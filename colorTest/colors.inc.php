@@ -32,7 +32,7 @@ class GetMostCommonColors
 	 *
 	 * @return array
 	 */
-	function Get_Color( $img, $count=20, $reduce_brightness=true, $reduce_gradients=true, $delta=16 )
+	function Get_Color( $img, $count=20, $reduce_brightness=false, $reduce_gradients=false, $delta=16 )
 	{
 		if (is_readable( $img ))
 		{
@@ -101,6 +101,8 @@ class GetMostCommonColors
 					}
 
 					$hex = substr("0".dechex($colors['red']),-2).substr("0".dechex($colors['green']),-2).substr("0".dechex($colors['blue']),-2);
+                    
+                    syslog(LOG_ERR,"Here");
 
 					if ( ! isset( $hexarray[$hex] ) )
 					{
@@ -118,7 +120,7 @@ class GetMostCommonColors
 			{
 				// if you want to *eliminate* gradient variations use:
 				// ksort( &$hexarray );
-				arsort( &$hexarray, SORT_NUMERIC );
+				arsort( $hexarray, SORT_NUMERIC );
 
 				$gradients = array();
 				foreach ($hexarray as $hex => $num)
@@ -146,7 +148,7 @@ class GetMostCommonColors
 			{
 				// if you want to *eliminate* brightness variations use:
 				// ksort( &$hexarray );
-				arsort( &$hexarray, SORT_NUMERIC );
+				arsort( $hexarray, SORT_NUMERIC );
 
 				$brightness = array();
 				foreach ($hexarray as $hex => $num)
@@ -169,7 +171,7 @@ class GetMostCommonColors
 				}
 			}
 
-			arsort( &$hexarray, SORT_NUMERIC );
+			arsort( $hexarray, SORT_NUMERIC );
 
 			// convert counts to percentages
 			foreach ($hexarray as $key => $value)

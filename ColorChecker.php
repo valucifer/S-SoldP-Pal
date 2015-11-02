@@ -7,17 +7,18 @@
  *
  * @author Nello Saulino <nello.saulino@gmail.com>
  */
- 
+
+require_once("colors.inc.php");
+
  class ColorChecker{
- 	include_once("colors.inc.php");
- 	
  	public $image = null;
  	public $nColors = 0;
  	public $delta = 0;
- 	var $colorChecker = new GetMostCommonColors();
- 	
- 	public function __constructor(){
- 		echo 'The class "', __CLASS__, '" is initiated!<br />';
+    public $colorChecker = null;
+     
+ 	public function __construct(){
+        $this->colorChecker = new GetMostCommonColors();
+ 		echo 'The class "'. __CLASS__. '" is initiated!<br />';
  	}
  	
  	/**
@@ -45,7 +46,7 @@
 	 * @return string $image
 	 */
  	public function getImage(){
- 		return $image;
+ 		return $this->image;
  	}
  	
  	/**
@@ -69,7 +70,7 @@
 	 * @return $nColors
 	 */
  	public function getNumberOfColors(){
- 		return $nColors;
+ 		return $this->nColors;
  	}
  	
  	/**
@@ -93,7 +94,7 @@
 	 * @return int $delta
 	 */
  	public function getDeltaValue(){
- 		return $delta;
+ 		return $this->delta;
  	}
  	
  	/**
@@ -102,10 +103,10 @@
 	 * @params string $image, int $nColors, int $delta
 	 * @return true if setting operations are ok, false otherwise
 	 */
- 	public function initializeParameters($image, $nColors, $delta){
- 		$this->setImage($image);
- 		$this->setNumberOfColors($nColors);
- 		$this->setDeltaValue($delta);
+ 	public function initializeParameters($img, $nClrs, $dlt){
+ 		$this->setImage($img);
+ 		$this->setNumberOfColors($nClrs);
+ 		$this->setDeltaValue($dlt);
  		
  		if( $this->getImage() != null && $this->getNumberOfColors() != 0 && $this->getDeltaValue() != 0 )
  			return true;
@@ -119,20 +120,20 @@
 	 * @return $colors 
 	 */
  	public function startColorAnalysis(){
- 		if( $image == null ){
+ 		if( $this->image == null ){
  			echo "Please, set image file!\n";
  			return;
  		}
- 		if( $nColors == 0 ){
+ 		if( $this->nColors == 0 ){
  			echo "You have set 0 as number of colors. How can I analyze 0 colors? :P Please set a number greater than 0.\n";
  			return;
  		}
- 		if( $delta == 0 ){
+ 		if( $this->delta == 0 ){
  			echo "Delta value is 0. Please set a number between 1 and 255.\n";
  			return;
  		}
  		
- 		$colors = $colorChecker->Get_Color($image, $nColors, false, false, $delta);
+ 		$colors = $this->colorChecker->Get_Color($this->image, $this->nColors, false, false, $this->delta);
  		
  		return $colors;
  	}
@@ -151,7 +152,7 @@
  		
  		foreach ( $colors as $hex => $count ){
 			if ( $count > 0 ){
-				toReturn.= $hex." ".$count.";";
+				$toReturn .= $hex." ".$count.";";
 			}
 		}
 		return $toReturn;

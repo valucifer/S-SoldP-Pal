@@ -1,15 +1,17 @@
 <?php
 
-include('ColorChecker');
+require_once('ColorChecker.php');
 
-$colChecker = new ColorChecker;
+$colChecker = new ColorChecker();
 $results = null;
 
-if( $colorChecker->initializeParameters("./testimage.jpg", 40, 1) ){
+if( $colChecker->initializeParameters("./testimage.jpg", 40, 1) ){
 	echo "ColorChecker is initialized correctly...let's continue!<br/>";
-	$results = $colorChecker->startColorAnalysisAndReturnResultsAsText();
+	$results = $colChecker->startColorAnalysisAndReturnResultsAsText();
 	$pieces = explode(";", $results);
-	print_r($pieces);
+	foreach($pieces as $value){
+        echo $value."<br/>";
+    }
 }
 
 ?>
