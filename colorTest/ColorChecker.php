@@ -143,7 +143,7 @@
 	 * @params
 	 * @return string $toReturn
 	 */
- 	public function startColorAnalysisAndReturnResultsAsText(){
+ 	public function (){
 
  		$colors = $this->startColorAnalysis();
  		
