@@ -4,24 +4,26 @@ class ImageComparison{
 
     public $firstImagePath = null;
     public $secondImagePath = null;
+    private $start = null;
 
     public function __construct(){
+        $this->start = microtime(true);
         echo "Class ".__CLASS__." is ready!<BR/>";
     }
 
     public function initialize($firstPath, $secondPath){
         if( !is_string( $firstPath ) )
             throw new Exception("First parameter you've passed is not a string! Also ensure it represents a valid path to image file.");
-        
+
         if( !file_exists ( $firstPath ) )
             throw new Exception("First parameter you've passed is not a valid path!");
-            
+
         if( !is_string( $secondPath ) )
             throw new Exception("Second parameter you've passed is not a string! Also ensure it represents a valid path to image file.");
-            
+
         if( !file_exists ( $secondPath ) )
             throw new Exception("Second parameter you've passed is not a valid path!");
-            
+
         $this->firstImagePath = $firstPath;
         $this->secondImagePath = $secondPath;
     }
@@ -81,6 +83,10 @@ class ImageComparison{
             return false;
         }
 
+    }
+
+    function __destruct() {
+        echo "Completed in ", microtime(true) - $this->start, " Seconds\n";
     }
 
 
