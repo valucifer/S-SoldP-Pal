@@ -28,14 +28,12 @@ require_once("colors.inc.php");
 	 * @return 
 	 */
  	public function setImage($img){
- 		if( !is_string( $img ) ){
- 			echo "Parameter you've passed is not a string! Also ensure it represents a valid path to image file.\n";
- 			return;
- 		}
- 		if( !file_exists ( $img ) ){
- 			echo "Parameter you've passed is not a valid path!\n";
- 			return;
- 		}
+ 		if( !is_string( $img ) )
+ 			throw new Exception("Parameter you've passed is not a string! Also ensure it represents a valid path to image file.");
+            
+ 		if( !file_exists ( $img ) )
+ 			throw new Exception("Parameter you've passed is not a valid path!");
+ 			
  		$this->image = $img;
  	}
  	
@@ -56,10 +54,9 @@ require_once("colors.inc.php");
 	 * @return 
 	 */
  	public function setNumberOfColors($numcolors){
- 		if(!is_numeric ( $numcolors )){
- 			echo "Parameter you've passed is not a number!\n";
- 			return;
- 		}
+ 		if(!is_numeric ( $numcolors ))
+ 			throw new Exception("Parameter you've passed is not a number!");
+ 			
  		$this->nColors = $numcolors;
  	}
  	
@@ -80,10 +77,9 @@ require_once("colors.inc.php");
 	 * @return 
 	 */
  	public function setDeltaValue($dlt){
- 		if(!is_numeric ( $dlt )){
- 			echo "Parameter you've passed is not a number!\n";
- 			return;
- 		}
+ 		if(!is_numeric ( $dlt ))
+ 			throw new Exception("Parameter you've passed is not a number!");
+
  		$this->delta = $dlt;
  	}
  	
@@ -120,18 +116,14 @@ require_once("colors.inc.php");
 	 * @return $colors 
 	 */
  	public function startColorAnalysis(){
- 		if( $this->image == null ){
- 			echo "Please, set image file!\n";
- 			return;
- 		}
- 		if( $this->nColors == 0 ){
- 			echo "You have set 0 as number of colors. How can I analyze 0 colors? :P Please set a number greater than 0.\n";
- 			return;
- 		}
- 		if( $this->delta == 0 ){
- 			echo "Delta value is 0. Please set a number between 1 and 255.\n";
- 			return;
- 		}
+ 		if( $this->image == null )
+ 			throw new Exception("Please, set image file!");
+        
+ 		if( $this->nColors == 0 )
+ 			throw new Exception("You have set 0 as number of colors. How can I analyze 0 colors? :P Please set a number greater than 0.");
+        
+ 		if( $this->delta == 0 )
+ 			throw new Exception( "Delta value is 0. Please set a number between 1 and 255.");
  		
  		$colors = $this->colorChecker->Get_Color($this->image, $this->nColors, false, false, $this->delta);
  		
