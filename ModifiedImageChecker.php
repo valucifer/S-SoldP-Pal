@@ -8,14 +8,15 @@
  * @author Nello Saulino <nello.saulino@gmail.com>
  */
 
-class ModifiedImageChecker(){
+require_once("ColorChecker.php");
+class ModifiedImageChecker{
+    
+    private $colorChecker = null;
+    var $start = null;
 
-    include_once("ColorChecker.php");
-    var $colorChecker = null;
-
-    public function __constructor(){
-        $colorChecker = new ColorChecker;
-        echo 'The class "', __CLASS__, '" is initiated!\n';
+    public function __construct(){
+        $this->colorChecker = new ColorChecker();
+        echo 'The class "', __CLASS__, '" is initiated!<BR/>';
     }
 
     /**
@@ -25,14 +26,14 @@ class ModifiedImageChecker(){
 	 * @return true if images are equals, false otherwise
 	 */
     private function checkImageDiff( $colorAnalysisImage1, $pathImage2, $colorsNumber, $delta ){
-        var $imageAnalysisResults = null;
+        $imageAnalysisResults = null;
         if( $colorChecker->initializeParameters( $pathImage2, $colorsNumber, $delta ) ){
             echo "First of all, let's check MD5 diget on image...";
             $imageAnalysisResults = $colorChecker->startColorAnalysisAndReturnResultsAsText();
             if( !strcmp($imageAnalysisResults, $colorAnalysisImage1) )
                 return false;
             else return true;
-        }else echo "...for that reason, I can't understand if your images are equals.\n";
+        }else echo "...for that reason, I can't understand if your images are equals.<br/>";
     }
 
     /**
@@ -42,10 +43,11 @@ class ModifiedImageChecker(){
 	 * @return true if images are different, false otherwise
 	 */
     public function areImagesDifferent( $firstImagePath, $secondImagePath, $colorsNumber, $delta ){
-        var $firstImageAnalysisResults = null;
-        var $secondImageAnalysisResults = null;
+        $this->start = microtime(true);
+        $firstImageAnalysisResults = null;
+        $secondImageAnalysisResults = null;
 
-        echo "I'm calculating MD5 digest to check if files are not the same...";
+        echo "I'm calculating MD5 digest to check if files are not the same...<br/>";
         
         if( !file_exists($firstImagePath) ){
             throw new Exception("No valid path for first argument!");
@@ -62,17 +64,21 @@ class ModifiedImageChecker(){
             return false;
         }
 
-        echo "Images seems to be different, let's take a check on their colors...";
+        echo "Images seems to be different, let's take a check on their colors...<br/>";
 
-        $colorChecker->initializeParameters( $firstImagePath, $colorsNumber, $delta );
-        $firstImageAnalysisResults = $colorChecker->startColorAnalysisAndReturnResultsAsText();
-        $colorChecker->initializeParameters( $secondImagePath, $colorsNumber, $delta );
-        $secondImageAnalysisResults = $colorChecker->startColorAnalysisAndReturnResultsAsText();
+        $this->colorChecker->initializeParameters( $firstImagePath, $colorsNumber, $delta );
+        $firstImageAnalysisResults = $this->colorChecker->startColorAnalysisAndReturnResultsAsText();
+        $this->colorChecker->initializeParameters( $secondImagePath, $colorsNumber, $delta );
+        $secondImageAnalysisResults = $this->colorChecker->startColorAnalysisAndReturnResultsAsText();
 
         if( !strcmp($firstImageAnalysisResults,$secondImageAnalysisResults) ){
             return false;
         }else return true;
 
+    }
+    
+    function __destruct() {
+        echo "Completed in ", microtime(true) - $this->start, " Seconds<br/>";
     }
 
 }
