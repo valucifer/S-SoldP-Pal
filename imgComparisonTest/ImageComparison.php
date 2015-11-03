@@ -10,37 +10,28 @@ class ImageComparison{
     }
 
     public function initialize($firstPath, $secondPath){
-        if( !is_string( $firstPath ) ){
-            echo "First parameter you've passed is not a string! Also ensure it represents a valid path to image file.\n";
-            return;
-        }
-        if( !file_exists ( $firstPath ) ){
-            echo "First parameter you've passed is not a valid path!\n";
-            return;
-        }
-
-        if( !is_string( $secondPath ) ){
-            echo "Second parameter you've passed is not a string! Also ensure it represents a valid path to image file.\n";
-            return;
-        }
-        if( !file_exists ( $secondPath ) ){
-            echo "Second parameter you've passed is not a valid path!\n";
-            return;
-        }
+        if( !is_string( $firstPath ) )
+            throw new Exception("First parameter you've passed is not a string! Also ensure it represents a valid path to image file.");
+        
+        if( !file_exists ( $firstPath ) )
+            throw new Exception("First parameter you've passed is not a valid path!");
+            
+        if( !is_string( $secondPath ) )
+            throw new Exception("Second parameter you've passed is not a string! Also ensure it represents a valid path to image file.");
+            
+        if( !file_exists ( $secondPath ) )
+            throw new Exception("Second parameter you've passed is not a valid path!");
+            
         $this->firstImagePath = $firstPath;
         $this->secondImagePath = $secondPath;
     }
 
     public function compareImages(){
-        if( $this->firstImagePath == null ){
-            echo "First image is not set! Please call 'initialize(firstPath, secondPath) method!\n";
-            return;
-        }
+        if( $this->firstImagePath == null )
+            throw new Exception("First image is not set! Please call 'initialize(firstPath, secondPath) method!");
 
-        if( $this->secondImagePath == null ){
-            echo "Second image is not set! Please call 'initialize(firstPath, secondPath) method!\n";
-            return;
-        }
+        if( $this->secondImagePath == null )
+            throw new Exception("Second image is not set! Please call 'initialize(firstPath, secondPath) method!");
 
         $i1 = @imagecreatefromstring(file_get_contents($this->firstImagePath));
         $i2 = @imagecreatefromstring(file_get_contents($this->secondImagePath));
