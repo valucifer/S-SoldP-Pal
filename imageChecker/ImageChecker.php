@@ -72,6 +72,7 @@ class ImageChecker{
 
         if( !strcmp( md5_file($firstImagePath), md5_file($secondImagePath) ) ){
             //digests are equals, so there aren't any differences
+            echo "Images have the same digest, so they are equals!<br/>";
             return false;
         }
 
