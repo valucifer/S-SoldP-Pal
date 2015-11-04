@@ -103,10 +103,6 @@ require_once("colors.inc.php");
  		$this->setImage($img);
  		$this->setNumberOfColors($nClrs);
  		$this->setDeltaValue($dlt);
- 		
- 		if( $this->getImage() != null && $this->getNumberOfColors() != 0 && $this->getDeltaValue() != 0 )
- 			return true;
- 		else return false;
  	}
  	
  	/**
@@ -117,13 +113,13 @@ require_once("colors.inc.php");
 	 */
  	public function startColorAnalysis(){
  		if( $this->image == null )
- 			throw new Exception("Please, set image file!");
+ 			throw new Exception("Please, set image file! You can call initializeParameters() method to set the environment to colors analysis.");
         
  		if( $this->nColors == 0 )
- 			throw new Exception("You have set 0 as number of colors. How can I analyze 0 colors? :P Please set a number greater than 0.");
+ 			throw new Exception("You have set 0 as number of colors. How can I analyze 0 colors? :P Please set a number greater than 0. You can call initializeParameters() method to set the environment to colors analysis.");
         
  		if( $this->delta == 0 )
- 			throw new Exception( "Delta value is 0. Please set a number between 1 and 255.");
+ 			throw new Exception( "Delta value is 0. Please set a number between 1 and 255.  You can call initializeParameters() method to set the environment to colors analysis.");
  		
  		$colors = $this->colorChecker->Get_Color($this->image, $this->nColors, false, false, $this->delta);
  		
