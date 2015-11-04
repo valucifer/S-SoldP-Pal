@@ -9,7 +9,7 @@
  */
 
 require_once("ColorChecker.php");
-class ModifiedImageChecker{
+class ImageChecker{
     
     private $colorChecker = null;
     var $start = null;
@@ -18,22 +18,33 @@ class ModifiedImageChecker{
         $this->colorChecker = new ColorChecker();
         echo 'The class "', __CLASS__, '" is initiated!<BR/>';
     }
+    
+    /**
+	 * This function analyzes an image from path and returns a textual representation of colors
+	 *
+	 * @params string $colorAnalysisImage1, string $pathImage2, int $colorsNumber, int $delta
+	 * @return string $imageAnalysisResults
+	 */
+    public function analyzeImagesColors($imagePathToAnalyze, $colorsNumber, $delta){
+    	$imageAnalysisResults = null;
+		$colorChecker->initializeParameters( $imagePathToAnalyze, $colorsNumber, $delta );
+    	$imageAnalysisResults = $this->colorChecker->startColorAnalysisAndReturnResultsAsText();
+    	return $imageAnalysisResults;
+    }
 
     /**
-	 * Compares two images' color analysis. First parameter in this function is a text that represent a color analysis executed previously
+	 * Compares two images' color analysis. First parameter in this function is a text that represents a color analysis executed previously
 	 *
 	 * @params string $colorAnalysisImage1, string $pathImage2, int $colorsNumber, int $delta
 	 * @return true if images are equals, false otherwise
 	 */
-    private function checkImageDiff( $colorAnalysisImage1, $pathImage2, $colorsNumber, $delta ){
+    public function checkImageDiff( $colorAnalysisImage1, $pathImage2, $colorsNumber, $delta ){
         $imageAnalysisResults = null;
-        if( $colorChecker->initializeParameters( $pathImage2, $colorsNumber, $delta ) ){
-            echo "First of all, let's check MD5 diget on image...";
-            $imageAnalysisResults = $colorChecker->startColorAnalysisAndReturnResultsAsText();
-            if( !strcmp($imageAnalysisResults, $colorAnalysisImage1) )
-                return false;
-            else return true;
-        }else echo "...for that reason, I can't understand if your images are equals.<br/>";
+        $colorChecker->initializeParameters( $pathImage2, $colorsNumber, $delta );
+        $imageAnalysisResults = $colorChecker->startColorAnalysisAndReturnResultsAsText();
+        if( !strcmp($imageAnalysisResults, $colorAnalysisImage1) )
+            return false;
+        else return true;
     }
 
     /**

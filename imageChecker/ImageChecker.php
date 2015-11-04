@@ -9,7 +9,7 @@
  */
 
 require_once("ColorChecker.php");
-class ModifiedImageChecker{
+class ImageChecker{
     
     private $colorChecker = null;
     var $start = null;
