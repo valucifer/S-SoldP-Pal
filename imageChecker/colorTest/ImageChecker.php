@@ -48,44 +48,40 @@ class ImageChecker{
     }
 
     /**
-	 * Compares two images through color analysis
+	 * Compares image information still existing to a new image color analysis
 	 *
-	 * @params string $firstImagePath, string $secondImagePath, int $colorsNumber, int $delta
-	 * @return true if images are different, false otherwise
+	 * @params string $imagePath, int $colorsNumber, int $delta, string $imageAnalysisResults, string $firstImageColorAnalysis
+	 * @return "false" if images are the same, array containing new image informations otherwise
 	 */
-    public function areImagesDifferent( $firstImagePath, $secondImagePath, $colorsNumber, $delta ){
+    public function areImagesDifferent( $imagePath, $colorsNumber, $delta, $firstImageMD5digest, $firstImageColorAnalysis ){
         $this->start = microtime(true);
         $firstImageAnalysisResults = null;
         $secondImageAnalysisResults = null;
-
-        echo "I'm calculating MD5 digest to check if files are not the same...<br/>";
+        $imageMD5digest = 0;
         
-        if( !file_exists($firstImagePath) ){
+        if( !file_exists($imagePath) ){
             throw new Exception("No valid path for first argument!");
             return false;
         }
         
-        if( !file_exists($secondImagePath) ){
-            throw new Exception("No valid path for second argument!");
-            return false;
-        }
-
-        if( !strcmp( md5_file($firstImagePath), md5_file($secondImagePath) ) ){
+        $imageMD5digest = md5_file($imagePath);
+        
+        if( !strcmp( $firstImageMD5digest, $imageMD5digest ) ){
             //digests are equals, so there aren't any differences
-            return false;
+            echo "Images have the same digest, so they are equals!<br/>";
+            return "false";
         }
 
         echo "Images seems to be different, let's take a check on their colors...<br/>";
 
-        $this->colorChecker->initializeParameters( $firstImagePath, $colorsNumber, $delta );
-        $firstImageAnalysisResults = $this->colorChecker->startColorAnalysisAndReturnResultsAsText();
-        $this->colorChecker->initializeParameters( $secondImagePath, $colorsNumber, $delta );
-        $secondImageAnalysisResults = $this->colorChecker->startColorAnalysisAndReturnResultsAsText();
-
-        if( !strcmp($firstImageAnalysisResults,$secondImageAnalysisResults) ){
-            return false;
-        }else return true;
-
+        $this->colorChecker->initializeParameters( $imagePath, $colorsNumber, $delta );
+        $imageAnalysisResults = $this->colorChecker->startColorAnalysisAndReturnResultsAsText();
+        
+        if( !strcmp($firstImageColorAnalysis, $imageAnalysisResults) ){
+        		return "false";
+        }else{
+        		return array($imageMD5digest,$imageAnalysisResults);
+        }
     }
     
     function __destruct() {
