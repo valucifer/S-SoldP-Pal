@@ -59,10 +59,25 @@ class ImageChecker{
         $secondImageAnalysisResults = null;
         $imageMD5digest = 0;
         
+        if( !is_string( $imagePath ) )
+ 			throw new Exception("Parameter imagePath you've passed is not a string!");
+        
         if( !file_exists($imagePath) ){
             throw new Exception("No valid path for first argument!");
             return false;
         }
+        
+        if(!is_numeric ( $colorsNumber ))
+ 			throw new Exception("Parameter colorNumber you've passed is not a number!");
+ 			
+ 		if(!is_numeric ( $delta ))
+ 			throw new Exception("Parameter delta you've passed is not a number!");
+
+ 		if( !is_string( $firstImageMD5digest ) )
+ 			throw new Exception("Parameter digest you've passed is not a string!");	
+
+ 		if( !is_string( $firstImageColorAnalysis ) )
+ 			throw new Exception("Parameter colorAnalysis you've passed is not a string!");	
         
         $imageMD5digest = md5_file($imagePath);
         

@@ -10,7 +10,7 @@ class UpdateTmpTables{
     **/
 
     //Static variables to set delta and color numbers to analyze images colors
-    private $COLORNUMBER="40";
+    private $COLORNUMBER=40; //Modifica di nello.
     private $DELTA="1";
 
     public function __construct(){
