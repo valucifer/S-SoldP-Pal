@@ -8,7 +8,9 @@
  * @author Nello Saulino <nello.saulino@gmail.com>
  */
 
-require_once("colors.inc.php");
+require("colors.inc.php");
+require("Logger.php");
+require("HandleOperationsException.php");
 
  class ColorChecker{
  	public $image = null;
@@ -18,7 +20,6 @@ require_once("colors.inc.php");
      
  	public function __construct(){
         $this->colorChecker = new GetMostCommonColors();
- 		echo 'The class "'. __CLASS__. '" is initiated!<br />';
  	}
  	
  	/**
@@ -29,10 +30,10 @@ require_once("colors.inc.php");
 	 */
  	public function setImage($img){
  		if( !is_string( $img ) )
- 			throw new Exception("Parameter you've passed is not a string! Also ensure it represents a valid path to image file.");
+ 			throw new HandleOperationsException("Parameter you've passed is not a string! Also ensure it represents a valid path to image file.");
             
  		if( !file_exists ( $img ) )
- 			throw new Exception("Parameter you've passed is not a valid path!");
+ 			throw new HandleOperationsException("Parameter you've passed is not a valid path!");
  			
  		$this->image = $img;
  	}
@@ -55,7 +56,7 @@ require_once("colors.inc.php");
 	 */
  	public function setNumberOfColors($numcolors){
  		if(!is_numeric ( $numcolors ))
- 			throw new Exception("Parameter you've passed is not a number!");
+ 			throw new HandleOperationsException("Parameter you've passed is not a number!");
  			
  		$this->nColors = $numcolors;
  	}
@@ -78,7 +79,7 @@ require_once("colors.inc.php");
 	 */
  	public function setDeltaValue($dlt){
  		if(!is_numeric ( $dlt ))
- 			throw new Exception("Parameter you've passed is not a number!");
+ 			throw new HandleOperationsException("Parameter you've passed is not a number!");
 
  		$this->delta = $dlt;
  	}
@@ -113,13 +114,13 @@ require_once("colors.inc.php");
 	 */
  	public function startColorAnalysis(){
  		if( $this->image == null )
- 			throw new Exception("Please, set image file! You can call initializeParameters() method to set the environment to colors analysis.");
+ 			throw new HandleOperationsException("Please, set image file! You can call initializeParameters() method to set the environment to colors analysis.");
         
  		if( $this->nColors == 0 )
- 			throw new Exception("You have set 0 as number of colors. How can I analyze 0 colors? :P Please set a number greater than 0. You can call initializeParameters() method to set the environment to colors analysis.");
+ 			throw new HandleOperationsException("You have set 0 as number of colors. How can I analyze 0 colors? :P Please set a number greater than 0. You can call initializeParameters() method to set the environment to colors analysis.");
         
  		if( $this->delta == 0 )
- 			throw new Exception( "Delta value is 0. Please set a number between 1 and 255.  You can call initializeParameters() method to set the environment to colors analysis.");
+ 			throw new HandleOperationsException( "Delta value is 0. Please set a number between 1 and 255.  You can call initializeParameters() method to set the environment to colors analysis.");
  		
  		$colors = $this->colorChecker->Get_Color($this->image, $this->nColors, false, false, $this->delta);
  		
