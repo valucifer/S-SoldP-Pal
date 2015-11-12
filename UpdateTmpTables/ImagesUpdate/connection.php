@@ -27,7 +27,7 @@
 		//close the connection
 		$close_connection = mysql_close($server);
 		if(!$close_connection) {
-			die("Close connectione failed: ".mysql_error());
+			die("Close connection failed: ".mysql_error());
 		}
 		return $close_connection;
 	}
