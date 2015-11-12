@@ -222,6 +222,59 @@
 			//[CODICE_ARTICOLO2] => [0] => CODICE_ARTICOLO2;COLORE;TAGLIA [1] => CODICE_ARTICOLO2;COLORE;TAGLIA
 		}
 		
+		
+		public function getCategory(){
+			$return = array();
+			$sizeArrayTBDESCRLIN = sizeof($this->_TB_DESCR_LIN);
+			
+			//Inizializziamo le variabili di cui necessitiamo
+			$griffe = null;
+			
+			for($j = 0; $j < $sizeArrayTBDESCRLIN; $j++){
+				$tmp1 = explode(";",$this->_TB_DESCR_LIN[$j]);
+				if(sizeof($tmp1) === 1) 
+					break;
+	
+				//Ovviamente ricerchiamo tutte queste caratteristiche andando a prelevare solo i dati in lingua ITALIANA
+				if($tmp1[0] === "GRIFFE" and $tmp1[2] === "IT"){
+					$griffe = trim($tmp1[3]);
+					$griffe = str_replace("\"","",$griffe);
+					array_push($return,$griffe);
+				}		
+				if($tmp1[0] === "LP"){
+					break;
+				}	
+			}
+			
+			return $return;
+		}
+		
+		public function getSubCategory(){
+			$return = array();
+			$sizeArrayTBDESCRLIN = sizeof($this->_TB_DESCR_LIN);
+			
+			//Inizializziamo le variabili di cui necessitiamo
+			$model = null;
+			
+			for($j = 0; $j < $sizeArrayTBDESCRLIN; $j++){
+				$tmp1 = explode(";",$this->_TB_DESCR_LIN[$j]);
+				if(sizeof($tmp1) === 1) 
+					break;
+	
+				//Ovviamente ricerchiamo tutte queste caratteristiche andando a prelevare solo i dati in lingua ITALIANA
+				if($tmp1[0] === "MODELLO" and $tmp1[2] === "IT"){
+					$model = trim($tmp1[3]);
+					$model = str_replace("\"","",$model);
+					array_push($return,$model);
+				}		
+				if($tmp1[0] === "SESSO"){
+					break;
+				}	
+			}
+			
+			return $return;
+		}
+		
 		private function getReferenceNameModelAndSupplier(){
 			//Con questa funzione avremo la referenza (Quindi il CODICE), il nome, il modello e il fornitore del singolo 
 			//articolo contenuto nel file _TB_ART. Tali caratteristiche le possiamo ricavare andando ad effettuare un merge con il 
