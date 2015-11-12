@@ -54,9 +54,9 @@
         *@return true if exist the image in DB , false otherwise
         *
         **/
-        public function ifImageExist($psId){
+        public function ifImageExist($psIdImage){
             $connection = connectionServer();
-            $sql = "SELECT * FROM  ps_tmp_image WHERE ( ps_id = '".$psId."')";
+            $sql = "SELECT * FROM  ps_tmp_image WHERE ( ps_id = '".$psIdImage."')";
             $result = mysql_query($sql,$connection);
             if (mysql_num_rows($result) > 0){
                 closeConnectionServer($connection);
@@ -77,7 +77,7 @@
             $sql = "SELECT * FROM  ps_tmp_image WHERE ( ps_id = '".$psIdImage."')";
             $result = mysql_query($sql,$connection);
             while($row = mysql_fetch_array( $result )){
-                $toReturn = array("colorAnalysis"=>$row[5], "md5Digest"=>$row[4],"oldPath"=>$row[2],"newPath"=>$row[3]);
+                $toReturn = array("colorAnalysis"=>$row[5], "md5Digest"=>$row[4],"oldPath"=>$row[1],"newPath"=>$row[2]);
             }
               closeConnectionServer($connection);
             return $toReturn;
