@@ -157,7 +157,7 @@
 			$product->id_category_default = 2; //Home
 			$product->redirect_type = '404';
 			$product->price = (float) $product_attributes["Prezzo"];
-			$product->active = $product_attributes["Attivo"];
+			$product->active = (int) $product_attributes["Attivo"];
 			$product->minimal_quantity = (int)$product_attributes["Qta_min"];
 			$product->show_price = 1;
 			$product->on_sale = 0;
@@ -216,7 +216,35 @@
 			$product->id_supplier, 0, '');
 		}
 		
-		private function controlCategoriesForActivateTheir($idCategory){
+		private function controlCategoriesForActivateTheir($ids_categories_array){
+			$size_array_categories = sizeof($ids_categories_array);
+			
+			for($i = 0; $i < $size_array_categories; $i++){
+				$tmp = $ids_categories_array[$i];
+				
+				$category = new Category((int)$tmp["id"]);
+				$array_of_ids_products = $category->getProductsWs();
+				$size_array_products = sizeof($array_of_ids_products);
+				
+				$count = 0;
+				
+				for($j = 0; $j < $size_array_products; $j++){
+					$array_prod = $array_of_ids_products[$j];
+					$product = new Product((int)$array_prod["id"]);
+					if($product-active != 1){
+						$count++;
+					}else
+						break;
+				}
+				
+				if($count == $size_array_products || $count == 0){
+					$category->active = 0;
+					$category->update();
+				}else{
+					$category->active = 1;
+					$category->update();
+				}
+			}
 			
 		}
 		
@@ -231,7 +259,7 @@
 			$product->id_category_default = 2; //Home
 			$product->redirect_type = '404';
 			$product->price = (float)$product_attributes["Prezzo"];
-			$product->active = $product_attributes["Attivo"];
+			$product->active = 0;//(int)$product_attributes["Attivo"];
 			
 			$product->minimal_quantity = (int)$product_attributes["Qta_min"];
 			$product->show_price = 1;
@@ -245,8 +273,12 @@
 			$product->depth = (float)$arrayFeatures["Lunghezza"];
 			
 			$product->update();
-			StockAvailable::setQuantity($product->id,'',(int)$product_attributes["Qta"]);
+			StockAvailable::setQuantity($product->id,'', (int)$product_attributes["Qta"]);
 			
+			if(!$product->active){
+				$ids_categories_array = $product->getWsCategories();
+				$this->controlCategoriesForActivateTheir($ids_categories_array);
+			}
 		}
 	}
 	
@@ -266,15 +298,15 @@
 		
 		//$arrayCombinations = $mapping->getCombinations();
 		foreach($keys as $key){
-			try{
+			/*try{
 				$prova->insertProductForPrestashop($arrayMapping[$key],$urlFoto);
 			}catch(Exception $e){
 				echo "$key<br/>";
 				echo $e->getMessage()." in line". $e->getLine()."<br/>";
 				echo "<br/><br/><br/><br/>";
-			}
-			/*$prova->updateProductForPrestashop($arrayMapping[$key],1254);
-			break;*/
+			}*/
+			$prova->updateProductForPrestashop($arrayMapping[$key],599);
+			break;
 		}
 		
 		echo "<br><br>finish!";

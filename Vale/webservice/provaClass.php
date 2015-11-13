@@ -5,8 +5,8 @@
 	//il giorno: 09/11/2015
 	
 	require_once "./Mapping.php";
-	
-	$mapping = new Mapping("File/A20151016144918_SEM.chk");
+/*
+	$mapping = new Mapping("File/A20151102142434_SEM.chk");
 	
 	echo "<br> Prova: <br> Proviamo a dare un file in input (tramite path)<br><br>";
 	echo "	1)Il risultato della prima tabella:<br><br>";
@@ -15,44 +15,21 @@
 	echo "<br><br>";
 	echo "	2)Il risultato della seconda tabella:<br><br>";
 	print_r($mapping->getCombinations());
-/*
+*/
 	include "../config/config.inc.php";
 	include "../init.php";
-	$cat = new Category();
-	$arrayCategories = $cat::searchByNameAndParentCategoryId(1,"YAMAMAY",2);
-	echo "prima<br>";
-	print_r($arrayCategories);
-	echo "<br>dopo<br>";
-	try{
-		$arr = $cat->getProducts(1,1,10);
-		print_r($arr);
-		echo "<br> dopo";
-	}catch(Exception $e){
-		echo $e->getMessage();
+	$cat = new Category("98");
+	print_r($cat->getProductsWs());
+	echo "<br><br>";
+	$arr = $cat->getProductsWs();
+	$size = sizeof($arr);
+	echo "<br>";
+	for($i = 0; $i < $size; $i++){
+		$arr2 = $arr[$i];
+		$num = (int)$arr2["id"];
+		$prod = new Product($num);
+		echo "active: $prod->active<br>";
 	}
-	
-	$supplier = new Supplier();
-	$id = $supplier::getIdByName("mario");
-	if( $id != 0){
-		echo "esiste";
-	}else{
-		$supplier->name = "mario";
-		$supplier->add();
-		echo "creato";
-	}
-*/
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	
