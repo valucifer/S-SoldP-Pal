@@ -75,9 +75,9 @@ class FTPConnection{
             return;
         }else{ 
             //semaphore is not in remote folder, so we can proceed
-            $semFileResource = fopen($this->semaphore_name,"w");
-            fwrite($semFileResource, "1");
-            fclose($semFileResource);
+            $sem_file_resource = fopen($this->semaphore_name,"w");
+            fwrite($sem_file_resource, "1");
+            fclose($sem_file_resource);
             //upload semaphore to remote path
             if( !ftp_put($this->connection, $this->semaphore_name, $this->semaphore_name, FTP_ASCII) ){
                 throw new HandleOperationsException("Error uploading semaphore to remote directory.", "ERROR");
@@ -93,13 +93,13 @@ class FTPConnection{
 
         //check if a remote semaphore exists.
         foreach ($remote_contents as &$file){
-            $fileInfo = pathinfo($file);
-            if(!isset($fileInfo["extension"]))
+            $file_info = pathinfo($file);
+            if(!isset($file_info["extension"]))
                 continue;
-            if($fileInfo["extension"] == "chk"){
+            if($file_info["extension"] == "chk"){
                 //there's a semaphore with chk extension, so we can proceed
-                ftp_get($this->connection, $this->local_dir."/".$fileInfo["filename"].".".$fileInfo["extension"], $file, FTP_ASCII);
-                array_push($this->semaphores_array, $fileInfo["basename"]);
+                ftp_get($this->connection, $this->local_dir."/".$file_info["filename"].".".$file_info["extension"], $file, FTP_ASCII);
+                array_push($this->semaphores_array, $file_info["basename"]);
             }
         }
 
@@ -116,13 +116,13 @@ class FTPConnection{
             $tmp_array = explode("_", $sem);
             foreach( $remote_contents as &$remCon ){
                 if( strpos($remCon, $tmp_array[0]) ){
-                    $fileInfo = pathinfo($remCon);
-                    if(!isset($fileInfo["extension"])){
+                    $file_info = pathinfo($remCon);
+                    if(!isset($file_info["extension"])){
                         //we encountered a folder. This folder(s) will be processed later
-                        array_push($this->folders_name, $fileInfo["filename"]);
+                        array_push($this->folders_name, $file_info["filename"]);
                         continue;
                     }
-                    ftp_get($this->connection, $this->local_dir."/".$fileInfo["filename"].".".$fileInfo["extension"], $remCon, FTP_ASCII);
+                    ftp_get($this->connection, $this->local_dir."/".$file_info["filename"].".".$file_info["extension"], $remCon, FTP_ASCII);
                 }
             }
         }
@@ -134,8 +134,8 @@ class FTPConnection{
                 ftp_chdir($this->connection, $this->ftp_folder_path."/".$dir);
                 $dir_files = ftp_nlist($this->connection, $this->ftp_folder_path."/".$dir);
                 foreach($dir_files as $file){
-                    $fileInfo = pathinfo($file);
-                    ftp_get($this->connection, $this->local_dir."/".$dir."/".$fileInfo["filename"].".".$fileInfo["extension"], $file, FTP_BINARY);
+                    $file_info = pathinfo($file);
+                    ftp_get($this->connection, $this->local_dir."/".$dir."/".$file_info["filename"].".".$file_info["extension"], $file, FTP_BINARY);
                 }
             }
         }
