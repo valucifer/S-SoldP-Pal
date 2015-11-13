@@ -7,9 +7,7 @@
 		
 		function ImageForPrestashop(){}
 		
-		public function insertImageInPrestashop($id_prod, $url){
-			$id_product = $id_prod;
-	
+		public function insertImageInPrestashop($id_product, $url){
 			$shops = Shop::getShops(true, null, true);    
 			$image = new Image();
 			$image->id_product = $id_product;
@@ -22,14 +20,12 @@
 					$image->delete();
 				}
             }
-	
+			return $image->id;
 		}
 		
-		public function updateImageInPrestashop($id_prod, $id_img, $url){
+		public function updateImageInPrestashop($id_product, $id_img, $url){
 			if($id_img == "") $this->insertImageInPrestashop($id_prod,$url);
 			else{
-				$id_product = $id_prod;
-				
 				$shops = Shop::getShops(true, null, true);    
 				$image = new Image();
 				$image->id_product = $id_product;
@@ -89,74 +85,73 @@
 		
 		function ProductForPrestashop(){}
 		
-		public function createCategories($categories){
-			$language = 1; //Italian
-			$sizeCategories = sizeof($categories);
-			for($i = 0; $i < $sizeCategories; $i++){
-				$category = new Category();
-				$arrayCategories = $category::searchByNameAndParentCategoryId($language,trim($categories[$i]),2);
-				
-				if(empty($arrayCategories)){
-					$replace = array("."," ",",","&");
-					$categoryParent = new Category();
-					$categoryParent->active = 0;
-					$categoryParent->id_parent = 2;
-					$categoryParent->name = array($language=>trim($categories[$i]));
-					$categoryParent->link_rewrite = array($language=>strtolower(str_replace($replace,"-",$categories[$i])));
-					$categoryParent->add();
-				}
+		private function setArrayElementForLinkRewrite($name_element, $is_name = true, $language = 1){
+			if($is_name){
+				$name_product = array($language=>trim($name_element));
+				return $name_product;
+			}else{
+				$array_replace = array("."," ",",","&","+","*","/","\\",":",";","_","=","!","?","'","\"","$","€","<",">");
+				$link_rewrite_product = array($language=>strtolower(str_replace($array_replace,"-",trim($name_element))));
+				return $link_rewrite_product;
 			}
 		}
 		
-		public function createSubCategories($categories,$subCategories){
-			$language = 1; //Italian
-			$sizeSubCategories = sizeof($subCategories);
-			$sizeCategories = sizeof($categories);
-			
+		private function setCategoriesForProduct($name_category, $id_parent_category = 2, $language = 1){
+			$id_category = 2;
 			$category = new Category();
-			for($i = 0; $i < $sizeCategories; $i++){
-				$nameCategory = trim($categories[$i]);
-				for($j = 0; $j < $sizeSubCategories; $j++){
-						
-					$flagChild = true;
-					$idParent = 2;
-					$arrayParent = $category::searchByNameAndParentCategoryId($language,trim($nameCategory),2);
-					
-					if(!empty($arrayParent)){
-						$idParent = (int)$arrayParent["id_category"];
-						$arrayFlag = $category::searchByNameAndParentCategoryId($language,trim($subCategories[$j]),$idParent);
-						
-						if(empty($arrayFlag)){
-							$replace = array("."," ",",","&");
-							$categoryChild = new Category();
-							$categoryChild->active = 0;
-							$categoryChild->id_parent = $idParent;
-							$categoryChild->name = array($language=>trim($subCategories[$j]));
-							$categoryChild->link_rewrite = array($language=>strtolower(str_replace($replace,"-",trim($subCategories[$j]))));
-							$categoryChild->add();
-						}
-					}
-					
-				}
+			$arrayCategories = $category::searchByNameAndParentCategoryId(trim($language),$name_category,trim($id_parent_category));
+			
+			if(empty($arrayCategories)){
+				$category_for_product = new Category();
+				$category_for_product->active = 0;
+				$category_for_product->id_parent = (int) trim($id_parent_category);
+				$category_for_product->name = $this->setArrayElementForLinkRewrite($name_category);
+				$category_for_product->link_rewrite = $this->setArrayElementForLinkRewrite($name_category,false);
+				$category_for_product->meta_keywords = trim($name_category);
+				$category_for_product->add();
+				$id_category = $category_for_product->id;
+			}else{
+				$id_category = (int) $arrayCategories["id_category"];
 			}
+			return $id_category;			
+		}
+		
+		private function setSupplierForProduct($name_supplier){
+			$id_supplier = 0;
+			$supplier = new SupplierCore();
+			$id_supplier = $supplier::getIdByName(trim($name_supplier));
+			
+			if(! $id_supplier ){
+				$supplier->name = trim($name_supplier);
+				$supplier->add();
+				$id_supplier = $supplier->id;
+			}
+			
+			return $id_supplier;
+		}
+		
+		private function setManufacturerForProduct($name_manufacturer){
+			$id_manufacturer = 0;
+			$manufacturer = new ManufacturerCore();
+			$id_manufacturer = $manufacturer::getIdByName(trim($name_manufacturer));
+			
+			if(! $id_manufacturer ){
+				$manufacturer->name = trim($name_manufacturer);
+				$manufacturer->add();
+				$id_manufacturer = $manufacturer->id;
+			}
+			
+			return $id_manufacturer;
 		}
 		
 		public function insertProductForPrestashop($productAttributes = array(), $urlFoto){
 			$product = new Product();
 			$language = 1; //Italian => languages = 1
 			
-			$stringa = $productAttributes["Nome"];
-			$element = array();
-			$element[$language] = $stringa;
-			
-			$product->name = $element;
-			$product->meta_keywords = $stringa;
-			$replace = array("."," ",",","&","+","*","/","\\",":",";","_","=","!","?","'","\"","$","€","<",">");
-			$stringa = str_replace($replace,"-",$stringa);
-			$element = array();
-			$element[$language] = strtolower($stringa);
-			
-			$product->link_rewrite = $element;
+			$string_name_product = $productAttributes["Nome"];
+			$product->name = $this->setArrayElementForLinkRewrite($string_name_product);
+			$product->meta_keywords = $string_name_product;
+			$product->link_rewrite = $this->setArrayElementForLinkRewrite($string_name_product, false);
 			
 			$product->id_category_default = 2; //Home
 			$product->redirect_type = '404';
@@ -169,26 +164,8 @@
 			$product->online_only = 1;
 			$product->id_tax_rules_group = 0;
 			
-			$supplier = new SupplierCore();
-			$id_supplier = $supplier::getIdByName(trim($productAttributes["Supplier"]));
-			
-			if(! $id_supplier ){
-				$supplier->name = trim($productAttributes["Supplier"]);
-				$supplier->add();
-			}
-			
-			$id_supplier = $supplier::getIdByName(trim($productAttributes["Supplier"]));
-			$product->id_supplier = (int)$id_supplier;
-			
-			$manufacturer = new ManufacturerCore();
-			$id_manufacturer = $manufacturer::getIdByName(trim($productAttributes["Manufacture"]));
-			if(! $id_manufacturer ){
-				$manufacturer->name = trim($productAttributes["Manufacture"]);
-				$manufacturer->add();
-			}
-			
-			$id_manufacturer = $manufacturer::getIdByName(trim($productAttributes["Manufacture"]));
-			$product->id_manufacturer = (int)$id_manufacturer;
+			$product->id_supplier = $this->setSupplierForProduct($productAttributes["Supplier"]);
+			$product->id_manufacturer = $this->setManufacturerForProduct($productAttributes["Manufacture"]);
 			
 			$arrayFeatures = $productAttributes["Feature"];
 			$product->width = (float)$arrayFeatures["Larghezza"];
@@ -196,68 +173,60 @@
 			$product->depth = (float)$arrayFeatures["Lunghezza"];
 			
 			$product->add();
-			StockAvailable::setQuantity($product->id,'',(int)$productAttributes["Qta"]);
 			
 			$categories = trim($productAttributes["Categorie"]);
 			$tmp = explode(",",$categories);
-			$griffe = $tmp[1];
-			$modello = $tmp[0];
-			$idParent = null;
-			$idChild = null;
 			
-			$category = new Category();
-			$arrayParent = $category::searchByNameAndParentCategoryId($language,trim($griffe),2);
-			$idParent = (int)$arrayParent["id_category"];
-			$arrayChild = $category::searchByNameAndParentCategoryId($language,trim($modello),$idParent);
-			$idChild = (int)$arrayChild["id_category"];
+			$griffe = $tmp[1]; $modello = $tmp[0];
+			$idParent = null;  $idChild = null;
+			
+			$idParent = $this->setCategoriesForProduct($griffe);
+			$idChild = $this->setCategoriesForProduct($modello,$idParent);
+			
 			$pos = array(); array_push($pos,$idChild); array_push($pos,$idParent);
 			$product->addToCategories($pos);
 			
-			$activeCategory = new Category($idParent);
-			$activeCategory->active = 1;
-			$activeCategory->update();
-			
-			$activeCategory = new Category($idChild);
-			$activeCategory->active = 1;
-			$activeCategory->update();
-			
+			if($product->active != 0){
+				$activeCategory = new Category($idParent);
+				$activeCategory->active = 1;
+				$activeCategory->update();
+				
+				$activeCategory = new Category($idChild);
+				$activeCategory->active = 1;
+				$activeCategory->update();
+			}
+				
 			$tmp =  explode(".jpg,", trim($productAttributes["URL"]));
 			$sizeUrl = sizeof($tmp);
+			$arrayIdImage = array();
 			for($i = 0; $i < $sizeUrl; $i++){
 				if(!empty($tmp[$i])){
 					$url = trim($urlFoto).$tmp[$i].".jpg";
 					$image = new ImageForPrestashop();
-					$image->insertImageInPrestashop($product->id,$url);
+					$idImage = $image->insertImageInPrestashop($product->id,$url);
+					array_push($arrayIdImage,$idImage);
 				}
 			}
+			$product->addProductAttribute($product->price, 0.000, 0.000, 0.000, (int)$productAttributes["Qta"], $arrayIdImage, $product->reference, 
+			$product->id_supplier, 0, '');
+		}
+		
+		private function controlCategoriesForActivateTheir($idCategory){
+			
 		}
 		
 		public function updateProductForPrestashop($productAttributes = array(), $idProduct){
 			$product = new Product($idProduct);
-			
 			$language = 1; //Italian => languages = 1
 			
-			$stringa = $productAttributes["Nome"];
-			$element = array();
-			$element[$language] = $stringa;
-			
-			$product->name = $element;
+			$product->name = $this->setArrayElementForLinkRewrite($stringa);
 			$product->meta_keywords = $stringa;
-			$replace = array("."," ",",","&","+","*","/","\\",":",";","_","=","!","?","'","\"","$","€","<",">");
-			$stringa = str_replace($replace,"-",$stringa);
-			$element = array();
-			$element[$language] = strtolower($stringa);
-			
-			$product->link_rewrite = $element;
+			$product->link_rewrite = $this->setArrayElementForLinkRewrite($stringa,false);
 			
 			$product->id_category_default = 2; //Home
 			$product->redirect_type = '404';
 			$product->price = (float) $productAttributes["Prezzo"];
 			$product->active = $productAttributes["Attivo"];
-			
-			if($productAttributes["Attivo"] == 0){
-				
-			}
 			
 			$product->minimal_quantity = (int)$productAttributes["Qta_min"];
 			$product->show_price = 1;
@@ -290,23 +259,17 @@
 		
 		$arrayMapping = $mapping->getItemMaster();
 		
-		$arrayCategories = $mapping->getCategory();
-		$arraySubCategories = $mapping->getSubCategory();
-		
-		$prova->createCategories($arrayCategories);
-		$prova->createSubCategories($arrayCategories,$arraySubCategories);
-		
 		//$arrayCombinations = $mapping->getCombinations();
 		foreach($keys as $key){
-			/*try{
+			try{
 				$prova->insertProductForPrestashop($arrayMapping[$key],$urlFoto);
 			}catch(Exception $e){
 				echo "$key<br/>";
-				echo "$e->getMessage() in line $e->getLine()<br/>";
+				echo $e->getMessage()." in line". $e->getLine()."<br/>";
 				echo "<br/><br/><br/><br/>";
-			}*/
-			$prova->updateProductForPrestashop($arrayMapping[$key],1254);
-			break;
+			}
+			/*$prova->updateProductForPrestashop($arrayMapping[$key],1254);
+			break;*/
 		}
 		
 		echo "<br><br>finish!";
