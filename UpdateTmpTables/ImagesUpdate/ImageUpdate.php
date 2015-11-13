@@ -8,10 +8,14 @@
     **/
 
     include "connection.php";
+    require ("./HandleOperationsException.php");
+    require ("./Logger.php");
     
     class ImageUpdate{
+        $logger=null;
         
         public function __construct(){
+            $this->logger = new Logger();
         }
         
         /** 
@@ -24,8 +28,7 @@
             $imageExist = $this-> ifImageExist($psIdImage);
 
             if(!$productExist){
-                //gestire con eccezione
-                echo "il prodotto non esiste </br>";
+                $this->logger->postMessage("Il prodotto $psIdProduc non esiste","WARNING");
                 return ;
             }else
                 if($imageExist===true){
@@ -33,20 +36,62 @@
                     $connection = connectionServer();
                     $sql = "UPDATE ps_tmp_image SET color_analysis ='".$colorAnalysis."' ,md5_digest = '".$md5Digest."' ,                     new_path = '".$imgPath."',old_path = '".$oldPath["newPath"]."', status = '1' WHERE ( ps_id =  
                     '".$psIdImage."')";
-                    echo "sql : $sql </br>";
-                    if(mysql_query($sql,$connection))
-                        echo "Update of record successfully <br/>";
+                    $res = mysql_query($sql,$connection)
+                    if(res){
+                        $this->logger->postMessage("Il prodotto $psIdProduc e' stato aggiornato correttamente ");
+                    }
+                    else{
+                        $errno = mysql_errno($connection);
+                        $error = mysql_error($connection);
+                        switch ($errno) {
+                           case MYSQL_DUPLICATE_KEY_ENTRY:
+                throw new HandleOperationsException($error, "ERROR");
+                           break;
+                           default:
+                           throw MySQLException($error, $errno);
+                           break;
+                        }
             } else {
                 echo "l'immagine non esiste </br>";
                 $connection = connectionServer();
                 $sql = "INSERT INTO ps_tmp_image ( ps_id, color_analysis,md5_digest, new_path,status,fk_ps_id)
                 VALUES('".$psIdImage."','".$colorAnalysis."','".$md5Digest."','".$imgPath."','1','".$psIdProduc."')";
-                echo "sql: $sql </br>";
-                if(mysql_query($sql,$connection))
+                $res = mysql_query($sql,$connection)
+                if($res)
                     echo "New record created successfully <br/>";
+                else{
+                    else{
+                    $errno = mysql_errno($connection);
+                    $error = mysql_error($connection);
+                    switch ($errno) {
+                        case MYSQL_DUPLICATE_KEY_ENTRY:
+                throw new HandleOperationsException($error, "ERROR");
+                        break;
+                        default:
+                        throw MySQLException($error, $errno);
+                        break;
+                        }
+                    
+                }
+
             }
             closeConnectionServer($connection);
         }
+        
+        /** 
+        *Function that inserts images informations
+        *@params int $psIdImage, int $psIdImage, string $coloranalysis, string $md5Digest,
+        *string $imgPath
+        */
+        public function insertImageInformation($psIdProduc,$psIdImage,$colorAnalysis, $md5Digest,$imgPath){
+            $connection = connectionServer();
+            $sql = "INSERT INTO ps_tmp_image ( ps_id, color_analysis,md5_digest, new_path,status,fk_ps_id)
+                VALUES('".$psIdImage."','".$colorAnalysis."','".$md5Digest."','".$imgPath."','1','".$psIdProduc."')";
+            if(mysql_query($sql,$connection))
+                echo "New record created successfully <br/>";
+            closeConnectionServer($connection);
+        }
+        
         
         /**
         *Function that checks if there is a images into DB
@@ -77,7 +122,7 @@
             $sql = "SELECT * FROM  ps_tmp_image WHERE ( ps_id = '".$psIdImage."')";
             $result = mysql_query($sql,$connection);
             while($row = mysql_fetch_array( $result )){
-                $toReturn = array("colorAnalysis"=>$row[5], "md5Digest"=>$row[4],"oldPath"=>$row[1],"newPath"=>$row[2]);
+                $toReturn = array("colorAnalysis"=>$row[4], "md5Digest"=>$row[3],"oldPath"=>$row[1],"newPath"=>$row[2]);
             }
               closeConnectionServer($connection);
             return $toReturn;
