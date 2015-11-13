@@ -4,7 +4,7 @@
 	//Modificato da: Valentino Vivone
 	//il giorno: 09/11/2015
 	
-	require_once "./class.Compare.php";
+	require_once "./Mapping.php";
 	
 	$mapping = new Mapping("File/A20151016144918_SEM.chk");
 	

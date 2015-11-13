@@ -1,11 +1,11 @@
 <?php
 	include "../config/config.inc.php";
 	include "../init.php";
-	require_once "./class.Compare.php";
+	require_once "./Mapping.php";
 	
-	class ImageForPrestashop{
+	class imageForPrestashop{
 		
-		function ImageForPrestashop(){}
+		function imageForPrestashop(){}
 		
 		public function insertImageInPrestashop($id_product, $url){
 			$shops = Shop::getShops(true, null, true);    
@@ -81,11 +81,11 @@
 		
 	}
 	
-	class ProductForPrestashop{
+	class productForPrestashop{
 		
-		function ProductForPrestashop(){}
+		function productForPrestashop(){}
 		
-		private function setArrayElementForLinkRewrite($name_element, $is_name = true, $language = 1){
+		private function setArrayElementForLinkRewrite($name_element, $is_name, $language = 1){
 			if($is_name){
 				$name_product = array($language=>trim($name_element));
 				return $name_product;
@@ -96,23 +96,24 @@
 			}
 		}
 		
-		private function setCategoriesForProduct($name_category, $id_parent_category = 2, $language = 1){
+		private function setCategoriesForProduct($name_category, $id_parent_category, $language){
 			$id_category = 2;
 			$category = new Category();
-			$arrayCategories = $category::searchByNameAndParentCategoryId(trim($language),$name_category,trim($id_parent_category));
+			$array_categories = $category::searchByNameAndParentCategoryId($language, trim($name_category), $id_parent_category);
 			
-			if(empty($arrayCategories)){
+			if(empty($array_categories)){
 				$category_for_product = new Category();
 				$category_for_product->active = 0;
 				$category_for_product->id_parent = (int) trim($id_parent_category);
-				$category_for_product->name = $this->setArrayElementForLinkRewrite($name_category);
-				$category_for_product->link_rewrite = $this->setArrayElementForLinkRewrite($name_category,false);
+				$category_for_product->name = $this->setArrayElementForLinkRewrite(trim($name_category), true, $language);
+				$category_for_product->link_rewrite = $this->setArrayElementForLinkRewrite(trim($name_category), false, $language);
 				$category_for_product->meta_keywords = trim($name_category);
 				$category_for_product->add();
 				$id_category = $category_for_product->id;
 			}else{
-				$id_category = (int) $arrayCategories["id_category"];
+				$id_category = (int) $array_categories["id_category"];
 			}
+			
 			return $id_category;			
 		}
 		
@@ -144,70 +145,74 @@
 			return $id_manufacturer;
 		}
 		
-		public function insertProductForPrestashop($productAttributes = array(), $urlFoto){
+		public function insertProductForPrestashop($product_attributes = array(), $url_foto, $language = 1){
 			$product = new Product();
-			$language = 1; //Italian => languages = 1
+			//$language is 1 because 1 -> italian
 			
-			$string_name_product = $productAttributes["Nome"];
-			$product->name = $this->setArrayElementForLinkRewrite($string_name_product);
+			$string_name_product = trim($product_attributes["Nome"]);
+			$product->name = $this->setArrayElementForLinkRewrite($string_name_product, true, $language);
 			$product->meta_keywords = $string_name_product;
-			$product->link_rewrite = $this->setArrayElementForLinkRewrite($string_name_product, false);
+			$product->link_rewrite = $this->setArrayElementForLinkRewrite($string_name_product, false, $language);
 			
 			$product->id_category_default = 2; //Home
 			$product->redirect_type = '404';
-			$product->price = (float) $productAttributes["Prezzo"];
-			$product->active = $productAttributes["Attivo"];
-			$product->minimal_quantity = (int)$productAttributes["Qta_min"];
+			$product->price = (float) $product_attributes["Prezzo"];
+			$product->active = $product_attributes["Attivo"];
+			$product->minimal_quantity = (int)$product_attributes["Qta_min"];
 			$product->show_price = 1;
 			$product->on_sale = 0;
-			$product->reference = $productAttributes["Reference"];
+			$product->reference = $product_attributes["Reference"];
 			$product->online_only = 1;
 			$product->id_tax_rules_group = 0;
 			
-			$product->id_supplier = $this->setSupplierForProduct($productAttributes["Supplier"]);
-			$product->id_manufacturer = $this->setManufacturerForProduct($productAttributes["Manufacture"]);
+			$product->id_supplier = $this->setSupplierForProduct(trim($product_attributes["Supplier"]));
+			$product->id_manufacturer = $this->setManufacturerForProduct(trim($product_attributes["Manufacture"]));
 			
-			$arrayFeatures = $productAttributes["Feature"];
-			$product->width = (float)$arrayFeatures["Larghezza"];
-			$product->height = (float)$arrayFeatures["Altezza"];
-			$product->depth = (float)$arrayFeatures["Lunghezza"];
+			$array_features = $product_attributes["Feature"];
+			$product->width = (float)$array_features["Larghezza"];
+			$product->height = (float)$array_features["Altezza"];
+			$product->depth = (float)$array_features["Lunghezza"];
 			
 			$product->add();
 			
-			$categories = trim($productAttributes["Categorie"]);
+			$categories = trim($product_attributes["Categorie"]);
 			$tmp = explode(",",$categories);
 			
 			$griffe = $tmp[1]; $modello = $tmp[0];
-			$idParent = null;  $idChild = null;
+			$id_parent = null; $id_child = null;
 			
-			$idParent = $this->setCategoriesForProduct($griffe);
-			$idChild = $this->setCategoriesForProduct($modello,$idParent);
+			$id_parent = $this->setCategoriesForProduct(trim($griffe), 2, $language);
+			$id_child = $this->setCategoriesForProduct(trim($modello), $id_parent, $language);
 			
-			$pos = array(); array_push($pos,$idChild); array_push($pos,$idParent);
-			$product->addToCategories($pos);
+			$cat_pos_tmp = array(); 
+			array_push($cat_pos_tmp,$id_child); 
+			array_push($cat_pos_tmp,$id_parent);
+			$product->addToCategories($cat_pos_tmp);
 			
 			if($product->active != 0){
-				$activeCategory = new Category($idParent);
+				$activeCategory = new Category($id_parent);
 				$activeCategory->active = 1;
 				$activeCategory->update();
 				
-				$activeCategory = new Category($idChild);
+				$activeCategory = new Category($id_child);
 				$activeCategory->active = 1;
 				$activeCategory->update();
 			}
 				
-			$tmp =  explode(".jpg,", trim($productAttributes["URL"]));
-			$sizeUrl = sizeof($tmp);
-			$arrayIdImage = array();
-			for($i = 0; $i < $sizeUrl; $i++){
+			$tmp =  explode(".jpg,", trim($product_attributes["URL"]));
+			$size_url = sizeof($tmp);
+			$array_id_image = array();
+			
+			for($i = 0; $i < $size_url; $i++){
 				if(!empty($tmp[$i])){
-					$url = trim($urlFoto).$tmp[$i].".jpg";
-					$image = new ImageForPrestashop();
-					$idImage = $image->insertImageInPrestashop($product->id,$url);
-					array_push($arrayIdImage,$idImage);
+					$url = trim($url_foto).$tmp[$i].".jpg";
+					$image = new imageForPrestashop();
+					$id_image = $image->insertImageInPrestashop($product->id,$url);
+					array_push($array_id_image,$id_image);
 				}
 			}
-			$product->addProductAttribute($product->price, 0.000, 0.000, 0.000, (int)$productAttributes["Qta"], $arrayIdImage, $product->reference, 
+			
+			$product->addProductAttribute($product->price, 0.000, 0.000, 0.000, (int)$product_attributes["Qta"], $array_id_image, $product->reference, 
 			$product->id_supplier, 0, '');
 		}
 		
@@ -215,38 +220,38 @@
 			
 		}
 		
-		public function updateProductForPrestashop($productAttributes = array(), $idProduct){
-			$product = new Product($idProduct);
-			$language = 1; //Italian => languages = 1
+		public function updateProductForPrestashop($product_attributes = array(), $id_product, $language = 1){
+			$product = new Product($id_product);
 			
-			$product->name = $this->setArrayElementForLinkRewrite($stringa);
-			$product->meta_keywords = $stringa;
-			$product->link_rewrite = $this->setArrayElementForLinkRewrite($stringa,false);
+			$string_name_product = trim($product_attributes["Nome"]);
+			$product->name = $this->setArrayElementForLinkRewrite($string_name_product, true, $language);
+			$product->meta_keywords = $string_name_product;
+			$product->link_rewrite = $this->setArrayElementForLinkRewrite($string_name_product, false, $language);
 			
 			$product->id_category_default = 2; //Home
 			$product->redirect_type = '404';
-			$product->price = (float) $productAttributes["Prezzo"];
-			$product->active = $productAttributes["Attivo"];
+			$product->price = (float)$product_attributes["Prezzo"];
+			$product->active = $product_attributes["Attivo"];
 			
-			$product->minimal_quantity = (int)$productAttributes["Qta_min"];
+			$product->minimal_quantity = (int)$product_attributes["Qta_min"];
 			$product->show_price = 1;
 			$product->on_sale = 0;
 			$product->online_only = 1;
 			$product->id_tax_rules_group = 0;
 			
-			$arrayFeatures = $productAttributes["Feature"];
+			$arrayFeatures = $product_attributes["Feature"];
 			$product->width = (float)$arrayFeatures["Larghezza"];
 			$product->height = (float)$arrayFeatures["Altezza"];
 			$product->depth = (float)$arrayFeatures["Lunghezza"];
 			
 			$product->update();
-			StockAvailable::setQuantity($product->id,'',(int)$productAttributes["Qta"]);
+			StockAvailable::setQuantity($product->id,'',(int)$product_attributes["Qta"]);
 			
 		}
 	}
 	
 	ini_set('max_execution_time', 600);
-	$prova = new ProductForPrestashop();
+	$prova = new productForPrestashop();
 	
 	try{
 		$path = "File/A20151008161213_SEM.chk";
