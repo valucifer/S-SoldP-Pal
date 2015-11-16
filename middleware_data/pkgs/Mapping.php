@@ -37,7 +37,7 @@
 			if(sizeof($tmp_array) === 1){
 				throw new Exception("Il file semaforo è vuoto");
 			}else{
-				$tmp_path = "File/";
+				$tmp_path = "Files/";
 				
 				$this->_TB_ART = $this->createArray($tmp_path.$tmp_array[1]);
 				
