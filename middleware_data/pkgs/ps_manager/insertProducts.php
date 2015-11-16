@@ -7,12 +7,13 @@
 		
 		function imageForPrestashop(){}
 		
-		public function insertImageInPrestashop($id_product, $url){
+		public function insertImageInPrestashop($id_product, $url, $name_photo){
 			$shops = Shop::getShops(true, null, true);    
-			$image = new Image();
+			$image = new ImageCore();
 			$image->id_product = $id_product;
 			$image->position = Image::getHighestPosition($id_product) + 1;
 			$image->cover = true; // or false;
+			$image->legend = array('1'=>trim($name_photo));
     
 			if (($image->validateFields(false, true)) === true && ($image->validateFieldsLang(false, true)) === true && $image->add()){
                 $image->associateTo($shops);
@@ -23,11 +24,11 @@
 			return $image->id;
 		}
 		
-		public function updateImageInPrestashop($id_product, $id_img, $url){
-			if($id_img == "") $this->insertImageInPrestashop($id_prod,$url);
+		public function updateImageInPrestashop($id_product, $id_img, $url, $name_photo){
+			if($id_img == "") return $this->insertImageInPrestashop($id_prod,$url,$name_photo);
 			else{
 				$shops = Shop::getShops(true, null, true);    
-				$image = new Image();
+				$image = new ImageCore();
 				$image->id_product = $id_product;
 		
 				if (($image->validateFields(false, true)) === true && ($image->validateFieldsLang(false, true)) === true && $image->update()){
@@ -36,6 +37,7 @@
 						$image->delete();
 					}
 				}
+				return $image->id;
 			}
 		}
 		
@@ -79,6 +81,19 @@
 			return true;
 		}
 		
+		public getIdImageByName($name_photo, $language = 1){
+			$id = null;
+			$image = new ImageCore();
+			$array_all_images = $image->getAllImages();
+			
+			foreach($array_all_images as $array_single_image){
+				$array_image = new ImageCore((int)$array_single_image['id_image']);
+				$image_name = $array_image->legend;
+				if(strtolower($image_name[$language]) === $name_photo)
+					return $array_image->id;
+			}
+			
+		}
 	}
 	
 	class productForPrestashop{
@@ -238,7 +253,7 @@
 				if(!empty($tmp[$i])){
 					$url = trim($url_foto).$tmp[$i].".jpg";
 					$image = new imageForPrestashop();
-					$id_image = $image->insertImageInPrestashop($product->id,$url);
+					$id_image = $image->insertImageInPrestashop($product->id,$url,$tmp[$i]);
 					array_push($array_id_image,$id_image);
 				}
 			}
