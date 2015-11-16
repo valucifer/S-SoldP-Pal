@@ -25,7 +25,7 @@
 		}
 		
 		public function updateImageInPrestashop($id_product, $id_img, $url, $name_photo){
-			if($id_img == "") return $this->insertImageInPrestashop($id_prod,$url,$name_photo);
+			if($id_img == "") return (int)$this->insertImageInPrestashop($id_prod,$url,$name_photo);
 			else{
 				$shops = Shop::getShops(true, null, true);    
 				$image = new ImageCore();
@@ -37,7 +37,7 @@
 						$image->delete();
 					}
 				}
-				return $image->id;
+				return (int)$image->id;
 			}
 		}
 		
@@ -81,18 +81,20 @@
 			return true;
 		}
 		
-		public getIdImageByName($name_photo, $language = 1){
-			$id = null;
+		public function getIdImageByName($name_photo, $language = 1){
+			$id = "";
 			$image = new ImageCore();
 			$array_all_images = $image->getAllImages();
 			
 			foreach($array_all_images as $array_single_image){
 				$array_image = new ImageCore((int)$array_single_image['id_image']);
 				$image_name = $array_image->legend;
-				if(strtolower($image_name[$language]) === $name_photo)
-					return $array_image->id;
+				if(strtolower($image_name[$language]) === $name_photo){
+					$id = (int)$array_image->id;
+					break;
+				}
 			}
-			
+			return $id;
 		}
 	}
 	
