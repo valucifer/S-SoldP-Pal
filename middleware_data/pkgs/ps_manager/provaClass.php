@@ -8,15 +8,10 @@
 
 	include "../config/config.inc.php";
 	include "../init.php";
-	try{
-	$prod = new Product(662);
-	print_r($prod->getAttributeCombinations(1));
-	echo "<br><br>";
-	$arr = $prod->getAttributeCombinations(1);
-	$arr = $arr[0];
-	$comb = new CombinationCore($arr["id_product_attribute"]);
-	echo "cia";
-	echo "COMB: ".$comb->id;
-;	}catch(Exception $e){echo $e->getMessage();}
+	
+	/*$mapping = new Mapping("File/A20151008161213_SEM.chk");
+	print_r($mapping->getItemMaster());*/
+	$attribute = new Attribute();
+	print_r($attribute->isAttribute(6,"GRIGO",1));
 	
 ?>

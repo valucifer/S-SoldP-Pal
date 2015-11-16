@@ -350,27 +350,30 @@
 				$size_of_attributes_and_value = sizeof($variable_tmp_attributes);
 				
 				for($i = 0; $i < $size_of_attributes_and_value; $i++){
-					$code = ""; $name = "";
+					$code = "";
 					if($variable_tmp_values[$i] != ""){
 						$id_attribute_group = $this->createAttributeGroups($variable_tmp_attributes[$i], $language);
+						
 						if(strtolower($variable_tmp_attributes[$i]) === "colore" || strtolower($variable_tmp_attributes[$i]) === "colori"){
 							$code = "#".$this->getCodeColor(strtolower($variable_tmp_values[$i]));
+							if($code != "" && $code != "#"){
+								$attribute_for_product = new Attribute();
+								$attribute_for_product->name = $this->setArrayElementForLinkRewrite($variable_tmp_values[$i], true, $language);
+								$attribute_for_product->color = $code;
+								$attribute_for_product->id_attribute_group = $id_attribute_group;
+								$attribute_for_product->add();
+								array_push($return, $attribute_for_product->id);
+							}
 						}
 						
-						if($code != "" && $code != "#"){
-							$attribute_for_product = new Attribute();
-							$attribute_for_product->name = $this->setArrayElementForLinkRewrite($variable_tmp_values[$i], true, $language);
-							$attribute_for_product->color = $code;
-							$attribute_for_product->id_attribute_group = $id_attribute_group;
-							$attribute_for_product->add();
-							array_push($return, $attribute_for_product->id);
-						}else{
+						if(strtolower($variable_tmp_attributes[$i]) === "taglia" || strtolower($variable_tmp_attributes[$i]) === "taglie"){
 							$attribute_for_product = new Attribute();
 							$attribute_for_product->name = $this->setArrayElementForLinkRewrite($variable_tmp_values[$i], true, $language);
 							$attribute_for_product->id_attribute_group = $id_attribute_group;
 							$attribute_for_product->add();
 							array_push($return, $attribute_for_product->id);
 						}
+						
 					}
 				}
 				
@@ -443,7 +446,7 @@
 	}
 	
 	ini_set('max_execution_time', 600);
-	
+	/*
 	$prova = new productForPrestashop();
 	
 	try{
@@ -470,21 +473,21 @@
 				echo $e->getMessage()." in line". $e->getLine()."<br/>";
 				echo "<br/><br/><br/><br/>";
 			}
-			/*try{
+			try{
 				$prova->updateProductForPrestashop($arrayMapping["YASC98M01X"],12);
 				break;
 			}catch(Exception $e){
 				echo $e->getMessage();
-			}*/
+			}
 		}
 		
-		//$prova->addAttributeForProduct(7, 1, $triple["RBSC0UI01VER"], $arrayCombinations["RBSC0UI01VER"]);*/
+		//$prova->addAttributeForProduct(7, 1, $triple["RBSC0UI01VER"], $arrayCombinations["RBSC0UI01VER"]);
 		echo "<br><br>finish!";
 		
 	}catch(Exception $e){
 		echo $e->getMessage();
 	}
-	
+	*/
 	
 	
 	
