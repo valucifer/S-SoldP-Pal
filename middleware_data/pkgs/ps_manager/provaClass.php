@@ -5,33 +5,18 @@
 	//il giorno: 09/11/2015
 	
 	require_once "./Mapping.php";
-/*
-	$mapping = new Mapping("File/A20151102142434_SEM.chk");
-	
-	echo "<br> Prova: <br> Proviamo a dare un file in input (tramite path)<br><br>";
-	echo "	1)Il risultato della prima tabella:<br><br>";
-	print_r($mapping->getItemMaster());
-	
-	echo "<br><br>";
-	echo "	2)Il risultato della seconda tabella:<br><br>";
-	print_r($mapping->getCombinations());
-*/
+
 	include "../config/config.inc.php";
 	include "../init.php";
-	$cat = new Category("98");
-	print_r($cat->getProductsWs());
+	try{
+	$prod = new Product(662);
+	print_r($prod->getAttributeCombinations(1));
 	echo "<br><br>";
-	$arr = $cat->getProductsWs();
-	$size = sizeof($arr);
-	echo "<br>";
-	for($i = 0; $i < $size; $i++){
-		$arr2 = $arr[$i];
-		$num = (int)$arr2["id"];
-		$prod = new Product($num);
-		echo "active: $prod->active<br>";
-	}
-	
-	
-	
+	$arr = $prod->getAttributeCombinations(1);
+	$arr = $arr[0];
+	$comb = new CombinationCore($arr["id_product_attribute"]);
+	echo "cia";
+	echo "COMB: ".$comb->id;
+;	}catch(Exception $e){echo $e->getMessage();}
 	
 ?>

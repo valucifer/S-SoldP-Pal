@@ -220,7 +220,7 @@
 		* @return array
 		*
 		*/
-		private function triple(){
+		public function triple(){
 			$combinations = array();
 			
 			$size_array_TBARTDET = sizeof($this->_TB_ART_DET);
@@ -612,8 +612,8 @@
 					$tmp_color = explode(":",$color);
 					$tmp_size = explode(":",$size);
 					
-					$attributes = "(COLORE:".$tmp_color[0]."),(TAGLIA:".$tmp_size[0].")";
-					$values = "(".$tmp_color[0].":".$tmp_color[1]."),(".$tmp_size[0].":".$tmp_size[1].")";
+					$attributes = "COLORE,TAGLIA";
+					$values = $tmp_color[1].",".$tmp_size[1];
 					
 					$element[$value] = array("Attribute" => $attributes, "Value" => $values, "Image" => $image);
 				}
@@ -703,7 +703,7 @@
 			
 			return $return;
 		}
-		
+				
 	}
 	
 	

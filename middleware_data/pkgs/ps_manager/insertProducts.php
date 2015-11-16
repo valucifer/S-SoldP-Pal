@@ -145,7 +145,36 @@
 			return $id_manufacturer;
 		}
 		
-		public function insertProductForPrestashop($product_attributes = array(), $url_foto, $language = 1){
+		private function addFeaturesForProducts($id_product, $language, $array_features_product){
+			$feature_product = new Feature();
+			$feature_product_value = new FeatureValue();
+			
+			$id_feature_width = $feature_product->addFeatureImport("Larghezza");
+			$id_feature_height = $feature_product->addFeatureImport("Altezza");
+			$id_feature_size = $feature_product->addFeatureImport("Lunghezza");
+			
+			$array_id_features = array();
+			array_push($array_id_features,$id_feature_width);
+			array_push($array_id_features,$id_feature_height);
+			array_push($array_id_features,$id_feature_size);
+			 
+			$string_value_width = $array_features_product["Larghezza"]." cm";
+			$string_value_height = $array_features_product["Altezza"]." cm";
+			$string_value_size = $array_features_product["Lunghezza"]." cm";
+			
+			$array_id_feature_value = array();
+			array_push($array_id_feature_value,$feature_product_value->addFeatureValueImport($id_feature_width,$string_value_width,(int)$id_product,$language));
+			array_push($array_id_feature_value,$feature_product_value->addFeatureValueImport($id_feature_height,$string_value_height,(int)$id_product,$language));
+			array_push($array_id_feature_value,$feature_product_value->addFeatureValueImport($id_feature_size,$string_value_size,(int)$id_product,$language));
+			
+			$product = new Product((int)$id_product);
+			for($i = 0; $i < 3; $i++){
+				$product->addFeaturesToDB($array_id_features[$i],$array_id_feature_value[$i]);
+			}
+			
+		}
+		
+		public function insertProductForPrestashop($product_attributes = array(), $url_foto, $triple_cod_col_siz, $array_combinations, $language = 1){
 			$product = new Product();
 			//$language is 1 because 1 -> italian
 			
@@ -171,9 +200,11 @@
 			$array_features = $product_attributes["Feature"];
 			$product->width = (float)$array_features["Larghezza"];
 			$product->height = (float)$array_features["Altezza"];
-			$product->depth = (float)$array_features["Lunghezza"];
+			//$product->depth = (float)$array_features["Lunghezza"];
 			
 			$product->add();
+			
+			$this->addFeaturesForProducts($product->id, $language, $array_features);
 			
 			$categories = trim($product_attributes["Categorie"]);
 			$tmp = explode(",",$categories);
@@ -212,8 +243,105 @@
 				}
 			}
 			
-			$product->addProductAttribute($product->price, 0.000, 0.000, 0.000, (int)$product_attributes["Qta"], $array_id_image, $product->reference, 
-			$product->id_supplier, 0, '');
+			$id_product_attribute = $product->addProductAttribute($product->price, 0.000, 0.000, 0.000, (int)$product_attributes["Qta"], $array_id_image, $product->reference, $product->id_supplier, 0, '');
+			
+			$ids_attributes = $this->addAttributeForProduct($triple_cod_col_siz, $array_combinations, $language);
+			
+			$combinations = new CombinationCore((int)$id_product_attribute);
+			
+			$combinations->setAttributes($ids_attributes);
+			
+			return $product->id;
+		}
+		
+		private function getCodeColor($name_color){
+			$colors  =  array('blue alice'=>'F0F8FF','alice blu'=>'F0F8FF','bianco antico'=>'FAEBD7','aqua'=>'00FFFF','acqua'=>'00FFFF','acqua marina'=>'7FFFD4', 'azzurro'=>'F0FFFF','beige'=>'F5F5DC','biscotto'=>'FFE4C4',
+        'nero'=>'000000','blanched almond'=>'FFEBCD','mandorla sbiancata'=>'FFEBCD','blue'=>'0000FF','blu'=>'0000FF','blue violet'=>'8A2BE2','blue viola'=>'8A2BE2','blu violetto'=>'8A2BE2','marrone di fuoco'=>'A52A2A',
+		'burly wood'=>'DEB887','legno corpulento'=>'DEB887','legno'=>'DEB887','cadet blue'=>'5F9EA0','cadetto blu'=>'5F9EA0','chartreuse'=>'7FFF00','cioccolato'=>'D2691E','corallo'=>'FF7F50','bluetto'=>'6495ED',
+        'seta di mais'=>'FFF8DC','seta'=>'FFF8DC','cremisi'=>'DC143C','ciano'=>'00FFFF','blu scuro'=>'00008B','ciano scuro'=>'008B8B','verga d\'oro scuro'=>'B8860B','grigio scuro'=>'A9A9A9','verde scuro'=>'006400',
+        'kaki scuro'=>'BDB76B','magenta scuro'=>'8B008B','verde oliva scuro'=>'556B2F','arancione scuro'=>'FF8C00','orchidea scuro'=>'9932CC','rosso scuro'=>'8B0000','salmone scuro'=>'E9967A','verde acqua scuro'=>'8FBC8F',
+		'ardesia blu scuro'=>'483D8B','ardesia grigio scuro'=>'2F4F4F','turchese scuro'=>'00CED1','viola scuro'=>'9400D3','rosa intenso'=>'FF1493','blu cielo profondo'=>'00BFFF','dimgray'=>'696969','blu evaso'=>'1E90FF',
+		'mattone'=>'B22222','bianco floreale'=>'FFFAF0','verde foresta'=>'228B22','fucsia'=>'FF00FF','gainsboro'=>'DCDCDC','bianco fantasma'=>'F8F8FF','oro'=>'FFD700','goldenrod'=>'DAA520','grigio'=>'808080','verde'=>'008000',
+		'verde giallo'=>'ADFF2F','miele'=>'F0FFF0','rosa forte'=>'FF69B4','rosso indiano'=>'CD5C5C','indaco'=>'4B0082','avorio'=>'FFFFF0','kaki'=>'F0E68C','lavanda'=>'E6E6FA','lavanda arrossita'=>'FFF0F5',
+        'prato verde'=>'7CFC00','chiffon limone'=>'FFFACD','blu chiaro'=>'ADD8E6','corallo chiaro'=>'F08080','ciano chiaro'=>'E0FFFF','lightgoldenrodyellow'=>'FAFAD2','grigio chiaro'=>'D3D3D3','verde chiaro'=>'90EE90',
+		'rosa chiaro'=>'FFB6C1','salmone chiaro'=>'FFA07A','verde acqua chiaro'=>'20B2AA','blu chielo chiaro'=>'87CEFA','grigio ardesia chiaro'=>'778899','blu acciaio chiaro'=>'B0C4DE','giallo chiaro'=>'FFFFE0',
+        'lime'=>'00FF00','verde lime'=>'32CD32','biancheria'=>'FAF0E6','magenta'=>'FF00FF','marrone'=>'800000','acquamarina media'=>'66CDAA','blu medio'=>'0000CD','orchidea media'=>'BA55D3','porpora media'=>'9370D0',
+		'verde acqua media'=>'3CB371','orchidea blu media'=>'7B68EE','verde primavera media'=>'00FA9A','turchese medio'=>'48D1CC','rosso viola medio'=>'C71585','blu mezzanotte'=>'191970','crema di menta'=>'F5FFFA',
+		'rosa nebbia'=>'FFE4E1','mocassino'=>'FFE4B5','bianco navajo'=>'FFDEAD','marina militare'=>'000080','vecchi merletti'=>'FDF5E6','oliva'=>'808000','verde oliva'=>'6B8E23','arancione'=>'FFA500','rosso arancio'=>'FF4500',
+		'rosso arancione'=>'FF4500','orchidea'=>'DA70D6','verde pallido'=>'98FB98','turchese pallido'=>'AFEEEE','rosso violetto pallido'=>'DB7093','papaya'=>'FFEFD5','soffio pesca'=>'FFDAB9','peru'=>'CD853F','rosa'=>'FFC0CB',
+		'prugna'=>'DDA0DD','blu in polvere'=>'B0E0E6','porpora'=>'800080','rosso'=>'FF0000','mattone rosato'=>'BC8F8F','blu reale'=>'4169E1','marrone sella'=>'8B4513','salmone'=>'FA8072','marrone sabbia'=>'F4A460',
+		'verde mare'=>'2E8B57','conchiglia'=>'FFF5EE','sienna'=>'A0522D','argento'=>'C0C0C0','blu cielo'=>'87CEEB','blu orchidea'=>'6A5ACD','grigio orchidea'=>'708090','neve'=>'FFFAFA','verde primavera'=>'00FF7F',
+		'blu acciaio'=>'4682B4','abbronzatura'=>'D2B48C','teal'=>'008080','cardo'=>'D8BFD8','pomodoro'=>'FF6347','turchese'=>'40E0D0','viola'=>'EE82EE','frumento'=>'F5DEB3','bianco'=>'FFFFFF','bianco fumo'=>'F5F5F5',
+        'giallo'=>'FFFF00','giallo verde'=>'9ACD32');
+		
+			return $colors[$name_color];
+		}
+		
+		private function createAttributeGroups($attribute_product, $language = 1){
+			$attributes_groups = new AttributeGroupCore();
+			$array_attributes_groups = $attributes_groups->getAttributesGroups($language);
+			
+			foreach($array_attributes_groups as $array_single_attribute_group){
+				if($array_single_attribute_group["name"] === trim($attribute_product)){
+					return (int)$array_single_attribute_group["id_attribute_group"];
+				}
+			}
+			
+			$attribute_group = new AttributeGroupCore();
+			
+			$attribute_group->name = $this->setArrayElementForLinkRewrite($attribute_product, true, $language);
+			$attribute_group->public_name = $this->setArrayElementForLinkRewrite($attribute_product, true, $language);
+			
+			$type = strtolower($attribute_product);
+			if(strtolower($attribute_product) == "colore" || strtolower($attribute_product) == "colori")
+				$type = "color";
+			
+			$attribute_group->group_type = $type;
+			$attribute_group->add();
+			
+			return (int)$attribute_group->id;
+			
+		}
+		
+		private function addAttributeForProduct($triple_cod_col_siz, $array_combinations, $language = 1){
+			$return = array();
+			foreach($triple_cod_col_siz as $triple){
+				
+				$array_attributes = $array_combinations[$triple];
+				$attributes = $array_attributes["Attributi"];
+				$values = $array_attributes["Valori"];
+				
+				$variable_tmp_attributes = explode(",",$attributes);
+				$variable_tmp_values = explode(",",$values);
+				$size_of_attributes_and_value = sizeof($variable_tmp_attributes);
+				
+				for($i = 0; $i < $size_of_attributes_and_value; $i++){
+					$code = "";
+					if($variable_tmp_values[$i] != ""){
+						$id_attribute_group = $this->createAttributeGroups($variable_tmp_attributes[$i], $language);
+						if(strtolower($variable_tmp_attributes[$i]) === "colore" || strtolower($variable_tmp_attributes[$i]) === "colori"){
+							$code = "#".$this->getCodeColor(strtolower($variable_tmp_values[$i]));
+						}
+						
+						if($code != "" && $code != "#"){
+							$attribute_for_product = new Attribute();
+							$attribute_for_product->name = $this->setArrayElementForLinkRewrite($variable_tmp_values[$i], true, $language);
+							$attribute_for_product->color = $code;
+							$attribute_for_product->id_attribute_group = $id_attribute_group;
+							$attribute_for_product->add();
+							array_push($return, $attribute_for_product->id);
+						}else{
+							$attribute_for_product = new Attribute();
+							$attribute_for_product->name = $this->setArrayElementForLinkRewrite($variable_tmp_values[$i], true, $language);
+							$attribute_for_product->id_attribute_group = $id_attribute_group;
+							$attribute_for_product->add();
+							array_push($return, $attribute_for_product->id);
+						}
+					}
+				}
+				
+			}
+			return $return;
 		}
 		
 		private function controlCategoriesForActivateTheir($ids_categories_array){
@@ -221,23 +349,21 @@
 			
 			for($i = 0; $i < $size_array_categories; $i++){
 				$tmp = $ids_categories_array[$i];
-				
 				$category = new Category((int)$tmp["id"]);
+				
 				$array_of_ids_products = $category->getProductsWs();
 				$size_array_products = sizeof($array_of_ids_products);
-				
 				$count = 0;
 				
 				for($j = 0; $j < $size_array_products; $j++){
 					$array_prod = $array_of_ids_products[$j];
 					$product = new Product((int)$array_prod["id"]);
-					if($product-active != 1){
+					if(!$product->active){
 						$count++;
-					}else
-						break;
+					}
 				}
 				
-				if($count == $size_array_products || $count == 0){
+				if($count == $size_array_products){
 					$category->active = 0;
 					$category->update();
 				}else{
@@ -259,7 +385,7 @@
 			$product->id_category_default = 2; //Home
 			$product->redirect_type = '404';
 			$product->price = (float)$product_attributes["Prezzo"];
-			$product->active = 0;//(int)$product_attributes["Attivo"];
+			$product->active = (int)$product_attributes["Attivo"];
 			
 			$product->minimal_quantity = (int)$product_attributes["Qta_min"];
 			$product->show_price = 1;
@@ -267,28 +393,29 @@
 			$product->online_only = 1;
 			$product->id_tax_rules_group = 0;
 			
-			$arrayFeatures = $product_attributes["Feature"];
-			$product->width = (float)$arrayFeatures["Larghezza"];
-			$product->height = (float)$arrayFeatures["Altezza"];
-			$product->depth = (float)$arrayFeatures["Lunghezza"];
+			$array_features = $product_attributes["Feature"];
+			$product->width = (float)$array_features["Larghezza"];
+			$product->height = (float)$array_features["Altezza"];
+			//$product->depth = (float)$array_features["Lunghezza"];
 			
 			$product->update();
-			StockAvailable::setQuantity($product->id,'', (int)$product_attributes["Qta"]);
 			
-			if(!$product->active){
-				$ids_categories_array = $product->getWsCategories();
-				$this->controlCategoriesForActivateTheir($ids_categories_array);
-			}
+			$this->addFeaturesForProducts($product->id, $language, $array_features);
+			
+			
+			$ids_categories_array = $product->getWsCategories();
+			$this->controlCategoriesForActivateTheir($ids_categories_array);
+			
 		}
 	}
 	
 	ini_set('max_execution_time', 600);
+	
 	$prova = new productForPrestashop();
 	
 	try{
 		$path = "File/A20151008161213_SEM.chk";
 		$mapping = new Mapping($path);
-		
 		$tmp = explode("_",$path);
 		$urlFoto = $tmp[0]."_FOTO/";
 		
@@ -296,19 +423,28 @@
 		
 		$arrayMapping = $mapping->getItemMaster();
 		
-		//$arrayCombinations = $mapping->getCombinations();
-		foreach($keys as $key){
-			/*try{
-				$prova->insertProductForPrestashop($arrayMapping[$key],$urlFoto);
+		$arrayCombinations = $mapping->getCombinations();
+		
+		$triple = $mapping->triple();
+		
+		print_r($arrayCombinations);echo "<br><br><br>";
+		/*foreach($keys as $key){
+			try{
+				$id_prod = $prova->insertProductForPrestashop($arrayMapping[$key], $urlFoto, $triple[$key], $arrayCombinations[$key]);
 			}catch(Exception $e){
 				echo "$key<br/>";
 				echo $e->getMessage()." in line". $e->getLine()."<br/>";
 				echo "<br/><br/><br/><br/>";
-			}*/
-			$prova->updateProductForPrestashop($arrayMapping[$key],599);
-			break;
+			}
+			try{
+				$prova->updateProductForPrestashop($arrayMapping["YASC98M01X"],599);
+				break;
+			}catch(Exception $e){
+				echo $e->getMessage();
+			}
 		}
 		
+		//$prova->addAttributeForProduct(7, 1, $triple["RBSC0UI01VER"], $arrayCombinations["RBSC0UI01VER"]);*/
 		echo "<br><br>finish!";
 		
 	}catch(Exception $e){
