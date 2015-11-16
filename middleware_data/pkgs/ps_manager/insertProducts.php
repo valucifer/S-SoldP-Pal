@@ -271,7 +271,14 @@
 			
 			$return = array();
 			array_push($return,$product->id);
-			array_push($return, $array_id_image);
+			$element = array();
+			for($i = 0; $i < sizeof($array_id_image); $i++){
+				$img_for_table = new ImageCore($array_id_image[$i]);
+				$array_tmp = $img_for_table->legend;
+				$string_to_return = $array_id_image[$i].",".$array_tmp['1'];
+				array_push($element,$string_to_return);
+			}
+			array_push($return, $element);
 			return $return;
 		}
 		
@@ -453,6 +460,7 @@
 		foreach($keys as $key){
 			try{
 				$id_prod = $prova->insertProductForPrestashop($arrayMapping[$key], $urlFoto, $triple[$key], $arrayCombinations[$key]);
+				print_r($id_prod);
 			}catch(Exception $e){
 				echo "$key<br/>";
 				echo $e->getMessage()." in line". $e->getLine()."<br/>";
