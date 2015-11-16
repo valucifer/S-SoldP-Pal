@@ -7,12 +7,12 @@
     * @author     Carlos Borges (carboma89@gmail.com)
     **/
 
-    include "connection.php";
-    require ("./HandleOperationsException.php");
-    require ("./Logger.php");
+    require ("connection.php");
+    require ("HandleOperationsException.php");
+    require ("Logger.php");
     
     class ImageUpdate{
-        $logger=null;
+        private $logger=null;
         
         public function __construct(){
             $this->logger = new Logger();
@@ -26,55 +26,32 @@
         public function updateImageInformation($psIdProduc,$psIdImage,$colorAnalysis, $md5Digest,$imgPath){
             $productExist = $this-> _ifProductExist($psIdProduc);
             $imageExist = $this-> ifImageExist($psIdImage);
-
             if(!$productExist){
                 $this->logger->postMessage("Il prodotto $psIdProduc non esiste","WARNING");
                 return ;
-            }else
-                if($imageExist===true){
-                    $oldPath = $this->getImageInformation($psIdImage);
-                    $connection = connectionServer();
-                    $sql = "UPDATE ps_tmp_image SET color_analysis ='".$colorAnalysis."' ,md5_digest = '".$md5Digest."' ,                     new_path = '".$imgPath."',old_path = '".$oldPath["newPath"]."', status = '1' WHERE ( ps_id =  
-                    '".$psIdImage."')";
-                    $res = mysql_query($sql,$connection)
-                    if(res){
-                        $this->logger->postMessage("Il prodotto $psIdProduc e' stato aggiornato correttamente ");
-                    }
-                    else{
-                        $errno = mysql_errno($connection);
-                        $error = mysql_error($connection);
-                        switch ($errno) {
-                           case MYSQL_DUPLICATE_KEY_ENTRY:
-                throw new HandleOperationsException($error, "ERROR");
-                           break;
-                           default:
-                           throw MySQLException($error, $errno);
-                           break;
-                        }
-            } else {
-                echo "l'immagine non esiste </br>";
+            }
+            if($imageExist===true){
+                $oldPath = $this->getImageInformation($psIdImage);
                 $connection = connectionServer();
-                $sql = "INSERT INTO ps_tmp_image ( ps_id, color_analysis,md5_digest, new_path,status,fk_ps_id)
-                VALUES('".$psIdImage."','".$colorAnalysis."','".$md5Digest."','".$imgPath."','1','".$psIdProduc."')";
-                $res = mysql_query($sql,$connection)
-                if($res)
-                    echo "New record created successfully <br/>";
+                $sql = "UPDATE ps_tmp_image SET color_analysis ='".$colorAnalysis."' ,md5_digest = '".$md5Digest."' ,                     new_path = '".$imgPath."',old_path = '".$oldPath["newPath"]."', status = '1' WHERE ( ps_id =  
+                '".$psIdImage."')";
+                $res = mysql_query($sql,$connection);
+                if($res){
+                    $this->logger->postMessage("Il prodotto $psIdProduc e' stato aggiornato correttamente ");
+                }
                 else{
-                    else{
                     $errno = mysql_errno($connection);
                     $error = mysql_error($connection);
                     switch ($errno) {
                         case MYSQL_DUPLICATE_KEY_ENTRY:
-                throw new HandleOperationsException($error, "ERROR");
+                        throw new HandleOperationsException($error);
                         break;
                         default:
                         throw MySQLException($error, $errno);
                         break;
                         }
-                    
-                }
-
-            }
+                    }
+            } 
             closeConnectionServer($connection);
         }
         
@@ -87,8 +64,26 @@
             $connection = connectionServer();
             $sql = "INSERT INTO ps_tmp_image ( ps_id, color_analysis,md5_digest, new_path,status,fk_ps_id)
                 VALUES('".$psIdImage."','".$colorAnalysis."','".$md5Digest."','".$imgPath."','1','".$psIdProduc."')";
-            if(mysql_query($sql,$connection))
-                echo "New record created successfully <br/>";
+            try{
+                $res = mysql_query($sql,$connection);
+            }catch(Exception $e){
+                echo $e."";
+            }
+            if($res){
+                $this->logger->postMessage("Il prodotto $psIdProduc e' stato inserito correttamente ");
+            }else{
+                 $errno = mysql_errno($connection);
+                 $error = mysql_error($connection);
+                 echo "sono qua  $error ; $errno<br/>";
+                 switch ($errno) {
+                     case 1062:
+                        throw new HandleOperationsException($error);
+                     break;
+                     default:
+                     throw new HandleOperationsException($error);
+                     break;
+                 }
+             }
             closeConnectionServer($connection);
         }
         
