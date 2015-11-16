@@ -169,23 +169,27 @@
 			$id_feature_width = $feature_product->addFeatureImport("Larghezza");
 			$id_feature_height = $feature_product->addFeatureImport("Altezza");
 			$id_feature_size = $feature_product->addFeatureImport("Lunghezza");
+			$id_feature_model = $feature_product->addFeatureImport("Modello");
 			
 			$array_id_features = array();
 			array_push($array_id_features,$id_feature_width);
 			array_push($array_id_features,$id_feature_height);
 			array_push($array_id_features,$id_feature_size);
+			array_push($array_id_features,$id_feature_model);
 			 
 			$string_value_width = $array_features_product["Larghezza"]." cm";
 			$string_value_height = $array_features_product["Altezza"]." cm";
 			$string_value_size = $array_features_product["Lunghezza"]." cm";
+			$string_value_model = $array_features_product["Modello"];
 			
 			$array_id_feature_value = array();
 			array_push($array_id_feature_value,$feature_product_value->addFeatureValueImport($id_feature_width,$string_value_width,(int)$id_product,$language));
 			array_push($array_id_feature_value,$feature_product_value->addFeatureValueImport($id_feature_height,$string_value_height,(int)$id_product,$language));
 			array_push($array_id_feature_value,$feature_product_value->addFeatureValueImport($id_feature_size,$string_value_size,(int)$id_product,$language));
+			array_push($array_id_feature_value,$feature_product_value->addFeatureValueImport($id_feature_model,$string_value_model,(int)$id_product,$language));
 			
 			$product = new Product((int)$id_product);
-			for($i = 0; $i < 3; $i++){
+			for($i = 0; $i < 4; $i++){
 				$product->addFeaturesToDB($array_id_features[$i],$array_id_feature_value[$i]);
 			}
 			

@@ -187,7 +187,7 @@
 		
 		/*
 		* Creates array key => value with: 1) key is the code of product, 2) value is an array
-		* with width, height and size of product
+		* with width, height, size and model of product
 		* 
 		* @return array
 		*
@@ -195,6 +195,7 @@
 		private function getArtAndAttribute(){
 			$return = array();
 			$size_array_TBART = sizeof($this->_TB_ART);
+			$size_array_TBDESCRLIN = sizeof($this->_TB_DESCR_LIN);
 			
 			for($i = 0; $i < $size_array_TBART; $i++){
 				$tmp = explode(";",$this->_TB_ART[$i]);
@@ -202,10 +203,28 @@
 				if(sizeof($tmp) === 1) 
 					break;
 				
+				$model = trim($tmp[6]);
+				$name_model = "";
+				
+				for($j = 0; $j < $size_array_TBDESCRLIN; $j++){
+					$tmp1 = explode(";",$this->_TB_DESCR_LIN[$j]);
+					if(sizeof($tmp1) === 1) 
+						break;
+					
+					if($tmp1[0] === "MODELLO" && $tmp1[2] === "IT"){
+						if($tmp1[1] === $model){
+							$name_model = trim($tmp1[3]);
+							break;
+						}
+					}
+				
+				}
+				
 				$element = array();
 				$element["Larghezza"] = str_replace(",",".",trim($tmp[12]));
 				$element["Altezza"] = str_replace(",",".",trim($tmp[13]));
 				$element["Lunghezza"] = str_replace(",",".",trim($tmp[11]));
+				$element["Modello"] = str_replace("\"","",trim($name_model));
 				
 				$return[$tmp[0]] = $element;
 			}
@@ -271,7 +290,7 @@
 					break;
 				
 				//Initialize the variables
-				$reference = $tmp[0]; $name = null; $model = null; $griffe = null;
+				$reference = $tmp[0]; $name = null; $business_unit = null; $griffe = null;
 				
 				for($j = 0; $j < $size_array_TBDESCRLIN; $j++){
 					$tmp1 = explode(";",$this->_TB_DESCR_LIN[$j]);
@@ -287,9 +306,9 @@
 					}
 					
 					//Research the model of product
-					if($tmp1[0] === "MODELLO" and $tmp1[2] === "IT"){
-						if($tmp1[1] === $tmp[6]){
-							$model = trim($tmp1[3]);
+					if($tmp1[0] === "BU" and $tmp1[2] === "IT"){
+						if($tmp1[1] === $tmp[4]){
+							$business_unit = trim($tmp1[3]);
 						}
 					}
 					
@@ -304,10 +323,10 @@
 				
 				//Remove \" of the strings
 				$name = str_replace("\"","",$name);
-				$model = str_replace("\"","",$model);
+				$business_unit = str_replace("\"","",$business_unit);
 				$griffe = str_replace("\"","",$griffe);
 				
-				$return[$reference] = $reference.";".$name.";".$model.";".$griffe;
+				$return[$reference] = $reference.";".$name.";".$business_unit.";".$griffe;
 			}
 			
 			return $return;
