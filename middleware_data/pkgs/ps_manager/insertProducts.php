@@ -250,6 +250,7 @@
 			$combinations = new CombinationCore((int)$id_product_attribute);
 			
 			$combinations->setAttributes($ids_attributes);
+			$combinations->setImages($array_id_image);
 			
 			return $product->id;
 		}
@@ -295,6 +296,8 @@
 			$type = strtolower($attribute_product);
 			if(strtolower($attribute_product) == "colore" || strtolower($attribute_product) == "colori")
 				$type = "color";
+			if(strtolower($attribute_product) == "taglia" || strtolower($attribute_product) == "taglie")
+				$type = "select";
 			
 			$attribute_group->group_type = $type;
 			$attribute_group->add();
@@ -316,7 +319,7 @@
 				$size_of_attributes_and_value = sizeof($variable_tmp_attributes);
 				
 				for($i = 0; $i < $size_of_attributes_and_value; $i++){
-					$code = "";
+					$code = ""; $name = "";
 					if($variable_tmp_values[$i] != ""){
 						$id_attribute_group = $this->createAttributeGroups($variable_tmp_attributes[$i], $language);
 						if(strtolower($variable_tmp_attributes[$i]) === "colore" || strtolower($variable_tmp_attributes[$i]) === "colori"){
@@ -402,7 +405,6 @@
 			
 			$this->addFeaturesForProducts($product->id, $language, $array_features);
 			
-			
 			$ids_categories_array = $product->getWsCategories();
 			$this->controlCategoriesForActivateTheir($ids_categories_array);
 			
@@ -427,8 +429,8 @@
 		
 		$triple = $mapping->triple();
 		
-		print_r($arrayCombinations);echo "<br><br><br>";
-		/*foreach($keys as $key){
+		//print_r($arrayCombinations);echo "<br><br><br>";
+		foreach($keys as $key){
 			try{
 				$id_prod = $prova->insertProductForPrestashop($arrayMapping[$key], $urlFoto, $triple[$key], $arrayCombinations[$key]);
 			}catch(Exception $e){
@@ -436,12 +438,12 @@
 				echo $e->getMessage()." in line". $e->getLine()."<br/>";
 				echo "<br/><br/><br/><br/>";
 			}
-			try{
-				$prova->updateProductForPrestashop($arrayMapping["YASC98M01X"],599);
+			/*try{
+				$prova->updateProductForPrestashop($arrayMapping["YASC98M01X"],12);
 				break;
 			}catch(Exception $e){
 				echo $e->getMessage();
-			}
+			}*/
 		}
 		
 		//$prova->addAttributeForProduct(7, 1, $triple["RBSC0UI01VER"], $arrayCombinations["RBSC0UI01VER"]);*/
