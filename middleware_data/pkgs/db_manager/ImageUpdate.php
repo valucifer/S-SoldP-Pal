@@ -8,8 +8,8 @@
     **/
 
     require ("connection.php");
-    require ("HandleOperationsException.php");
-    require ("Logger.php");
+    require ("../../libs/HandleOperationsException.php");
+    require ("../../libs/Logger.php");
     
     class ImageUpdate{
         private $logger=null;
@@ -33,7 +33,7 @@
             if($imageExist===true){
                 $oldPath = $this->getImageInformation($psIdImage);
                 $connection = connectionServer();
-                $sql = "UPDATE ps_tmp_image SET color_analysis ='".$colorAnalysis."' ,md5_digest = '".$md5Digest."' ,                     new_path = '".$imgPath."',old_path = '".$oldPath["newPath"]."', status = '1' WHERE ( ps_id =  
+                $sql = "UPDATE ps_tmp_image SET color_analysis ='".$colorAnalysis."' ,md5_digest = '".$md5Digest."' ,                     new_path = '".$imgPath."',old_path = '".$oldPath["newPath"]."', status = '0' WHERE ( ps_id =  
                 '".$psIdImage."')";
                 $res = mysql_query($sql,$connection);
                 if($res){
@@ -63,7 +63,7 @@
         public function insertImageInformation($psIdProduc,$psIdImage,$colorAnalysis, $md5Digest,$imgPath){
             $connection = connectionServer();
             $sql = "INSERT INTO ps_tmp_image ( ps_id, color_analysis,md5_digest, new_path,status,fk_ps_id)
-                VALUES('".$psIdImage."','".$colorAnalysis."','".$md5Digest."','".$imgPath."','1','".$psIdProduc."')";
+                VALUES('".$psIdImage."','".$colorAnalysis."','".$md5Digest."','".$imgPath."','0','".$psIdProduc."')";
             try{
                 $res = mysql_query($sql,$connection);
             }catch(Exception $e){

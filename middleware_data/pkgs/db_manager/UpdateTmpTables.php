@@ -1,7 +1,7 @@
 
 <?php
 require_once ("../imageChecker/ImageChecker.php");
-require_once ("./imagesUpdate/ImageUpdate.php");
+require_once ("ImageUpdate.php");
 class UpdateTmpTables{ 
 /**
     * PHP class that provides functions to update the informations of the tmp product table 
@@ -31,10 +31,12 @@ class UpdateTmpTables{
             $differences = $comparator->areImagesDifferent($imagePath,  40, 1, $imgInformation['md5Digest'], $imgInformation['colorAnalysis'] );
             if(gettype($differences)==="string"){//if $differences is a string the two images are equals
                 echo "le immagini sono uguali </br>";
-                return true;
+                return false;
             }
             $toUpdate->updateImageInformation($psIdProduct, $psIdImage,$differences[1], $differences[0],$imagePath);
             echo "le immagini sono diverse le ho aggiornate </br>";
+            return true;
+            
         }
     }
     
