@@ -43,7 +43,7 @@
                     $errno = mysql_errno($connection);
                     $error = mysql_error($connection);
                     switch ($errno) {
-                        case MYSQL_DUPLICATE_KEY_ENTRY:
+                        case 1062:
                         throw new HandleOperationsException($error);
                         break;
                         default:
