@@ -269,7 +269,10 @@
 			$combinations->setAttributes($ids_attributes);
 			$combinations->setImages($array_id_image);
 			
-			return $product->id;
+			$return = array();
+			array_push($return,$product->id);
+			array_push($return, $array_id_image);
+			return $return;
 		}
 		
 		private function getCodeColor($name_color){
