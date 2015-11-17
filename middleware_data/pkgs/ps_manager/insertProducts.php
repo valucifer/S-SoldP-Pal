@@ -89,7 +89,7 @@
 			foreach($array_all_images as $array_single_image){
 				$array_image = new ImageCore((int)$array_single_image['id_image']);
 				$image_name = $array_image->legend;
-				if(strtolower($image_name[$language]) === $name_photo){
+				if(strtolower($image_name[$language]) === strtolower($name_photo)){
 					$id = (int)$array_image->id;
 					break;
 				}
@@ -170,26 +170,30 @@
 			$id_feature_height = $feature_product->addFeatureImport("Altezza");
 			$id_feature_size = $feature_product->addFeatureImport("Lunghezza");
 			$id_feature_model = $feature_product->addFeatureImport("Modello");
+			$id_feature_collez = $feature_product->addFeatureImport("Linea");
 			
 			$array_id_features = array();
 			array_push($array_id_features,$id_feature_width);
 			array_push($array_id_features,$id_feature_height);
 			array_push($array_id_features,$id_feature_size);
 			array_push($array_id_features,$id_feature_model);
+			array_push($array_id_features,$id_feature_collez);
 			 
 			$string_value_width = $array_features_product["Larghezza"]." cm";
 			$string_value_height = $array_features_product["Altezza"]." cm";
 			$string_value_size = $array_features_product["Lunghezza"]." cm";
 			$string_value_model = $array_features_product["Modello"];
+			$string_value_collez = $array_features_product["Linea"];
 			
 			$array_id_feature_value = array();
 			array_push($array_id_feature_value,$feature_product_value->addFeatureValueImport($id_feature_width,$string_value_width,(int)$id_product,$language));
 			array_push($array_id_feature_value,$feature_product_value->addFeatureValueImport($id_feature_height,$string_value_height,(int)$id_product,$language));
 			array_push($array_id_feature_value,$feature_product_value->addFeatureValueImport($id_feature_size,$string_value_size,(int)$id_product,$language));
 			array_push($array_id_feature_value,$feature_product_value->addFeatureValueImport($id_feature_model,$string_value_model,(int)$id_product,$language));
+			array_push($array_id_feature_value,$feature_product_value->addFeatureValueImport($id_feature_collez,$string_value_collez,(int)$id_product,$language));
 			
 			$product = new Product((int)$id_product);
-			for($i = 0; $i < 4; $i++){
+			for($i = 0; $i < 5; $i++){
 				$product->addFeaturesToDB($array_id_features[$i],$array_id_feature_value[$i]);
 			}
 			
@@ -210,9 +214,7 @@
 			$product->active = (int) $product_attributes["Attivo"];
 			$product->minimal_quantity = (int)$product_attributes["Qta_min"];
 			$product->show_price = 1;
-			$product->on_sale = 0;
 			$product->reference = $product_attributes["Reference"];
-			$product->online_only = 1;
 			$product->id_tax_rules_group = 0;
 			
 			$product->id_supplier = $this->setSupplierForProduct(trim($product_attributes["Supplier"]));
@@ -221,7 +223,6 @@
 			$array_features = $product_attributes["Feature"];
 			$product->width = (float)$array_features["Larghezza"];
 			$product->height = (float)$array_features["Altezza"];
-			//$product->depth = (float)$array_features["Lunghezza"];
 			
 			$product->add();
 			
@@ -259,19 +260,12 @@
 				if(!empty($tmp[$i])){
 					$url = trim($url_foto).$tmp[$i].".jpg";
 					$image = new imageForPrestashop();
-					$id_image = $image->insertImageInPrestashop($product->id,$url,$tmp[$i]);
+					$id_image = $image->insertImageInPrestashop($product->id,$url,$tmp[$i].".jpg");
 					array_push($array_id_image,$id_image);
 				}
 			}
 			
-			$id_product_attribute = $product->addProductAttribute($product->price, 0.000, 0.000, 0.000, (int)$product_attributes["Qta"], $array_id_image, $product->reference, $product->id_supplier, 0, '');
-			
-			$ids_attributes = $this->addAttributeForProduct($triple_cod_col_siz, $array_combinations, $language);
-			
-			$combinations = new CombinationCore((int)$id_product_attribute);
-			
-			$combinations->setAttributes($ids_attributes);
-			$combinations->setImages($array_id_image);
+			$this->addCombinationsForPrestashop($product->id, $triple_cod_col_siz, $array_combinations, $language);
 			
 			$return = array();
 			array_push($return,$product->id);
@@ -284,6 +278,123 @@
 			}
 			array_push($return, $element);
 			return $return;
+		}
+		
+		private function addCombinationsForPrestashop($id_product, $triple_cod_col_siz, $array_combinations, $language = 1){
+			$product = new Product((int)$id_product);
+			
+			$price = (float)$product->price;
+			$reference = $product->reference;
+			$id_supplier = (int)$product->id_supplier;
+			
+			foreach($triple_cod_col_siz as $triple){
+				$array_attributes_and_values = $array_combinations[$triple];
+				
+				$attributes = $array_attributes_and_values["Attributi"];
+				$values = $array_attributes_and_values["Valori"];
+				$image = trim($array_attributes_and_values["Immagine"]);
+				$quantity = (int)$array_attributes_and_values["Qta"];
+				
+				$variable_tmp_attributes = explode(",",$attributes);
+				$variable_tmp_values = explode(",",$values);
+				
+				$id_attributes_for_combinations = array();
+				for($i = 0; $i < sizeof($variable_tmp_attributes); $i++){
+					$code = "";
+					if($variable_tmp_values[$i] != ""){
+						$id_attribute_group = $this->createAttributeGroups($variable_tmp_attributes[$i], $language);
+						
+						if(strtolower($variable_tmp_attributes[$i]) === "colore" || strtolower($variable_tmp_attributes[$i]) === "colori"){
+							$product_attribute_for_not_reply = $product->getAttributeCombinations($language);
+							if(empty($product_attribute_for_not_reply)){
+								$code = $this->getCodeColor(strtolower($variable_tmp_values[$i]));
+								if($code != ""){
+									$code = "#".$code;
+									$attribute_for_product = new Attribute();
+									$attribute_for_product->name = $this->setArrayElementForLinkRewrite($variable_tmp_values[$i], true, $language);
+									$attribute_for_product->color = $code;
+									$attribute_for_product->id_attribute_group = $id_attribute_group;
+									$attribute_for_product->add();
+									array_push($id_attributes_for_combinations, $attribute_for_product->id);
+								}
+							}else{
+								$flag = true;
+								foreach($product_attribute_for_not_reply as $more_attributes){
+									if($more_attributes['attribute_name'] === $variable_tmp_values[$i]){
+										array_push($id_attributes_for_combinations, (int)$more_attributes['id_attribute']);
+										$flag = false;
+										break;
+									}
+								}
+								if($flag){
+									$code = $this->getCodeColor(strtolower($variable_tmp_values[$i]));
+									if($code != ""){
+										$code = "#".$code;
+										$attribute_for_product = new Attribute();
+										$attribute_for_product->name = $this->setArrayElementForLinkRewrite($variable_tmp_values[$i], true, $language);
+										$attribute_for_product->color = $code;
+										$attribute_for_product->id_attribute_group = $id_attribute_group;
+										$attribute_for_product->add();
+										array_push($id_attributes_for_combinations, $attribute_for_product->id);
+									}
+								}
+							}
+						}
+						
+						if(strtolower($variable_tmp_attributes[$i]) === "taglia" || strtolower($variable_tmp_attributes[$i]) === "taglie"){
+							$product_attribute_for_not_reply = $product->getAttributeCombinations($language);
+							if(empty($product_attribute_for_not_reply)){
+								$attribute_for_product = new Attribute();
+								$attribute_for_product->name = $this->setArrayElementForLinkRewrite($variable_tmp_values[$i], true, $language);
+								$attribute_for_product->id_attribute_group = $id_attribute_group;
+								$attribute_for_product->add();
+								array_push($id_attributes_for_combinations, $attribute_for_product->id);
+							}else{
+								$flag = true;
+								foreach($product_attribute_for_not_reply as $more_attributes){
+									$vrbls_1 = trim($more_attributes['attribute_name']);
+									$vrbls_2 = trim($variable_tmp_values[$i]);
+									if(gettype($vrbls_1) === "string" && gettype($vrbls_2) === "string"){
+										if($vrbls_1 === $vrbls_2){
+											array_push($id_attributes_for_combinations, (int)$more_attributes['id_attribute']);
+											$flag = false;
+											break;
+										}
+									}
+									if(gettype($vrbls_1) === "integer" && gettype($vrbls_2) === "integer"){
+										if($vrbls_1 == $vrbls_2){
+											array_push($id_attributes_for_combinations, (int)$more_attributes['id_attribute']);
+											$flag = false;
+											echo "taglia trovata<br>";
+											break;
+										}
+									}
+									
+								}
+								if($flag){
+									$attribute_for_product = new Attribute();
+									$attribute_for_product->name = $this->setArrayElementForLinkRewrite($variable_tmp_values[$i], true, $language);
+									$attribute_for_product->id_attribute_group = $id_attribute_group;
+									$attribute_for_product->add();
+									array_push($id_attributes_for_combinations, $attribute_for_product->id);
+								}
+							}
+						}
+					}
+				}
+				
+				$image_for_prestashop = new imageForPrestashop();
+				$id_image = $image_for_prestashop->getIdImageByName(trim($image));
+				$id_images = array();
+				array_push($id_images, $id_image);
+				
+				$id_product_attributes = $product->addProductAttribute($price, 0, 0, 0, $quantity, "", $reference, $id_supplier, 0, 1);
+			
+				$combinations = new CombinationCore((int)$id_product_attributes);
+			
+				$combinations->setAttributes($id_attributes_for_combinations);
+				$combinations->setImages($id_images);
+			}
 		}
 		
 		private function getCodeColor($name_color){
@@ -337,7 +448,7 @@
 			
 		}
 		
-		private function addAttributeForProduct($triple_cod_col_siz, $array_combinations, $language = 1){
+		/*private function addAttributeForProduct($triple_cod_col_siz, $array_combinations, $language = 1){
 			$return = array();
 			foreach($triple_cod_col_siz as $triple){
 				
@@ -380,6 +491,7 @@
 			}
 			return $return;
 		}
+		*/
 		
 		private function controlCategoriesForActivateTheir($ids_categories_array){
 			$size_array_categories = sizeof($ids_categories_array);
@@ -467,18 +579,18 @@
 		foreach($keys as $key){
 			try{
 				$id_prod = $prova->insertProductForPrestashop($arrayMapping[$key], $urlFoto, $triple[$key], $arrayCombinations[$key]);
-				print_r($id_prod);
+			//	print_r($id_prod);
 			}catch(Exception $e){
 				echo "$key<br/>";
 				echo $e->getMessage()." in line". $e->getLine()."<br/>";
 				echo "<br/><br/><br/><br/>";
 			}
-			try{
-				$prova->updateProductForPrestashop($arrayMapping["YASC98M01X"],12);
-				break;
-			}catch(Exception $e){
-				echo $e->getMessage();
-			}
+			//try{
+			//	$prova->updateProductForPrestashop($arrayMapping["YASC98M01X"],12);
+			//	break;
+			//}catch(Exception $e){
+			//	echo $e->getMessage();
+			//}
 		}
 		
 		//$prova->addAttributeForProduct(7, 1, $triple["RBSC0UI01VER"], $arrayCombinations["RBSC0UI01VER"]);
@@ -487,8 +599,8 @@
 	}catch(Exception $e){
 		echo $e->getMessage();
 	}
-	*/
 	
+	*/
 	
 	
 	

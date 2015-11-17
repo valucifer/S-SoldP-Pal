@@ -37,7 +37,7 @@
 			if(sizeof($tmp_array) === 1){
 				throw new Exception("Il file semaforo è vuoto");
 			}else{
-				$tmp_path = "Files/";
+				$tmp_path = "File/";
 				
 				$this->_TB_ART = $this->createArray($tmp_path.$tmp_array[1]);
 				
@@ -204,13 +204,20 @@
 					break;
 				
 				$model = trim($tmp[6]);
+				$collez = trim($tmp[3]);
 				$name_model = "";
+				$name_collez = "";
 				
 				for($j = 0; $j < $size_array_TBDESCRLIN; $j++){
 					$tmp1 = explode(";",$this->_TB_DESCR_LIN[$j]);
 					if(sizeof($tmp1) === 1) 
 						break;
 					
+					if($tmp1[0] === "COLLEZ" && $tmp1[2] === "IT"){
+						if($tmp1[1] === $collez){
+							$name_collez = trim($tmp1[3]);
+						}
+					}
 					if($tmp1[0] === "MODELLO" && $tmp1[2] === "IT"){
 						if($tmp1[1] === $model){
 							$name_model = trim($tmp1[3]);
@@ -225,6 +232,7 @@
 				$element["Altezza"] = str_replace(",",".",trim($tmp[13]));
 				$element["Lunghezza"] = str_replace(",",".",trim($tmp[11]));
 				$element["Modello"] = str_replace("\"","",trim($name_model));
+				$element["Linea"] = str_replace("\"","",trim($name_collez));
 				
 				$return[$tmp[0]] = $element;
 			}
@@ -540,6 +548,37 @@
 		}
 		
 		/*
+		* Creates string with quantity of the single product
+		* 
+		* @param string $cod_size
+		* @param string $cod_art
+		* @param string $cod_color
+		* @return string
+		*
+		*/
+		private function getQuantityForCombinations($cod_art, $cod_color, $cod_size){
+			$return = 0;
+			$size_array_TBARTDETDISP = sizeof($this->_TB_ART_DET_DISP);
+			
+		
+			for($i = 0; $i < $size_array_TBARTDETDISP; $i++){
+				$tmp = explode(";",$this->_TB_ART_DET_DISP[$i]);
+				
+				if(sizeof($tmp) === 1) 
+					break;
+				
+				if($tmp[0] === $cod_art && $tmp[1] === $cod_color && $tmp[2] === $cod_size){
+					$return = (float)$tmp[4];
+					break;
+				}
+				
+			}
+			
+			
+			return $return;
+		}
+		
+		/*
 		* Creates string with size of the color: name of the size
 		* 
 		* @param string $cod_size
@@ -605,6 +644,7 @@
 		* @see $this->getColors
 		* @see $this->getSizes
 		* @see $this->getImages
+		* @see $this->getQuantityForCombinations
 		*
 		* @return array
 		*
@@ -627,14 +667,14 @@
 					$color = $this->getColors($tmp[1]);
 					$size = $this->getSizes($tmp[2]);
 					$image = $this->getImages($tmp[0],$tmp[1]);
+					$quantity = $this->getQuantityForCombinations($tmp[0],$tmp[1],$tmp[2]);
 					
 					$tmp_color = explode(":",$color);
 					$tmp_size = explode(":",$size);
 					
 					$attributes = "COLORE,TAGLIA";
 					$values = $tmp_color[1].",".$tmp_size[1];
-					
-					$element[$value] = array("Attribute" => $attributes, "Value" => $values, "Image" => $image);
+					$element[$value] = array("Attribute" => $attributes, "Value" => $values, "Quantity" => $quantity, "Image" => $image);
 				}
 				
 				$return[$this->keys[$i]] = $element;
@@ -714,7 +754,7 @@
 				
 				foreach($this->triple[$keys] as $combo){
 					$sigle_attribute_value_and_image = $tmp[$combo];
-					$element[$combo] = array("Attributi" => $sigle_attribute_value_and_image["Attribute"],"Valori" => $sigle_attribute_value_and_image["Value"],"Immagine" => $sigle_attribute_value_and_image["Image"]);
+					$element[$combo] = array("Attributi" => $sigle_attribute_value_and_image["Attribute"],"Valori" => $sigle_attribute_value_and_image["Value"], "Qta" => $sigle_attribute_value_and_image["Quantity"], "Immagine" => $sigle_attribute_value_and_image["Image"]);
 				}
 				
 				$return[$keys] = $element;

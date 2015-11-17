@@ -9,9 +9,9 @@
 	include "../config/config.inc.php";
 	include "../init.php";
 	
-	/*$mapping = new Mapping("File/A20151008161213_SEM.chk");
-	print_r($mapping->getItemMaster());*/
-	$attribute = new Attribute();
-	print_r($attribute->isAttribute(6,"GRIGO",1));
+	$mapping = new Mapping("File/A20151008161213_SEM.chk");
+	print_r($mapping->getItemMaster());echo"<br><br><br>";
+	print_r($mapping->getCombinations());echo"<br><br><br>";
+	
 	
 ?>
