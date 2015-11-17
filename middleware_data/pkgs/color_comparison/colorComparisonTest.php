@@ -14,7 +14,7 @@ foreach($files as $file){
         continue;
     }
     echo "<div>Image ".$index." called ".$file.":</div><br/>";  
-    $color_comparison->getColorsTable("imgs/".$file);
+    $color_comparison->getThreeMainColors("imgs/".$file, true);
     $index++;
 }
 $end = microtime(true)-$start;
