@@ -1,7 +1,8 @@
 
 <?php
-require_once ("../imageChecker/ImageChecker.php");
+require_once ("ImageChecker.php");
 require_once ("ImageUpdate.php");
+
 class UpdateTmpTables{ 
 /**
     * PHP class that provides functions to update the informations of the tmp product table 
@@ -45,10 +46,13 @@ class UpdateTmpTables{
     *@params string $imagePath, int $psIdProduct, int $psIdImage
     **/
     public function insertImageField ($imagePath,$psIdProduct,$psIdImage){
+        
         $toUpdate = new ImageUpdate();
         $comparator = new ImageChecker();
         $differences = $comparator->areImagesDifferent($imagePath,  40, 1," ", " " );
+        echo "<br/> sono in insertImageField";
         $toUpdate->insertImageInformation($psIdProduct, $psIdImage,$differences[1], $differences[0],$imagePath);
     }
  }
+
 ?>

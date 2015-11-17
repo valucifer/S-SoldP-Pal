@@ -1,8 +1,8 @@
 <?php
 
-require ("connection.php");
-require ("../../libs/HandleOperationsException.php");
-require ("../../libs/Logger.php");
+require_once ("connection.php");
+require_once ("HandleOperationsException.php");
+require_once ("Logger.php");
 
 class ProductUpdate{
      private $logger=null;

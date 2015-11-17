@@ -7,9 +7,8 @@
  * @author Nello Saulino <nello.saulino@gmail.com>
  */
 
-include "./settings.php";
-require("HandleOperationsException.php");
-require("Logger.php");
+require_once("HandleOperationsException.php");
+require_once("Logger.php");
 
 class FTPConnection{
 
@@ -17,7 +16,7 @@ class FTPConnection{
     private $ftp_port = 2114;
     private $ftp_username = "pjgroup";
     private $ftp_password = "3nRvgCMDYv";
-    private $local_dir = __FTP_FOLDER_COPY__;
+    private $local_dir = "./files";
     private $semaphore_name = "FTP_SEMAMPHORE.smph";
     private $connection = null;
     private $timestamps_name = array();

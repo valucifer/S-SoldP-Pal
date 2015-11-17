@@ -7,9 +7,9 @@
     * @author     Carlos Borges (carboma89@gmail.com)
     **/
 
-    require ("connection.php");
-    require ("../../libs/HandleOperationsException.php");
-    require ("../../libs/Logger.php");
+    require_once ("connection.php");
+    require_once ("HandleOperationsException.php");
+    require_once ("Logger.php");
     
     class ImageUpdate{
         private $logger=null;
@@ -62,8 +62,10 @@
         */
         public function insertImageInformation($psIdProduc,$psIdImage,$colorAnalysis, $md5Digest,$imgPath){
             $connection = connectionServer();
+            echo "<br/> sono in insertImageInformation";
             $sql = "INSERT INTO ps_tmp_image ( ps_id, color_analysis,md5_digest, new_path,status,fk_ps_id)
                 VALUES('".$psIdImage."','".$colorAnalysis."','".$md5Digest."','".$imgPath."','0','".$psIdProduc."')";
+            echo "sql : $sql";
             try{
                 $res = mysql_query($sql,$connection);
             }catch(Exception $e){

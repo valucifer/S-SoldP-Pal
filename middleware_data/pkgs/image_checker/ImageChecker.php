@@ -7,8 +7,8 @@
  * @author Nello Saulino <nello.saulino@gmail.com>
  */
 
-require("ColorChecker.php");
-require("HandleOperationsException.php");
+require_once("ColorChecker.php");
+require_once("HandleOperationsException.php");
 
 class ImageChecker{
     

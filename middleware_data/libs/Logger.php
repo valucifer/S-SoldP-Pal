@@ -7,7 +7,7 @@ class Logger{
     private $log_file = null;
     
     public function __construct(){
-        $this->log_file = 'handleOperationsLog.txt';
+        $this->log_file = './log_files/Log.txt';
         Analog::handler (Analog\Handler\File::init ($this->log_file));
     }
     

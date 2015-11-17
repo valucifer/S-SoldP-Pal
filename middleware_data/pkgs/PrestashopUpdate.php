@@ -1,10 +1,9 @@
 <?php
-
-require ("./ps_manager/insertProduct.php");
-require ("./db_manager/UpdateTmpTables.php");
-require ("./db_manager/ProductUpdate.php");
-require ("./db_manager/UpdateTmpTables.php");
-require ("Mapping.php");
+require_once ("Mapping.php");
+require_once ("UpdateTmpTables.php");
+require_once ("ProductUpdate.php");
+require_once ("UpdateTmpTables.php");
+require_once ("insertProducts.php");
 
 class PrestashopUpdate{
         
@@ -17,7 +16,6 @@ class PrestashopUpdate{
     private $url_photo;
         
     public function __construct($mapping_path){
-        echo"sono qua";
         $tmp= explode ('_',$mapping_path);
         $this->url_photo = $tmp[0].'_FOTO/';
         $this->logger = new Logger();
@@ -33,7 +31,7 @@ class PrestashopUpdate{
         $image_manager = new imageForPrestashop();
         for($i = 0; $i<sizeof($image_url); $i++){
             $image_id = $image_manager->getIdImageByName($images_url[$i]);
-            $tmp_manager = new UpdateTmpTabler();
+            $tmp_manager = new UpdateTmpTables();
             if($image_id===""){//primo inserimento dell'immagine
                  $psIdImage=$image_manager->updateImageInPrestashop($ps_product_id,$image_id,$this->url_photo,$images_url[$i]);
                 $tmp_manager->insertImageField ($this->url_photo.$images_url[$i],$ps_product_id,$psIdImage);
@@ -60,7 +58,10 @@ class PrestashopUpdate{
 				$array_product = $insert_product->insertProductForPrestashop($this->array_mapping[$key], $this->url_photo, $this->triple[$key], $this->array_combinations[$key]);
                 $array_images_id = $array_product[1];
                 $product_update->insertProduct($array_product[0],$key);
+                echo "Inserisco il nuovo prodotto con ps_id $array_product[0] e reference $key ";
+                $tmp_manager = new UpdateTmpTables();
                 for($i=0;i<sizeof($array_images_id);$i++){
+                    echo"sono nel for";
                     $tmp = explode (',',$array_images_id[$i]);
                     $tmp_manager->insertImageField ($this->url_photo.$tmp[1],$array_product[0],$tmp[0]);
                 }   

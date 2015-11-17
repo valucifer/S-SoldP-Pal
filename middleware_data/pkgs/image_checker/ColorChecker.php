@@ -1,8 +1,8 @@
 <?php
 
-require("colors.inc.php");
-require("Logger.php");
-require("HandleOperationsException.php");
+require_once("colors.inc.php");
+require_once("Logger.php");
+require_once("HandleOperationsException.php");
 
 /**
  * This class handles colors form an image and their presence ratio.

@@ -21,7 +21,7 @@ class HandleOperationsException extends Exception implements IException{
     private $log_file = null;
 
     public function __construct($message = null, $code = 0){
-        $this->log_file = 'handleOperationsLog.txt';
+        $this->log_file = './log_files/Log.txt';
         if (!$message) 
             throw new $this('Unknown '. get_class($this));
         Analog::handler (Analog\Handler\File::init ($this->log_file));

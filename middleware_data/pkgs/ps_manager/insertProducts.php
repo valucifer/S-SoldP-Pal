@@ -1,7 +1,7 @@
 <?php
-	include "../config/config.inc.php";
-	include "../init.php";
-	require_once "./Mapping.php";
+	include "../../config/config.inc.php";//da controllare durante l'istallazione finale (Carlos Borges)
+	include "../../init.php";
+	require_once ("Mapping.php");
 	
 	class imageForPrestashop{
 		
