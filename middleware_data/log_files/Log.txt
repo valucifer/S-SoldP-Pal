@@ -8,3 +8,97 @@
 #2 {main}
 ::1 - 2015-11-18 14:56:57 - 7 - Il prodotto 1 e' stato inserito correttamente 
 ::1 - 2015-11-18 14:56:58 - 7 - Il prodotto 1 e' stato aggiornato correttamente 
+::1 - 2015-11-18 15:07:29 - 7 - Il prodotto 8 e' stato inserito correttamente 
+::1 - 2015-11-18 15:07:29 - 7 - Il prodotto 8 e' stato inserito correttamente 
+::1 - 2015-11-18 15:07:29 - 7 - Il prodotto 8 e' stato inserito correttamente 
+::1 - 2015-11-18 15:07:29 - 7 - Il prodotto 8 e' stato inserito correttamente 
+::1 - 2015-11-18 15:07:29 - 3 - HandleOperationsException 'Duplicate entry '0-8' for key 'PRIMARY'' in /Applications/MAMP/htdocs/prestashop/webservice/middleware_data/pkgs/db_manager/ImageUpdate.php(line:82)
+#0 /Applications/MAMP/htdocs/prestashop/webservice/middleware_data/pkgs/db_manager/UpdateTmpTables.php(55): ImageUpdate->insertImageInformation('8', '', NULL, 'd41d8cd98f00b20...', './files/A201510...')
+#1 /Applications/MAMP/htdocs/prestashop/webservice/middleware_data/pkgs/PrestashopUpdate.php(66): UpdateTmpTables->insertImageField('./files/A201510...', '8', '')
+#2 /Applications/MAMP/htdocs/prestashop/webservice/middleware_data/mainscript.php(23): PrestashopUpdate->updatePsProduct()
+#3 {main}
+::1 - 2015-11-18 15:07:29 - 7 - Il prodotto 9 e' stato inserito correttamente 
+::1 - 2015-11-18 15:07:29 - 7 - Il prodotto 9 e' stato inserito correttamente 
+::1 - 2015-11-18 15:07:29 - 7 - Il prodotto 9 e' stato inserito correttamente 
+::1 - 2015-11-18 15:07:29 - 7 - Il prodotto 9 e' stato inserito correttamente 
+::1 - 2015-11-18 15:07:29 - 3 - HandleOperationsException 'Duplicate entry '0-9' for key 'PRIMARY'' in /Applications/MAMP/htdocs/prestashop/webservice/middleware_data/pkgs/db_manager/ImageUpdate.php(line:82)
+#0 /Applications/MAMP/htdocs/prestashop/webservice/middleware_data/pkgs/db_manager/UpdateTmpTables.php(55): ImageUpdate->insertImageInformation('9', '', NULL, 'd41d8cd98f00b20...', './files/A201510...')
+#1 /Applications/MAMP/htdocs/prestashop/webservice/middleware_data/pkgs/PrestashopUpdate.php(66): UpdateTmpTables->insertImageField('./files/A201510...', '9', '')
+#2 /Applications/MAMP/htdocs/prestashop/webservice/middleware_data/mainscript.php(23): PrestashopUpdate->updatePsProduct()
+#3 {main}
+::1 - 2015-11-18 15:07:29 - 7 - Il prodotto 10 e' stato inserito correttamente 
+::1 - 2015-11-18 15:07:29 - 7 - Il prodotto 10 e' stato inserito correttamente 
+::1 - 2015-11-18 15:07:29 - 7 - Il prodotto 10 e' stato inserito correttamente 
+::1 - 2015-11-18 15:07:29 - 3 - HandleOperationsException 'Duplicate entry '0-10' for key 'PRIMARY'' in /Applications/MAMP/htdocs/prestashop/webservice/middleware_data/pkgs/db_manager/ImageUpdate.php(line:82)
+#0 /Applications/MAMP/htdocs/prestashop/webservice/middleware_data/pkgs/db_manager/UpdateTmpTables.php(55): ImageUpdate->insertImageInformation('10', '', NULL, 'd41d8cd98f00b20...', './files/A201510...')
+#1 /Applications/MAMP/htdocs/prestashop/webservice/middleware_data/pkgs/PrestashopUpdate.php(66): UpdateTmpTables->insertImageField('./files/A201510...', '10', '')
+#2 /Applications/MAMP/htdocs/prestashop/webservice/middleware_data/mainscript.php(23): PrestashopUpdate->updatePsProduct()
+#3 {main}
+::1 - 2015-11-18 15:07:29 - 7 - Il prodotto 11 e' stato inserito correttamente 
+::1 - 2015-11-18 15:07:29 - 7 - Il prodotto 11 e' stato inserito correttamente 
+::1 - 2015-11-18 15:07:29 - 7 - Il prodotto 11 e' stato inserito correttamente 
+::1 - 2015-11-18 15:07:29 - 7 - Il prodotto 11 e' stato inserito correttamente 
+::1 - 2015-11-18 15:07:29 - 7 - Il prodotto 11 e' stato inserito correttamente 
+::1 - 2015-11-18 15:07:29 - 3 - HandleOperationsException 'Duplicate entry '0-11' for key 'PRIMARY'' in /Applications/MAMP/htdocs/prestashop/webservice/middleware_data/pkgs/db_manager/ImageUpdate.php(line:82)
+#0 /Applications/MAMP/htdocs/prestashop/webservice/middleware_data/pkgs/db_manager/UpdateTmpTables.php(55): ImageUpdate->insertImageInformation('11', '', NULL, 'd41d8cd98f00b20...', './files/A201510...')
+#1 /Applications/MAMP/htdocs/prestashop/webservice/middleware_data/pkgs/PrestashopUpdate.php(66): UpdateTmpTables->insertImageField('./files/A201510...', '11', '')
+#2 /Applications/MAMP/htdocs/prestashop/webservice/middleware_data/mainscript.php(23): PrestashopUpdate->updatePsProduct()
+#3 {main}
+::1 - 2015-11-18 15:07:30 - 7 - Il prodotto 12 e' stato inserito correttamente 
+::1 - 2015-11-18 15:07:30 - 7 - Il prodotto 12 e' stato inserito correttamente 
+::1 - 2015-11-18 15:07:30 - 7 - Il prodotto 12 e' stato inserito correttamente 
+::1 - 2015-11-18 15:07:30 - 7 - Il prodotto 12 e' stato inserito correttamente 
+::1 - 2015-11-18 15:07:30 - 7 - Il prodotto 12 e' stato inserito correttamente 
+::1 - 2015-11-18 15:07:30 - 3 - HandleOperationsException 'Duplicate entry '0-12' for key 'PRIMARY'' in /Applications/MAMP/htdocs/prestashop/webservice/middleware_data/pkgs/db_manager/ImageUpdate.php(line:82)
+#0 /Applications/MAMP/htdocs/prestashop/webservice/middleware_data/pkgs/db_manager/UpdateTmpTables.php(55): ImageUpdate->insertImageInformation('12', '', NULL, 'd41d8cd98f00b20...', './files/A201510...')
+#1 /Applications/MAMP/htdocs/prestashop/webservice/middleware_data/pkgs/PrestashopUpdate.php(66): UpdateTmpTables->insertImageField('./files/A201510...', '12', '')
+#2 /Applications/MAMP/htdocs/prestashop/webservice/middleware_data/mainscript.php(23): PrestashopUpdate->updatePsProduct()
+#3 {main}
+::1 - 2015-11-18 15:22:43 - 7 - Il prodotto 8 e' stato inserito correttamente 
+::1 - 2015-11-18 15:22:43 - 7 - Il prodotto 8 e' stato inserito correttamente 
+::1 - 2015-11-18 15:22:43 - 7 - Il prodotto 8 e' stato inserito correttamente 
+::1 - 2015-11-18 15:22:43 - 7 - Il prodotto 8 e' stato inserito correttamente 
+::1 - 2015-11-18 15:22:43 - 3 - HandleOperationsException 'Duplicate entry '0-8' for key 'PRIMARY'' in /Applications/MAMP/htdocs/prestashop/webservice/middleware_data/pkgs/db_manager/ImageUpdate.php(line:82)
+#0 /Applications/MAMP/htdocs/prestashop/webservice/middleware_data/pkgs/db_manager/UpdateTmpTables.php(55): ImageUpdate->insertImageInformation('8', '', NULL, 'd41d8cd98f00b20...', './files/A201510...')
+#1 /Applications/MAMP/htdocs/prestashop/webservice/middleware_data/pkgs/PrestashopUpdate.php(67): UpdateTmpTables->insertImageField('./files/A201510...', '8', '')
+#2 /Applications/MAMP/htdocs/prestashop/webservice/middleware_data/mainscript.php(23): PrestashopUpdate->updatePsProduct()
+#3 {main}
+::1 - 2015-11-18 15:22:44 - 7 - Il prodotto 9 e' stato inserito correttamente 
+::1 - 2015-11-18 15:22:44 - 7 - Il prodotto 9 e' stato inserito correttamente 
+::1 - 2015-11-18 15:22:44 - 7 - Il prodotto 9 e' stato inserito correttamente 
+::1 - 2015-11-18 15:22:44 - 7 - Il prodotto 9 e' stato inserito correttamente 
+::1 - 2015-11-18 15:22:44 - 3 - HandleOperationsException 'Duplicate entry '0-9' for key 'PRIMARY'' in /Applications/MAMP/htdocs/prestashop/webservice/middleware_data/pkgs/db_manager/ImageUpdate.php(line:82)
+#0 /Applications/MAMP/htdocs/prestashop/webservice/middleware_data/pkgs/db_manager/UpdateTmpTables.php(55): ImageUpdate->insertImageInformation('9', '', NULL, 'd41d8cd98f00b20...', './files/A201510...')
+#1 /Applications/MAMP/htdocs/prestashop/webservice/middleware_data/pkgs/PrestashopUpdate.php(67): UpdateTmpTables->insertImageField('./files/A201510...', '9', '')
+#2 /Applications/MAMP/htdocs/prestashop/webservice/middleware_data/mainscript.php(23): PrestashopUpdate->updatePsProduct()
+#3 {main}
+::1 - 2015-11-18 15:22:44 - 7 - Il prodotto 10 e' stato inserito correttamente 
+::1 - 2015-11-18 15:22:44 - 7 - Il prodotto 10 e' stato inserito correttamente 
+::1 - 2015-11-18 15:22:44 - 7 - Il prodotto 10 e' stato inserito correttamente 
+::1 - 2015-11-18 15:22:44 - 3 - HandleOperationsException 'Duplicate entry '0-10' for key 'PRIMARY'' in /Applications/MAMP/htdocs/prestashop/webservice/middleware_data/pkgs/db_manager/ImageUpdate.php(line:82)
+#0 /Applications/MAMP/htdocs/prestashop/webservice/middleware_data/pkgs/db_manager/UpdateTmpTables.php(55): ImageUpdate->insertImageInformation('10', '', NULL, 'd41d8cd98f00b20...', './files/A201510...')
+#1 /Applications/MAMP/htdocs/prestashop/webservice/middleware_data/pkgs/PrestashopUpdate.php(67): UpdateTmpTables->insertImageField('./files/A201510...', '10', '')
+#2 /Applications/MAMP/htdocs/prestashop/webservice/middleware_data/mainscript.php(23): PrestashopUpdate->updatePsProduct()
+#3 {main}
+::1 - 2015-11-18 15:22:44 - 7 - Il prodotto 11 e' stato inserito correttamente 
+::1 - 2015-11-18 15:22:44 - 7 - Il prodotto 11 e' stato inserito correttamente 
+::1 - 2015-11-18 15:22:44 - 7 - Il prodotto 11 e' stato inserito correttamente 
+::1 - 2015-11-18 15:22:44 - 7 - Il prodotto 11 e' stato inserito correttamente 
+::1 - 2015-11-18 15:22:44 - 7 - Il prodotto 11 e' stato inserito correttamente 
+::1 - 2015-11-18 15:22:44 - 3 - HandleOperationsException 'Duplicate entry '0-11' for key 'PRIMARY'' in /Applications/MAMP/htdocs/prestashop/webservice/middleware_data/pkgs/db_manager/ImageUpdate.php(line:82)
+#0 /Applications/MAMP/htdocs/prestashop/webservice/middleware_data/pkgs/db_manager/UpdateTmpTables.php(55): ImageUpdate->insertImageInformation('11', '', NULL, 'd41d8cd98f00b20...', './files/A201510...')
+#1 /Applications/MAMP/htdocs/prestashop/webservice/middleware_data/pkgs/PrestashopUpdate.php(67): UpdateTmpTables->insertImageField('./files/A201510...', '11', '')
+#2 /Applications/MAMP/htdocs/prestashop/webservice/middleware_data/mainscript.php(23): PrestashopUpdate->updatePsProduct()
+#3 {main}
+::1 - 2015-11-18 15:22:44 - 7 - Il prodotto 12 e' stato inserito correttamente 
+::1 - 2015-11-18 15:22:44 - 7 - Il prodotto 12 e' stato inserito correttamente 
+::1 - 2015-11-18 15:22:44 - 7 - Il prodotto 12 e' stato inserito correttamente 
+::1 - 2015-11-18 15:22:44 - 7 - Il prodotto 12 e' stato inserito correttamente 
+::1 - 2015-11-18 15:22:44 - 7 - Il prodotto 12 e' stato inserito correttamente 
+::1 - 2015-11-18 15:22:44 - 3 - HandleOperationsException 'Duplicate entry '0-12' for key 'PRIMARY'' in /Applications/MAMP/htdocs/prestashop/webservice/middleware_data/pkgs/db_manager/ImageUpdate.php(line:82)
+#0 /Applications/MAMP/htdocs/prestashop/webservice/middleware_data/pkgs/db_manager/UpdateTmpTables.php(55): ImageUpdate->insertImageInformation('12', '', NULL, 'd41d8cd98f00b20...', './files/A201510...')
+#1 /Applications/MAMP/htdocs/prestashop/webservice/middleware_data/pkgs/PrestashopUpdate.php(67): UpdateTmpTables->insertImageField('./files/A201510...', '12', '')
+#2 /Applications/MAMP/htdocs/prestashop/webservice/middleware_data/mainscript.php(23): PrestashopUpdate->updatePsProduct()
+#3 {main}
+::1 - 2015-11-18 15:43:45 - 7 - Il prodotto 17 e' stato inserito correttamente 
+::1 - 2015-11-18 15:43:45 - 7 - Il prodotto 18 e' stato inserito correttamente 

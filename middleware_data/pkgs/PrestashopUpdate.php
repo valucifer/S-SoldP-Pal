@@ -3,7 +3,7 @@ require_once ("Mapping.php");
 require_once ("UpdateTmpTables.php");
 require_once ("ProductUpdate.php");
 require_once ("UpdateTmpTables.php");
-require_once ("insertProducts.php");
+require_once ("PrestashopProducts.php");
 
 class PrestashopUpdate{
         
@@ -63,6 +63,7 @@ class PrestashopUpdate{
                 for($i=0;i<sizeof($array_images_id);$i++){
                     echo"sono nel for";
                     $tmp = explode (',',$array_images_id[$i]);
+                    echo "<br/>Inserisco roba <br/>$this->url_photo.$tmp[1]<br/>$array_product[0]<br/>$tmp[0]<br/>";
                     $tmp_manager->insertImageField ($this->url_photo.$tmp[1],$array_product[0],$tmp[0]);
                 }   
 			}catch(Exception $e){

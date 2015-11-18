@@ -31,7 +31,7 @@
 		* @see $this->launchException
 		*
 		*/
-		public function Mapping($path){
+		function Mapping($path){
 			$tmp_array = $this->createArray($path);
 			
 			if(sizeof($tmp_array) === 1){
