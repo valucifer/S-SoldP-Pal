@@ -10,22 +10,21 @@ set_include_path(get_include_path() . PATH_SEPARATOR .__DIR__. '/pkgs/image_chec
 set_include_path(get_include_path() . PATH_SEPARATOR .__DIR__. '/pkgs/ftp_connection');
 set_include_path(get_include_path() . PATH_SEPARATOR . __DIR__.'/libs');
 set_include_path(get_include_path() . PATH_SEPARATOR . __DIR__.'/libs/color_lib');
-//set_include_path(get_include_path() . PATH_SEPARATOR .__DIR__. '/files');
+set_include_path(get_include_path() . PATH_SEPARATOR .__DIR__. '/files');
 
 
 
-require ("PrestashopUpdate.php");
+//require ("PrestashopUpdate.php");
 
 
-require ("UpdateTmpTables.php");
+require_once("UpdateTmpTables.php");
 
 
 $update = new UpdateTmpTables();
-$update-> updateImageField ('test2.jpg' , 1, 1);
 echo"</br> ************************************** </br>";
-$update-> insertImageField ('test3.jpg' , 1, 3);
+$update-> insertImageField ('test1.jpg' , 1, 3);
 echo"</br> ************************************** </br>";
-$update-> updateImageField ('test1.jpg' , 1, 2);
+$update-> updateImageField ('test2.jpg' , 1, 3);
 
 /**
 
@@ -33,5 +32,5 @@ echo "inizio aggiornamento </br>";
 $updatePS = new PrestashopUpdate('./files/A20151008161213_SEM.chk');
 $updatePS->updatePsProduct();
 echo "aggiornamento completato </br>";
-**(
+**/
 ?>

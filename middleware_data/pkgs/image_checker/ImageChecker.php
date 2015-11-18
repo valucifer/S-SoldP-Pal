@@ -59,7 +59,7 @@ class ImageChecker{
 	 * @params $firstImagePath, $secondImagePath, $colorsNumber, $delta
 	 * @return true if images are different, false otherwise
 	 */
-    public function areImagesDifferent( $firstImagePath, $secondImagePath, $colorsNumber, $delta ){
+    public function areTwoImageFilesDifferent( $firstImagePath, $secondImagePath, $colorsNumber, $delta ){
         //$this->start = microtime(true);
         $firstImageAnalysisResults = null;
         $secondImageAnalysisResults = null;
@@ -87,6 +87,33 @@ class ImageChecker{
         if( !strcmp($firstImageAnalysisResults,$secondImageAnalysisResults) ){
             return false;
         }else return true;
+
+    }
+    
+    /**
+	 * Compares two images through color analysis. This method checks first if md5 digest on images is the same; if digests are the same, then images are surely equals. If not, it proceeds analyzing color images.
+	 * @exception HandleOperationsException thrown when parameters does not represent a valid path.
+	 * @params $firstImagePath, $secondImagePath, $colorsNumber, $delta
+	 * @return true if images are different, false otherwise
+	 */
+    public function areImagesDifferent( $imagePath, $colorsNumber, $delta, $md5_dig, $colorAnalysis ){
+        //$this->start = microtime(true);
+        $imageAnalysisResults = null;
+        
+        if( !file_exists($imagePath) ){
+            throw new HandleOperationsException("No valid path for first argument!", "ERROR");
+            return false;
+        }
+        
+        if( !strcmp( md5_file($imagePath), $md5_dig ) ){
+            //digests are equals, so there aren't any differences
+            return "false";
+        }
+
+        $this->colorChecker->initializeParameters( $imagePath, $colorsNumber, $delta );
+        $imageAnalysisResults = $this->colorChecker->startColorAnalysisAndReturnResultsAsText();
+        
+        return array($imageAnalysisResults, md5_file($imagePath));
 
     }
     

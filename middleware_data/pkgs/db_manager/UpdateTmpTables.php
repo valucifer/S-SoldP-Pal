@@ -14,15 +14,14 @@ class UpdateTmpTables{
     private $COLORNUMBER=40;
     private $DELTA=1;
 
-    public function __construct(){
-        }
+    public function __construct(){}
 
     /**
     *This function provide if the new images of product are the same, if not than update image path and
     *information into the DB tmp table
     *@params string $imagePath, int $psIdProduct, int $psIdImage
     **/
-    public function updateImageField ($imagePath , $psIdProduct,$psIdImage){
+    public function updateImageField ($imagePath ,$psIdProduct, $psIdImage){
         
         $toUpdate = new ImageUpdate();
         $comparator = new ImageChecker();
@@ -34,7 +33,7 @@ class UpdateTmpTables{
                 echo "le immagini sono uguali </br>";
                 return false;
             }
-            $toUpdate->updateImageInformation($psIdProduct, $psIdImage,$differences[1], $differences[0],$imagePath);
+            $toUpdate->updateImageInformation($psIdProduct, $psIdImage, $differences[0], $differences[1], $imagePath);
             echo "le immagini sono diverse le ho aggiornate </br>";
             return true;
             
@@ -45,13 +44,15 @@ class UpdateTmpTables{
     *This function provideinsert image path and information into the DB tmp table
     *@params string $imagePath, int $psIdProduct, int $psIdImage
     **/
-    public function insertImageField ($imagePath,$psIdProduct,$psIdImage){
-        
+    public function insertImageField ($imagePath, $psIdProduct, $psIdImage){
         $toUpdate = new ImageUpdate();
+        echo "1";
         $comparator = new ImageChecker();
-        $differences = $comparator->areImagesDifferent($imagePath,  40, 1," ", " " );
+        echo "2";
+        $differences = $comparator->areImagesDifferent($imagePath, 40, 1," ", " " );
+        echo "3";
         echo "<br/> sono in insertImageField";
-        $toUpdate->insertImageInformation($psIdProduct, $psIdImage,$differences[1], $differences[0],$imagePath);
+        $toUpdate->insertImageInformation($psIdProduct, $psIdImage,$differences[0], $differences[1],$imagePath);
     }
  }
 

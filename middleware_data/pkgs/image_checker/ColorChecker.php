@@ -86,9 +86,6 @@ class ColorChecker{
     public function setDeltaValue($dlt){
         if(!is_numeric ( $dlt ))
             throw new HandleOperationsException("Parameter you've passed is not a number!", "ERROR");
-        if( $numcolors == 0 || $numcolors > 255 )
-            throw new HandleOperationsException("Parameter you're passing has to be in range [1-255]", "ERROR");
-
         $this->delta = $dlt;
     }
 
