@@ -112,10 +112,18 @@
 			$image = new ImageCore();
 			$array_all_images = $image->getAllImages();
 			
+			$tmp = explode(".",$name_photo);
+			$name_photo_product = "";
+			if(count($tmp) == 1)
+				$name_photo_product = $name_photo.".jpg";
+			else
+				$name_photo_product = $name_photo;
+			
 			foreach($array_all_images as $array_single_image){
 				$array_image = new ImageCore((int)$array_single_image['id_image']);
 				$image_name = $array_image->legend;
-				if(strtolower($image_name[$language]) === strtolower($name_photo)){
+				
+				if(strtolower($image_name[$language]) === strtolower($name_photo_product)){
 					$id = (int)$array_image->id;
 					break;
 				}
@@ -652,7 +660,7 @@
 			for($i = 0; $i < sizeof($array_id_image); $i++){
 				$img_for_table = new ImageCore($array_id_image[$i]);
 				$array_tmp = $img_for_table->legend;
-				$string_to_return = $array_id_image[$i].",".$array_tmp['1'];
+				$string_to_return = $array_id_image[$i].",".$array_tmp[$language];
 				array_push($element,$string_to_return);
 			}
 			array_push($return, $element);
@@ -775,7 +783,7 @@
 					$id_images = array();
 					
 					if(empty($id_image)){
-						$url = trim($url_foto).$image;
+						$url = trim($url_foto);
 						$id_image = $image_for_prestashop->insertImageInPrestashop($id_product,$url,$image);
 						array_push($id_images, $id_image);
 						
