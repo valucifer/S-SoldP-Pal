@@ -638,7 +638,6 @@
 				$product->update();
 			
 			if(!$control_category){
-				echo "controllo cate";
 				$ids_categories_array = $product->getWsCategories();
 				$this->controlCategoriesForActivateTheir($ids_categories_array);
 			}
@@ -666,16 +665,14 @@
 			$id_supplier = (int)$product->id_supplier;
 			
 			foreach($triple_cod_col_siz as $triple){
-				echo "TRIPLA: ".$tripla."<br>";
 				$array_attributes_and_values = $array_combinations[$triple];
-				echo "array_comb: ".print_r($array_attributes_and_values);echo "<br><br>";
 				
 				$attributes = $array_attributes_and_values["Attributi"];
 				$values = $array_attributes_and_values["Valori"];
 				$image = trim($array_attributes_and_values["Immagine"]);
-				echo "IMMAGINE: ".$image."<br>";
+				
 				$quantity = (int)$array_attributes_and_values["Qta"];
-				echo "quantita: ".$quantity."<br><br>";
+				
 				$variable_tmp_attributes = explode(",",$attributes);
 				$variable_tmp_values = explode(",",$values);
 				
@@ -770,20 +767,16 @@
 				}
 				
 				if($flag_just_exist_color || $flag_just_exist_size){
-					echo "non esiste color: ".$flag_just_exist_color.", size: ".$flag_just_exist_size."<br>";
 					
 					$image_for_prestashop = new imageForPrestashop();
 					$id_image = $image_for_prestashop->getIdImageByName(trim($image));
 					$id_images = array();
 					
 					if(empty($id_image)){
-						echo "IMMAGINE NON ESISTE<br>";
 						$url = trim($url_foto).$image;
 						$id_image = $image_for_prestashop->insertImageInPrestashop($id_product,$url,$image);
 						array_push($id_images, $id_image);
-						echo "id_mage: ".$id_image."<br>";
-					}else{
-						echo "esiste<br>";
+						
 					}
 			
 					array_push($id_images, $id_image);
@@ -794,58 +787,11 @@
 				
 					$combinations->setAttributes($id_attributes_for_combinations);
 					$combinations->setImages($id_images);
-				}else{
-					echo "esiste<br>";
 				}
 			}		
 		}
 	}
 	
 	ini_set('max_execution_time', 600);
-	/*
-	$prova = new productForPrestashop();
-	
-	try{
-		$path = "File/A20151008161213_SEM.chk";
-		$mapping = new Mapping($path);
-		$tmp = explode("_",$path);
-		$urlFoto = $tmp[0]."_FOTO/";
-		
-		$keys = $mapping->keys();
-		
-		$arrayMapping = $mapping->getItemMaster();
-		
-		$arrayCombinations = $mapping->getCombinations();
-		
-		$triple = $mapping->triple();
-		
-		//print_r($arrayCombinations);echo "<br><br><br>";
-		foreach($keys as $key){
-			try{
-				$id_prod = $prova->insertProductForPrestashop($arrayMapping[$key], $urlFoto, $triple[$key], $arrayCombinations[$key]);
-			//	print_r($id_prod);
-			}catch(Exception $e){
-				echo "$key<br/>";
-				echo $e->getMessage()." in line". $e->getLine()."<br/>";
-				echo "<br/><br/><br/><br/>";
-			}
-			//try{
-			//	$prova->updateProductForPrestashop($arrayMapping["YASC98M01X"],12);
-			//	break;
-			//}catch(Exception $e){
-			//	echo $e->getMessage();
-			//}
-		}
-		
-		//$prova->addAttributeForProduct(7, 1, $triple["RBSC0UI01VER"], $arrayCombinations["RBSC0UI01VER"]);
-		echo "<br><br>finish!";
-		
-	}catch(Exception $e){
-		echo $e->getMessage();
-	}
-	
-	*/
-	
-	
 	
 ?>
