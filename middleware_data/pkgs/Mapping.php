@@ -663,7 +663,9 @@ class Mapping{
 
                 $attributes = "COLORE,TAGLIA";
                 $values = $tmp_color[1].",".$tmp_size[1];
-                $element[$value] = array("Attribute" => $attributes, "Value" => $values, "Quantity" => $quantity, "Image" => $image);
+				$code_color_and_size = $tmp_color[0].",".$tmp_size[0];
+				
+                $element[$value] = array("Attribute" => $attributes, "Value" => $values, "Quantity" => $quantity, "Image" => $image, "Codes" => $code_color_and_size);
             }
 
             $return[$this->keys[$i]] = $element;
@@ -743,7 +745,9 @@ class Mapping{
 
             foreach($this->triple[$keys] as $combo){
                 $sigle_attribute_value_and_image = $tmp[$combo];
-                $element[$combo] = array("Attributi" => $sigle_attribute_value_and_image["Attribute"],"Valori" => $sigle_attribute_value_and_image["Value"], "Qta" => $sigle_attribute_value_and_image["Quantity"], "Immagine" => $sigle_attribute_value_and_image["Image"]);
+                $element[$combo] = array("Attributi" => $sigle_attribute_value_and_image["Attribute"],"Valori" => $sigle_attribute_value_and_image["Value"], 
+				"Qta" => $sigle_attribute_value_and_image["Quantity"], "Immagine" => $sigle_attribute_value_and_image["Image"]
+				, "Codici" => $sigle_attribute_value_and_image["Codes"]);
             }
 
             $return[$keys] = $element;
@@ -752,6 +756,103 @@ class Mapping{
         return $return;
     }
 
+	/*
+		* Creates an array with attribute of a product.
+		* 
+		* @param float $price
+		* @param integer $active
+		* @param string $reference
+		* @param string $name
+		* @param string $category
+		* @param string $supplier
+		* @param string $manufacture
+		* @param integer $qta
+		* @param integer $qta_min
+		* @param float $width
+		* @param float $height
+		* @param float $size
+		* @param string $model
+		* @param string $collection
+		* @param string $url
+		* @return array
+		*
+		*/
+	public function createSingleArrayMapping($price, $active, $reference, $name, $category, $supplier, $manufacture, $qta, $qta_min,
+												$width, $height, $size, $model, $collection, $url){
+		$return = array();
+		$return["Prezzo"] = (float)trim($price);
+		$return["Attivo"] = (int)trim($active);
+		$return["Reference"] = trim($reference);
+		$return["Nome"] = trim($name);
+		$return["Categorie"] = trim($category);
+		$return["Supplier"] = trim($supplier);
+		$return["Manufacture"] = trim($manufacture);
+		$return["Qta"] = (int)trim($qta);
+		$return["Qta_min"] = (int)trim($qta_min);
+		
+		$feature = array();
+		$feature["Larghezza"] = (float)trim($width);
+		$feature["Altezza"] = (float)trim($height);
+		$feature["Lunghezza"] = (float)trim($size);
+		$feature["Modello"] = trim($model);
+		$feature["Linea"] = trim($collection);
+		
+		$return["Feature"] = $feature;
+		
+		$return["URL"] = trim($url);
+		
+		return $return;
+	}
+	
+	/*
+		* Creates an array with triples of a product {product code;colore code;size code}.
+		* 
+		* @param string $reference
+		* @param array $code_color
+		* @param array $code_size
+		* @return array
+		*
+		*/
+	public function createSingleArrayTriple($reference, $code_color, $code_size){
+		$return = array();
+		for($i = 0; $i < sizeof($code_color); $i++){
+			$return[trim($reference).";".trim($code_color[$i]).";".trim($code_size[$i])] = trim($reference).";".trim($code_color[$i]).";".trim($code_size[$i]);
+		}
+		return $return;
+	}
+	
+	/*
+		* Creates an array with combinations of a product.
+		* 
+		* @param string $reference
+		* @param array $code_color
+		* @param array $code_size
+		* @param array $name_color
+		* @param array $name_size
+		* @param array $name_photo
+		* @param array $quantity
+		* @return array
+		*
+		*/
+	public function createSingleArrayCombination($reference, $code_color, $code_size, $name_color, $name_size, $name_photo, $quantity){
+		$return = array();
+		
+		$return['Product_reference'] = trim($reference);
+		
+		for($i = 0; $i < sizeof($code_color); $i++){
+			$triple = array();
+			$triple['Attributi'] = 'COLORE,TAGLIA';
+			$triple['Valori'] = trim($name_color[$i]).",".trim($name_size[$i]);
+			$triple['Qta'] = (int)trim($quantity[$i]);
+			$triple['Immagine'] = trim($name_photo[$i]);
+			$triple['Codici'] = trim($code_color[$i]).",".trim($code_size[$i]);
+			
+			$return[trim($reference).";".trim($code_color[$i]).";".trim($code_size[$i])] = $triple;
+		}
+		return $return;
+		
+	}
+	
 }
 
 

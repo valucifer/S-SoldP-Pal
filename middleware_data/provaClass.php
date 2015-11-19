@@ -19,9 +19,43 @@
 	require_once ("Mapping.php");
 
 	$mapping = new Mapping("./files/A20151008161213_SEM.chk");
-	/*print_r($mapping->getItemMaster());
+	print_r($mapping->getItemMaster());
 	echo "<br><br>";
-	print_r($mapping->getCombinations());*/
+	print_r($mapping->getCombinations());
+	echo "<br><br>";
+	print_r($mapping->triple()); 
+	echo "<br><br><br>************************************************************************<br><br><br>";
+	echo "<br><br><br>************************************************************************<br><br><br>";
+	echo "<br><br><br>************************************************************************<br><br><br>";
+	$arr1 = $mapping->createSingleArrayMapping('79.00', '1', 'KPBS03S08', 'BORSA SINTETICA DONNA', 'BORSA,KRIZIA POI DOPO',
+	                                          'KRIZIA POI DOPO', 'KRIZIA POI DOPO', '0', '1', '12.000', '35.000',
+											  '36.280', 'Secchiello', 'WHY', 'KPBS03S08,3,001.jpg,KPBS03S08,2,005.jpg,');
+	
+	print_r($arr1);
+	echo "<br><br><br>************************************************************************<br><br><br>";
+	echo "<br><br><br>************************************************************************<br><br><br>";
+	echo "<br><br><br>************************************************************************<br><br><br>";
+	
+	$ccol = array('001','005');
+	$csiz = array('','');
+	$arr2 = $mapping->createSingleArrayTriple('KPBS03S08', $ccol, $csiz);
+	
+	print_r($arr2);
+	echo "<br><br><br>************************************************************************<br><br><br>";
+	echo "<br><br><br>************************************************************************<br><br><br>";
+	echo "<br><br><br>************************************************************************<br><br><br>";
+	$ncol = array('NERO','BEIGE');
+	$nsiz = array('','');
+	$ccol = array('001','005');
+	$csiz = array('','');
+	$qua = array('85','58');
+	$imm = array('KPBS03S08,3,001.jpg','KPBS03S08,2,005.jpg,');
+	$arr3 = $mapping->createSingleArrayCombination('KPBS03S08', $ccol, $csiz, $ncol, $nsiz, $imm, $qua);
+	
+	print_r($arr3);
+	echo "<br><br><br>************************************************************************<br><br><br>";
+	echo "<br><br><br>************************************************************************<br><br><br>";
+	echo "<br><br><br>************************************************************************<br><br><br>";
 	
 	//$image = new ImageForPrestashop();
 	//echo $image->updateImageInPrestashop(8, 37, "./files/A20151008161213_FOTO/", 'KPBS04M01,88,E95.jpg');
@@ -59,33 +93,33 @@
 	$array_triple = array ( 'KPBS03S05;001;' => 'KPBS03S05;001;'
 					);
 
-
+*/
 	$urlFoto = "./files/A20151008161213_FOTO/";
 	
 	
-	
+	/*
 	try{
-		$arr = $prova->updateProductForPrestashop($array_prova, 8, $urlFoto, $array_triple, $array_comb);
+		$arr = $prova->updateProductForPrestashop($arr1, 8, $urlFoto, $array_triple, $array_comb);
 		echo "<br>444<br>";
 		print_r($arr);
 		echo "<br>444<br>";
 	}catch(Exception $e){
 		echo $e->getMessage();
 	}
-	
 	*/
 	
+	/*
 	$array_keys = $mapping->keys();
 	$array_mapping = $mapping->getItemMaster();
 	$array_combinations = $mapping->getCombinations();
 	$array_triple = $mapping->triple();
-
+*/
     $prova = new PrestashopProduct();
-    $urlFoto = "./files/A20151008161213_FOTO/"; 
+    //$urlFoto = "./files/A20151016144918_FOTO/"; 
 	
-	foreach($array_keys as $key){
+	//foreach($array_keys as $key){
 		try{
-			$arr = $prova->insertProductForPrestashop($array_mapping[$key], $urlFoto, $array_triple[$key], $array_combinations[$key]);
+			$arr = $prova->insertProductForPrestashop($arr1, $urlFoto, $arr2, $arr3);
 			echo "<br> 444 <br>";
 			print_r($arr);
 			echo "<br> 444 <br>";
@@ -93,7 +127,7 @@
 		}catch(Exception $e){
 			echo "exception: ".$e->getMessage();
 		}
-	}
+	//}
 ?>
 
 
