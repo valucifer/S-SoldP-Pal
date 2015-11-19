@@ -121,7 +121,7 @@ INSERT INTO `prestashop`.`ps_buffer_product` ( `reference`, `attivo`, `categoria
 
 INSERT INTO `prestashop`.`ps_buffer_product` ( `reference`, `attivo`, `categoria`, `prezzo`, `supplier`, `manufacture`, `qta`, `qta_min`, `lunghezza`, `altezza`, `larghezza`, `colore`, `quantita`, `taglia`, `nome`, `modello`, `linea`, `codice_colore`, `codice_taglia`) VALUES ( 'esiste e diverso', '0', 'asda', '213.3', 'sda', 'da', '12.3', '21.4', '25.2', '23.2', '344.1', 'blue', '324.3', 'xl', NULL, NULL, NULL, NULL, NULL);
 
-INSERT INTO `prestashop`.`ps_buffer_product` ( `reference`, `attivo`, `categoria`, `prezzo`, `supplier`, `manufacture`, `qta`, `qta_min`, `lunghezza`, `altezza`, `larghezza`, `colore`, `quantita`, `taglia`, `nome`, `modello`, `linea`, `codice_colore`, `codice_taglia`) VALUES ( 'non esiste', '0', 'asda', '213.3', 'sda', 'da', '12.3', '21.4', '25.2', '23.2', '344.1', 'blue', '324.3', 'xl', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `prestashop`.`ps_buffer_product` ( `reference`, `attivo`, `categoria`, `prezzo`, `supplier`, `manufacture`, `qta`, `qta_min`, `lunghezza`, `altezza`, `larghezza`, `colore`, `quantita`, `taglia`, `nome`, `modello`, `linea`, `codice_colore`, `codice_taglia`) VALUES ( 'non esiste', '0', 'asda', '213.3', 'sda', 'da', '12.3', '21.4', '25.2', '23.2', '344.1', 'red', '324.3', 'xl', NULL, NULL, NULL, NULL, NULL);
 
 
 

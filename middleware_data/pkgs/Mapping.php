@@ -756,7 +756,66 @@ class Mapping{
         return $return;
     }
 
+	
+	
+}
+
+class MappingArray{
+ 
+    public function __construct(){
+    }
+    
+    
 	/*
+		* Creates an array with combinations of a product.
+		* 
+		* @param string $reference
+		* @param array $code_color
+		* @param array $code_size
+		* @param array $name_color
+		* @param array $name_size
+		* @param array $name_photo
+		* @param array $quantity
+		* @return array
+		*
+		*/
+	public function createSingleArrayCombination($reference, $code_color, $code_size, $name_color, $name_size, $name_photo, $quantity){
+		$return = array();
+		
+		$return['Product_reference'] = trim($reference);
+		
+		for($i = 0; $i < sizeof($code_color); $i++){
+			$triple = array();
+			$triple['Attributi'] = 'COLORE,TAGLIA';
+			$triple['Valori'] = trim($name_color[$i]).",".trim($name_size[$i]);
+			$triple['Qta'] = (int)trim($quantity[$i]);
+			$triple['Immagine'] = trim($name_photo[$i]);
+			$triple['Codici'] = trim($code_color[$i]).",".trim($code_size[$i]);
+			
+			$return[trim($reference).";".trim($code_color[$i]).";".trim($code_size[$i])] = $triple;
+		}
+		return $return;
+		
+	}
+    
+    	/*
+		* Creates an array with triples of a product {product code;colore code;size code}.
+		* 
+		* @param string $reference
+		* @param array $code_color
+		* @param array $code_size
+		* @return array
+		*
+		*/
+	public function createSingleArrayTriple($reference, $code_color, $code_size){
+		$return = array();
+		for($i = 0; $i < sizeof($code_color); $i++){
+			$return[trim($reference).";".trim($code_color[$i]).";".trim($code_size[$i])] = trim($reference).";".trim($code_color[$i]).";".trim($code_size[$i]);
+		}
+		return $return;
+	}
+    
+    /*
 		* Creates an array with attribute of a product.
 		* 
 		* @param float $price
@@ -804,57 +863,7 @@ class Mapping{
 		return $return;
 	}
 	
-	/*
-		* Creates an array with triples of a product {product code;colore code;size code}.
-		* 
-		* @param string $reference
-		* @param array $code_color
-		* @param array $code_size
-		* @return array
-		*
-		*/
-	public function createSingleArrayTriple($reference, $code_color, $code_size){
-		$return = array();
-		for($i = 0; $i < sizeof($code_color); $i++){
-			$return[trim($reference).";".trim($code_color[$i]).";".trim($code_size[$i])] = trim($reference).";".trim($code_color[$i]).";".trim($code_size[$i]);
-		}
-		return $return;
-	}
-	
-	/*
-		* Creates an array with combinations of a product.
-		* 
-		* @param string $reference
-		* @param array $code_color
-		* @param array $code_size
-		* @param array $name_color
-		* @param array $name_size
-		* @param array $name_photo
-		* @param array $quantity
-		* @return array
-		*
-		*/
-	public function createSingleArrayCombination($reference, $code_color, $code_size, $name_color, $name_size, $name_photo, $quantity){
-		$return = array();
-		
-		$return['Product_reference'] = trim($reference);
-		
-		for($i = 0; $i < sizeof($code_color); $i++){
-			$triple = array();
-			$triple['Attributi'] = 'COLORE,TAGLIA';
-			$triple['Valori'] = trim($name_color[$i]).",".trim($name_size[$i]);
-			$triple['Qta'] = (int)trim($quantity[$i]);
-			$triple['Immagine'] = trim($name_photo[$i]);
-			$triple['Codici'] = trim($code_color[$i]).",".trim($code_size[$i]);
-			
-			$return[trim($reference).";".trim($code_color[$i]).";".trim($code_size[$i])] = $triple;
-		}
-		return $return;
-		
-	}
-	
 }
-
 
 
 
