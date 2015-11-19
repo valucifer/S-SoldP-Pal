@@ -1,20 +1,35 @@
 <?php
 /*
-* Mapping and Combination related to the elements of the file taken as input
+* Manage Product and Image in Prestashop
 *
 * @author Valentino Vivone <v.vivone.5389@gmail.com>
 * @version 1.0
 *
 */
 
-include "../../../config/config.inc.php";//da controllare durante l'istallazione finale (Carlos Borges)
+include "../../../config/config.inc.php";//da controllare durante l'installazione finale (Carlos Borges)
 include "../../../init.php";
 require_once ("Mapping.php");
 
 class PrestashopImageHandler{
-
+	
+	/*
+	*
+	* @return
+	*
+	*/
     public function __construct(){}
-
+	
+	/*
+	* Inserts product's image in Prestashop.
+	* 
+	* @param integer $id_product
+	* @param string $url
+	* @param string $name_photo
+	* @return integer 
+	* @see $this->copyImg
+	*
+	*/
     public function insertImageInPrestashop($id_product, $url, $name_photo){
         $shops = Shop::getShops(true, null, true);    
         $image = new ImageCore();
@@ -25,6 +40,7 @@ class PrestashopImageHandler{
         $tmp = explode(".",$name_photo);
         $name_photo_product = "";
         $name_for_legend = "";
+		
         if(count($tmp) == 1){
             $name_photo_product = trim($url).$name_photo.".jpg";
             $name_for_legend = $name_photo.".jpg";
@@ -38,13 +54,27 @@ class PrestashopImageHandler{
 
         if (($image->validateFields(false, true)) === true && ($image->validateFieldsLang(false, true)) === true && $image->add()){
             $image->associateTo($shops);
+			
             if (!$this->copyImg($id_product, $image->id, $name_photo_product, 'products')){
                 $image->delete();
             }
+			
         }
+		
         return $image->id;
     }
 
+	/*
+	* Updates product's image in Prestashop.
+	* 
+	* @param integer $id_product
+	* @param integer $id_img
+	* @param string $url
+	* @param string $name_photo
+	* @return integer 
+	* @see $this->copyImg
+	*
+	*/
     public function updateImageInPrestashop($id_product, $id_img, $url, $name_photo){
         if(empty($id_img)) 
             return (int)$this->insertImageInPrestashop($id_prod,$url,$name_photo);
@@ -57,6 +87,7 @@ class PrestashopImageHandler{
             $name_photo_product = "";
 
             $name_for_legend = "";
+			
             if(count($tmp) == 1){
                 $name_photo_product = trim($url).$name_photo.".jpg";
                 $name_for_legend = $name_photo.".jpg";
@@ -70,14 +101,27 @@ class PrestashopImageHandler{
 
             if (($image->validateFields(false, true)) === true && ($image->validateFieldsLang(false, true)) === true && $image->update()){
                 $image->associateTo($shops);
+				
                 if (!$this->copyImg($id_product, $id_img, $name_photo_product, 'products')){
                     $image->delete();
                 }
+				
             }
+			
             return (int)$image->id;
         }
     }
 
+	/*
+	* Resizes product's image or categories'image in Prestashop.
+	* 
+	* @param integer $id_entity
+	* @param integer $id_image
+	* @param string $url
+	* @param string $entity
+	* @return bool 
+	*
+	*/
     private function copyImg($id_entity, $id_image = null, $url, $entity = 'products'){
         $tmpfile = tempnam(_PS_TMP_IMG_DIR_, 'ps_import');
         $watermark_types = explode(',', Configuration::get('WATERMARK_TYPES'));
@@ -118,6 +162,14 @@ class PrestashopImageHandler{
         return true;
     }
 
+	/*
+	* Releases a image's id in Prestashop. It requires a name of the image.
+	* 
+	* @param string $name_photo
+	* @param integer $language
+	* @return a empty string if the name has not been found, else integer.
+	* 
+	*/
     public function getIdImageByName($name_photo, $language = 1){
         $id = "";
         $image = new ImageCore();
@@ -125,6 +177,7 @@ class PrestashopImageHandler{
 
         $tmp = explode(".",$name_photo);
         $name_photo_product = "";
+		
         if(count($tmp) == 1)
             $name_photo_product = $name_photo.".jpg";
         else
@@ -138,15 +191,34 @@ class PrestashopImageHandler{
                 $id = (int)$array_image->id;
                 break;
             }
+			
         }
+		
         return (int)$id;
     }
+
 }
 
 class PrestashopProduct{
 
+	/*
+	*
+	* @return
+	*
+	*/
     public function __construct(){}
-
+	
+	/*
+	* Create an key => value array where the key is the language and the value is a name of element.
+	* If $name_element is a name of the element, then $is_name is equal true, else if $name_element is a
+	* link_rewrite of the name, then $is_name is equal false.
+	* 
+	* @param string $name_element
+	* @param bool $is_name
+	* @param integer $language
+	* @return array 
+	*
+	*/
     private function setArrayElementForLinkRewrite($name_element, $is_name, $language = 1){
         if($is_name){
             $name_product = array($language=>trim($name_element));
@@ -158,6 +230,15 @@ class PrestashopProduct{
         }
     }
 
+	/*
+	* Create a Category in Prestashop.
+	* 
+	* @param string $name_category
+	* @param integer $id_parent_category
+	* @param integer $language
+	* @return integer 
+	*
+	*/
     private function setCategoriesForProduct($name_category, $id_parent_category, $language){
         $id_category = 2;
         $category = new Category();
@@ -179,6 +260,13 @@ class PrestashopProduct{
         return $id_category;			
     }
 
+	/*
+	* Create a Supplier in Prestashop if this not exists, else return supplier id.
+	* 
+	* @param string $name_supplier
+	* @return integer 
+	*
+	*/
     private function setSupplierForProduct($name_supplier){
         $id_supplier = 0;
         $supplier = new SupplierCore();
@@ -193,6 +281,13 @@ class PrestashopProduct{
         return $id_supplier;
     }
 
+	/*
+	* Create a Manufacturer in Prestashop if this not exists, else return manufacturer id.
+	* 
+	* @param string $name_manufacturer
+	* @return integer 
+	*
+	*/
     private function setManufacturerForProduct($name_manufacturer){
         $id_manufacturer = 0;
         $manufacturer = new ManufacturerCore();
@@ -207,6 +302,15 @@ class PrestashopProduct{
         return $id_manufacturer;
     }
 
+	/*
+	* Create product's features in Prestashop.
+	* 
+	* @param integer $id_product
+	* @param integer $language
+	* @param array $array_features_product
+	* @return 
+	*
+	*/
     private function addFeaturesForProducts($id_product, $language, $array_features_product){
         $feature_product = new FeatureCore();
         $feature_product_value = new FeatureValueCore();
@@ -245,7 +349,25 @@ class PrestashopProduct{
 
     }
 
-    public function insertProductForPrestashop($product_attributes = array(), $url_foto, $triple_cod_col_siz, $array_combinations, $language = 1){
+	/*
+	* Inserts a product in Prestashop.
+	* 
+	* @param array $product_attributes
+	* @param string $url
+	* @param array $triple_cod_col_siz
+	* @param array $array_combinations
+	* @param integer $language
+	* @return array 
+	* @see $this->setSupplierForProduct
+	* @see $this->setArrayElementForLinkRewrite
+	* @see $this->setManufacturerForProduct
+	* @see $this->addFeaturesForProducts
+	* @see $this->setCategoriesForProduct
+	* @see $this->addCombinationsForPrestashop
+	* @see PrestashopImageHandler insertImageInPrestashop()
+	*
+	*/
+    public function insertProductForPrestashop($product_attributes = array(), $url_photo, $triple_cod_col_siz, $array_combinations, $language = 1){
         $product = new Product();
         //$language is 1 because 1 -> italian
 
@@ -303,14 +425,14 @@ class PrestashopProduct{
         $array_id_image = array();
         for($i = 0; $i < $size_url; $i++){
             if(!empty($tmp[$i])){
-                $url = trim($url_foto);
+                $url = trim($url_photo);
                 $image = new PrestashopImageHandler();
                 $id_image = $image->insertImageInPrestashop($product->id,$url,$tmp[$i]);
                 array_push($array_id_image,$id_image);
             }
         }
 
-        $this->addCombinationsForPrestashop($product->id, $url_foto, $triple_cod_col_siz, $array_combinations, $language);
+        $this->addCombinationsForPrestashop($product->id, $url_photo, $triple_cod_col_siz, $array_combinations, $language);
 
         $return = array();
         $array_images_combinations_of_the_product = $product->getImages($language);
@@ -320,16 +442,32 @@ class PrestashopProduct{
         foreach($array_images_combinations_of_the_product as $array_combo_image){
             $name_of_the_image = $array_combo_image['legend'];
             $id_image_of_the_product = $array_combo_image['id_image'];
-            array_push($element, $id_image_of_the_product.",".$name_of_the_image );
+            array_push($element, $id_image_of_the_product.";".$name_of_the_image );
         }
         array_push($return, $element);
         return $return;
     }
 
+	/*
+	* Creates a Combination of the product.
+	* 
+	* @param integer $id_product
+	* @param string $url_photo
+	* @param array $triple_cod_col_siz
+	* @param array $array_combinations
+	* @param integer $language
+	* @return  
+	* @see $this->createAttributeGroups
+	* @see $this->setArrayElementForLinkRewrite
+	* @see $this->getCodeColor
+	* @see PrestashopImageHandler getIdImageByName()
+	* @see PrestashopImageHandler insertImageInPrestashop()
+	*
+	*/
     private function addCombinationsForPrestashop($id_product, $url_photo, $triple_cod_col_siz, $array_combinations, $language = 1){
         $product = new Product((int)$id_product);
 
-        $price = 0.000;//(float)$product->price;
+        $price = 0.000;//(float)$product->price; In futuro si deve de-commentare per attuare il prezzo ( cambiare la combinazione)
 
         $reference = $product->reference;
         $id_supplier = (int)$product->id_supplier;
@@ -428,7 +566,7 @@ class PrestashopProduct{
                     }
                 }
             }
-
+			
             $id_images = array();
             $tmp_photo = explode(".jpg,",$image);
 
@@ -456,6 +594,13 @@ class PrestashopProduct{
         }
     }
 
+	/*
+	* Returns a code of the color taken input.
+	* 
+	* @param string $name_color
+	* @return string
+	*
+	*/
     private function getCodeColor($name_color){
         $colors  =  array('blue alice'=>'F0F8FF','alice blu'=>'F0F8FF','bianco antico'=>'FAEBD7','aqua'=>'00FFFF','acqua'=>'00FFFF','acqua marina'=>'7FFFD4', 'azzurro'=>'F0FFFF','beige'=>'F5F5DC','biscotto'=>'FFE4C4',
                           'nero'=>'000000','blanched almond'=>'FFEBCD','mandorla sbiancata'=>'FFEBCD','blue'=>'0000FF','blu'=>'0000FF','blue violet'=>'8A2BE2','blue viola'=>'8A2BE2','blu violetto'=>'8A2BE2','marrone di fuoco'=>'A52A2A',
@@ -479,6 +624,15 @@ class PrestashopProduct{
         return $colors[$name_color];
     }
 
+	/*
+	* Creates a a group of attributes on Prestashop.
+	* 
+	* @param string $attribute_product
+	* @param integer $language
+	* @return integer
+	* @see $this->setArrayElementForLinkRewrite
+	*
+	*/
     private function createAttributeGroups($attribute_product, $language = 1){
         $attributes_groups = new AttributeGroupCore();
         $array_attributes_groups = $attributes_groups->getAttributesGroups($language);
@@ -507,6 +661,13 @@ class PrestashopProduct{
 
     }
 
+	/*
+	* Controls and changes, if it's possible, category's active parameter if a product's active parameter change.
+	* 
+	* @param array $ids_categories_array
+	* @return 
+	*
+	*/
     private function controlCategoriesForActivateTheir($ids_categories_array){
         $size_array_categories = sizeof($ids_categories_array);
 
@@ -537,6 +698,15 @@ class PrestashopProduct{
 
     }
 
+	/*
+	* Controls if the variables are equal or not.
+	* 
+	* @param string $actual_name
+	* @param string new_name
+	* @param integer $language
+	* @return bool
+	*
+	*/
     private function isOldNameProductEgualToNewNameProduct($actual_name, $new_name, $language = 1){
         $old_name = $actual_name[$language];
         if(strtolower(trim($old_name)) === strtolower(trim($new_name))){
@@ -545,7 +715,15 @@ class PrestashopProduct{
             return false;
         }
     }
-
+	
+	/*
+	* Controls if the variables are equal or not.
+	* 
+	* @param string $old_value
+	* @param string $new_value
+	* @return bool
+	*
+	*/
     private function isOldOrNewValueForProduct($old_value, $new_value){
         if(gettype($old_value) === "string" && gettype($new_value) === "string"){
             if(strtolower(trim($old_value)) === strtolower(trim($new_value)))
@@ -569,6 +747,22 @@ class PrestashopProduct{
         }
     }
 
+	/*
+	* Updates a product on Prestashop.
+	* 
+	* @param array $product_attributes
+	* @param integer $id_product
+	* @param string $url_photo
+	* @param array $triple_cod_col_siz
+	* @param integer $language
+	* @param array $array_combinations
+	* @return array
+	* @see $this->isOldNameProductEgualToNewNameProduct
+	* @see $this->isOldOrNewValueForProduct
+	* @see $this->controlCategoriesForActivateTheir 
+	* @see $this->updateCombinantionsForPrestashop
+	*
+	*/
     public function updateProductForPrestashop($product_attributes = array(), $id_product, $url_photo, $triple_cod_col_siz, $array_combinations, $language = 1){
         $product = new Product($id_product);
         $is_change_product = false;
@@ -686,12 +880,28 @@ class PrestashopProduct{
         foreach($array_images_combinations_of_the_product as $array_combo_image){
             $name_of_the_image = $array_combo_image['legend'];
             $id_image_of_the_product = $array_combo_image['id_image'];
-            array_push($element, $id_image_of_the_product.",".$name_of_the_image );
+            array_push($element, $id_image_of_the_product.";".$name_of_the_image );
         }
         array_push($return, $element);
         return $return;
     }
 
+	/*
+	* Updates combinations of product on Prestashop.
+	* 
+	* @param integer $id_product
+	* @param string $url_photo
+	* @param array $triple_cod_col_siz
+	* @param array $array_combinations
+	* @param integer $language
+	* @return array
+	* @see $this->createAttributeGroups
+	* @see $this->setArrayElementForLinkRewrite
+	* @see $this->getCodeColor
+	* @see PrestashopImageHandler getIdImageByName()
+	* @see PrestashopImageHandler insertImageInPrestashop()
+	*
+	*/
     private function updateCombinantionsForPrestashop($id_product, $url_photo, $triple_cod_col_siz, $array_combinations, $language = 1){
         $product = new Product((int)$id_product);
 
@@ -856,6 +1066,6 @@ class PrestashopProduct{
     }
 }
 
-ini_set('max_execution_time', 600);
+ini_set('max_execution_time', 3600);
 
 ?>
