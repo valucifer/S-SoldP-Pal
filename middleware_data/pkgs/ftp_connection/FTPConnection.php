@@ -151,7 +151,7 @@ class FTPConnection{
         //delete semaphore, 'cause all the operations are ok.
         ftp_delete ($this->connection , $this->ftp_folder_path."/".$this->semaphore_name);
         //delete downloaded files
-        rmdir($this->local_dir);
+        $this->deleteDirectory($this->local_dir);
         //delete ftp folder
         $remote_contents = ftp_nlist($this->connection, $this->ftp_folder_path);
         foreach( $this->semaphores_array as &$sem ){    
@@ -183,6 +183,29 @@ class FTPConnection{
             if( !ftp_close($this->connection) )
                 throw new HandleOperationsException("Unable to close connection.", "ERROR");
         }
+    }
+
+    private function _deleteDirectory($dir) {
+        if (!file_exists($dir)) {
+            return true;
+        }
+
+        if (!is_dir($dir)) {
+            return unlink($dir);
+        }
+
+        foreach (scandir($dir) as $item) {
+            if ($item == '.' || $item == '..') {
+                continue;
+            }
+
+            if (!$this->_deleteDirectory($dir . DIRECTORY_SEPARATOR . $item)) {
+                return false;
+            }
+
+        }
+
+        return rmdir($dir);
     }
 
 }
