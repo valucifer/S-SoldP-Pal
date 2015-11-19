@@ -42,7 +42,6 @@ class ProductUpdate{
             }else{
                  $errno = mysql_errno($connection);
                  $error = mysql_error($connection);
-                 echo "sono qua  $error ; $errno<br/>";
                  switch ($errno) {
                      case 1062:
                         throw new HandleOperationsException($error);

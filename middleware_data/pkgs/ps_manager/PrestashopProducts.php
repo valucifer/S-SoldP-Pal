@@ -7,8 +7,13 @@
 *
 */
 
+<<<<<<< Updated upstream
 include "../../../config/config.inc.php";//da controllare durante l'installazione finale (Carlos Borges)
 include "../../../init.php";
+=======
+include "../../config/config.inc.php";//da controllare durante l'istallazione finale (Carlos Borges)
+include "../../init.php";
+>>>>>>> Stashed changes
 require_once ("Mapping.php");
 
 class PrestashopImageHandler{
@@ -76,6 +81,7 @@ class PrestashopImageHandler{
 	*
 	*/
     public function updateImageInPrestashop($id_product, $id_img, $url, $name_photo){
+        echo "<br>$id_product, $id_img, $url, $name_photo<br>";
         if(empty($id_img)) 
             return (int)$this->insertImageInPrestashop($id_prod,$url,$name_photo);
         else{

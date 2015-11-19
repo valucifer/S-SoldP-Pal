@@ -14,12 +14,13 @@ set_include_path(get_include_path() . PATH_SEPARATOR .__DIR__. '/files');
 
 
 
-require ("PrestashopUpdate.php");
+require_once("PrestashopUpdate.php");
 
 
 
 echo "inizio aggiornamento </br>";
 $updatePS = new PrestashopUpdate('./files/A20151008161213_SEM.chk');
+echo "inizio aggiornamento </br>";
 $updatePS->updatePsProduct();
 echo "aggiornamento completato </br>";
 
