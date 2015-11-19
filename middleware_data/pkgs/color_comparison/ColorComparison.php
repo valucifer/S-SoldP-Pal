@@ -1,5 +1,5 @@
 <?php
-require("../image_checker/colors.inc.php");
+require("../../libs/color_lib/colors.inc.php");
 
 /**
  * This class recognizes three main colors on image, except for background color.
