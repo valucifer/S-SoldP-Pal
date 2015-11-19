@@ -7,11 +7,11 @@
 *
 */
 
-	include "../../config/config.inc.php";//da controllare durante l'istallazione finale (Carlos Borges)
-	include "../../init.php";
-	require_once ("Mapping.php");
+	include "../config/config.inc.php";
+	include "../init.php";
+	require_once "./Mapping.php";
 	
-	class ImageForPrestashop{
+	class imageForPrestashop{
 		
 		public function imageForPrestashop(){}
 		
@@ -24,17 +24,12 @@
 			
 			$tmp = explode(".",$name_photo);
 			$name_photo_product = "";
-			$name_for_legend = "";
-			if(count($tmp) == 1){
+			if(count($tmp) == 1)
 				$name_photo_product = trim($url).$name_photo.".jpg";
-				$name_for_legend = $name_photo.".jpg";
-			}
-			else{
+			else
 				$name_photo_product = trim($url).$name_photo;
-				$name_for_legend = $name_photo;
-			}
 			
-			$image->legend = array('1'=>trim($name_for_legend));
+			$image->legend = array('1'=>trim($name_photo_product));
     
 			if (($image->validateFields(false, true)) === true && ($image->validateFieldsLang(false, true)) === true && $image->add()){
                 $image->associateTo($shops);
@@ -46,28 +41,20 @@
 		}
 		
 		public function updateImageInPrestashop($id_product, $id_img, $url, $name_photo){
-			if(empty($id_img)) 
-				return (int)$this->insertImageInPrestashop($id_prod,$url,$name_photo);
+			if($id_img == "") return (int)$this->insertImageInPrestashop($id_prod,$url,$name_photo);
 			else{
 				$shops = Shop::getShops(true, null, true);    
-				$image = new ImageCore((int)$id_img);
+				$image = new ImageCore();
 				$image->id_product = $id_product;
 				
 				$tmp = explode(".",$name_photo);
 				$name_photo_product = "";
-				
-				$name_for_legend = "";
-				if(count($tmp) == 1){
+				if(count($tmp) == 1)
 					$name_photo_product = trim($url).$name_photo.".jpg";
-					$name_for_legend = $name_photo.".jpg";
-				}
-				else{
+				else
 					$name_photo_product = trim($url).$name_photo;
-					$name_for_legend = $name_photo;
-				}
 				
-				$image->legend = array('1'=>trim($name_for_legend));
-    
+		
 				if (($image->validateFields(false, true)) === true && ($image->validateFieldsLang(false, true)) === true && $image->update()){
 					$image->associateTo($shops);
 					if (!$this->copyImg($id_product, $id_img, $name_photo_product, 'products')){
@@ -123,27 +110,19 @@
 			$image = new ImageCore();
 			$array_all_images = $image->getAllImages();
 			
-			$tmp = explode(".",$name_photo);
-			$name_photo_product = "";
-			if(count($tmp) == 1)
-				$name_photo_product = $name_photo.".jpg";
-			else
-				$name_photo_product = $name_photo;
-			
 			foreach($array_all_images as $array_single_image){
 				$array_image = new ImageCore((int)$array_single_image['id_image']);
 				$image_name = $array_image->legend;
-				
-				if(strtolower($image_name[$language]) === strtolower($name_photo_product)){
+				if(strtolower($image_name[$language]) === strtolower($name_photo)){
 					$id = (int)$array_image->id;
 					break;
 				}
 			}
-			return (int)$id;
+			return $id;
 		}
 	}
 	
-	class ProductForPrestashop{
+	class productForPrestashop{
 		
 		public function productForPrestashop(){}
 		
@@ -259,7 +238,7 @@
 			$product->price = (float) $product_attributes["Prezzo"];
 			$product->active = (int) $product_attributes["Attivo"];
 			$product->minimal_quantity = (int)$product_attributes["Qta_min"];
-			$product->show_price = 1;
+			$product->show_price = 0;
 			$product->reference = $product_attributes["Reference"];
 			$product->id_tax_rules_group = 0;
 			
@@ -301,36 +280,35 @@
 			$tmp =  explode(".jpg,", trim($product_attributes["URL"]));
 			$size_url = sizeof($tmp);
 			$array_id_image = array();
+			
 			for($i = 0; $i < $size_url; $i++){
 				if(!empty($tmp[$i])){
-					$url = trim($url_foto);
+					$url = trim($url_foto).$tmp[$i].".jpg";
 					$image = new imageForPrestashop();
-					$id_image = $image->insertImageInPrestashop($product->id,$url,$tmp[$i]);
+					$id_image = $image->insertImageInPrestashop($product->id,$url,$tmp[$i].".jpg");
 					array_push($array_id_image,$id_image);
 				}
 			}
 			
-			$this->addCombinationsForPrestashop($product->id, $url_foto, $triple_cod_col_siz, $array_combinations, $language);
+			$this->addCombinationsForPrestashop($product->id, $triple_cod_col_siz, $array_combinations, $language);
 			
 			$return = array();
-			$array_images_combinations_of_the_product = $product->getImages($language);
-			array_push($return, $product->id);
-			
+			array_push($return,$product->id);
 			$element = array();
-			foreach($array_images_combinations_of_the_product as $array_combo_image){
-				$name_of_the_image = $array_combo_image['legend'];
-				$id_image_of_the_product = $array_combo_image['id_image'];
-				array_push($element, $id_image_of_the_product.",".$name_of_the_image );
+			for($i = 0; $i < sizeof($array_id_image); $i++){
+				$img_for_table = new ImageCore($array_id_image[$i]);
+				$array_tmp = $img_for_table->legend;
+				$string_to_return = $array_id_image[$i].",".$array_tmp['1'];
+				array_push($element,$string_to_return);
 			}
 			array_push($return, $element);
 			return $return;
 		}
 		
-		private function addCombinationsForPrestashop($id_product, $url_photo, $triple_cod_col_siz, $array_combinations, $language = 1){
+		private function addCombinationsForPrestashop($id_product, $triple_cod_col_siz, $array_combinations, $language = 1){
 			$product = new Product((int)$id_product);
 			
-			$price = 0.000;//(float)$product->price;
-			
+			$price = (float)$product->price;
 			$reference = $product->reference;
 			$id_supplier = (int)$product->id_supplier;
 			
@@ -429,23 +407,10 @@
 					}
 				}
 				
+				$image_for_prestashop = new imageForPrestashop();
+				$id_image = $image_for_prestashop->getIdImageByName(trim($image));
 				$id_images = array();
-				$tmp_photo = explode(".jpg,",$image);
-				
-				for($i = 0; $i < sizeof($tmp_photo); $i++){
-					if(!empty($tmp_photo[$i])){
-						$image_for_prestashop = new imageForPrestashop();
-						$id_image = $image_for_prestashop->getIdImageByName(trim($tmp_photo[$i]));
-						
-						if(!empty($id_image)){
-							array_push($id_images, $id_image);
-						}
-						else{
-							$id_image = $image_for_prestashop->insertImageInPrestashop($id_product, trim($url_photo), trim($tmp_photo[$i]));
-							array_push($id_images, $id_image);
-						}
-					}
-				}
+				array_push($id_images, $id_image);
 				
 				$id_product_attributes = $product->addProductAttribute($price, 0, 0, 0, $quantity, "", $reference, $id_supplier, 0, 1);
 			
@@ -569,7 +534,7 @@
 			}
 		}
 		
-		public function updateProductForPrestashop($product_attributes = array(), $id_product, $url_photo, $triple_cod_col_siz, $array_combinations, $language = 1){
+		public function updateProductForPrestashop($product_attributes = array(), $id_product, $url_foto, $triple_cod_col_siz, $array_combinations, $language = 1){
 			$product = new Product($id_product);
 			$is_change_product = false;
 			
@@ -622,6 +587,7 @@
 				
 				if($this->isOldOrNewValueForProduct("Altezza",$single_old_feature)){
 					if(!$this->isOldOrNewValueForProduct($single_old_feature_value,($array_features["Altezza"]." cm"))){
+						
 						$feature_value->value = array($language => ($array_features["Altezza"]." cm"));
 						$feature_value->update();
 						$height = true;
@@ -676,26 +642,25 @@
 				$this->controlCategoriesForActivateTheir($ids_categories_array);
 			}
 			
-			$this->updateCombinantionsForPrestashop($id_product, $url_photo, $triple_cod_col_siz, $array_combinations, $language);
+			$this->updateCombinantionsForPrestashop($id_product, $url_foto, $triple_cod_col_siz, $array_combinations, $language = 1);
 			
 			$return = array();
-			$array_images_combinations_of_the_product = $product->getImages($language);
-			array_push($return, $product->id);
-			
+			array_push($return,$product->id);
 			$element = array();
-			foreach($array_images_combinations_of_the_product as $array_combo_image){
-				$name_of_the_image = $array_combo_image['legend'];
-				$id_image_of_the_product = $array_combo_image['id_image'];
-				array_push($element, $id_image_of_the_product.",".$name_of_the_image );
+			for($i = 0; $i < sizeof($array_id_image); $i++){
+				$img_for_table = new ImageCore($array_id_image[$i]);
+				$array_tmp = $img_for_table->legend;
+				$string_to_return = $array_id_image[$i].",".$array_tmp['1'];
+				array_push($element,$string_to_return);
 			}
 			array_push($return, $element);
-			return $return;
+			return $return;	
 		}
 		
-		private function updateCombinantionsForPrestashop($id_product, $url_photo, $triple_cod_col_siz, $array_combinations, $language = 1){
+		private function updateCombinantionsForPrestashop($id_product, $url_foto, $triple_cod_col_siz, $array_combinations, $language = 1){
 			$product = new Product((int)$id_product);
 			
-			$price = 0.000;//(float)$product->price;
+			$price = (float)$product->price;
 			$reference = $product->reference;
 			$id_supplier = (int)$product->id_supplier;
 			
@@ -705,6 +670,7 @@
 				$attributes = $array_attributes_and_values["Attributi"];
 				$values = $array_attributes_and_values["Valori"];
 				$image = trim($array_attributes_and_values["Immagine"]);
+				
 				$quantity = (int)$array_attributes_and_values["Qta"];
 				
 				$variable_tmp_attributes = explode(",",$attributes);
@@ -797,32 +763,23 @@
 								}
 							}
 						}
-					}else{
-						if(strtolower($variable_tmp_attributes[$i]) === "colore" || strtolower($variable_tmp_attributes[$i]) === "colori"){
-							$flag_just_exist_color = false;
-						}
-						if(strtolower($variable_tmp_attributes[$i]) === "taglia" || strtolower($variable_tmp_attributes[$i]) === "taglie"){
-							$flag_just_exist_size = false;
-						}
 					}
-				
 				}
 				
 				if($flag_just_exist_color || $flag_just_exist_size){
+					
+					$image_for_prestashop = new imageForPrestashop();
+					$id_image = $image_for_prestashop->getIdImageByName(trim($image));
 					$id_images = array();
-					$tmp_photo = explode(".jpg,",$image);
-					for($i = 0; $i < sizeof($tmp_photo); $i++){
-						if(!empty($tmp_photo[$i])){
-							$image_for_prestashop = new imageForPrestashop();
-							$id_image = $image_for_prestashop->getIdImageByName(trim($tmp_photo[$i]));
-							if(!empty($id_image))
-								array_push($id_images, $id_image);
-							else{
-								$id_image = $image_for_prestashop->insertImageInPrestashop($id_product, trim($url_photo), trim($tmp_photo[$i]));
-								array_push($id_images, $id_image);
-							}
-						}
+					
+					if(empty($id_image)){
+						$url = trim($url_foto).$image;
+						$id_image = $image_for_prestashop->insertImageInPrestashop($id_product,$url,$image);
+						array_push($id_images, $id_image);
+						
 					}
+			
+					array_push($id_images, $id_image);
 					
 					$id_product_attributes = $product->addProductAttribute($price, 0, 0, 0, $quantity, "", $reference, $id_supplier, 0, 1);
 			
@@ -830,27 +787,6 @@
 				
 					$combinations->setAttributes($id_attributes_for_combinations);
 					$combinations->setImages($id_images);
-				}else{
-					$id_images = array();
-					$tmp_photo = explode(".jpg,",$image);
-					for($i = 0; $i < sizeof($tmp_photo); $i++){
-						if(!empty($tmp_photo[$i])){
-							$image_for_prestashop = new imageForPrestashop();
-							$id_image = $image_for_prestashop->getIdImageByName(trim($tmp_photo[$i]));
-							if(empty($id_image)){
-								$id_image = $image_for_prestashop->insertImageInPrestashop($id_product, trim($url_photo), trim($tmp_photo[$i]));
-								array_push($id_images, $id_image);
-							}
-						}
-					}
-					if(!empty($id_images)){
-						$id_product_attributes = $product->addProductAttribute($price, 0, 0, 0, $quantity, "", $reference, $id_supplier, 0, 1);
-			
-						$combinations = new CombinationCore((int)$id_product_attributes);
-					
-						$combinations->setAttributes($id_attributes_for_combinations);
-						$combinations->setImages($id_images);
-					}
 				}
 			}		
 		}

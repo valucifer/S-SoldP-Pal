@@ -37,7 +37,7 @@
 			if(sizeof($tmp_array) === 1){
 				throw new Exception("Il file semaforo è vuoto");
 			}else{
-				$tmp_path = "files/";
+				$tmp_path = "File/";
 				
 				$this->_TB_ART = $this->createArray($tmp_path.$tmp_array[1]);
 				
@@ -627,7 +627,8 @@
 						break;
 					
 					if($tmp[0] === $cod_art && $tmp[1] === $cod_color){
-						$return = $return.trim($tmp[4]).",";
+						$return = trim($tmp[4]);
+						break;
 					}
 					
 				}
@@ -724,7 +725,7 @@
 				
 				$stringTmp = "";
 				foreach($urlFoto[$keys] as $singleFoto){
-					$stringTmp = $stringTmp.$singleFoto.",";
+						$stringTmp = $stringTmp.$singleFoto.",";
 				}
 				$element["URL"] = $stringTmp;
 				
