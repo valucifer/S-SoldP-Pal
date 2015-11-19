@@ -7,8 +7,8 @@
 *
 */
 
-include "../../../config/config.inc.php";//da controllare durante l'installazione finale (Carlos Borges)
-include "../../../init.php";
+include "../../config/config.inc.php";//da controllare durante l'installazione finale (Carlos Borges)
+include "../../init.php";
 require_once ("Mapping.php");
 
 class PrestashopImageHandler{

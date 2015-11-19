@@ -19,7 +19,7 @@ require_once("PrestashopUpdate.php");
 
 
 echo "inizio aggiornamento </br>";
-$updatePS = new PrestashopUpdate('./files/A20151008161213_SEM.chk');
+$updatePS = new PrestashopUpdate('./files/A20151102142434_SEM.chk');
 echo "inizio aggiornamento </br>";
 $updatePS->updatePsProduct();
 echo "aggiornamento completato </br>";

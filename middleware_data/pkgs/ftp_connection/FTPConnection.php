@@ -23,7 +23,7 @@ class FTPConnection{
     private $semaphores_array = array();
     private $folders_name = array();
     private $logger = null;
-    
+
     /**
 	 * Initializes class.
 	 *
@@ -150,8 +150,28 @@ class FTPConnection{
     public function cleanUp(){
         //delete semaphore, 'cause all the operations are ok.
         ftp_delete ($this->connection , $this->ftp_folder_path."/".$this->semaphore_name);
+        //delete downloaded files
+        rmdir($this->local_dir);
+        //delete ftp folder
+        $remote_contents = ftp_nlist($this->connection, $this->ftp_folder_path);
+        foreach( $this->semaphores_array as &$sem ){    
+            $tmp_array = explode("_", $sem);
+            foreach( $remote_contents as &$remCon ){
+                if( strpos($remCon, $tmp_array[0]) ){
+                    $file_info = pathinfo($remCon);
+                    if(!isset($file_info["extension"])){
+                        //we encountered a folder. This folder(s) will be processed later
+                        continue;
+                    }
+                    ftp_delete($this->connection, $this->local_dir."/".$file_info["filename"].".".$file_info["extension"], $remCon, FTP_ASCII);
+                }
+            }
+        }
+        foreach($this->folders_name as $folder){
+            ftp_rmdir($this->connection, $this->local_dir."/".$folder);
+        }
     }
-    
+
     /**
 	 * Handles class desctruction operations closing connection to remote folder.
 	 * @exception HandleOperationsException thrown when connection cannot be closed for some reason.
