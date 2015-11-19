@@ -10,7 +10,9 @@ $files = scandir("imgs");
 $index = 1;
 $start = microtime(true);
 
-$color_comparison->getThreeMainColors("VBS0A004,6,005.jpg", true);
+$color_comparison->getThreeMainColors("1.jpg", true);
+$color_comparison->getThreeMainColors("2.jpg", true);
+$color_comparison->getThreeMainColors("3.jpg", true);
 
 /*foreach($files as $file){
     if($file === '.DS_Store' || $file === "." || $file === ".."){
