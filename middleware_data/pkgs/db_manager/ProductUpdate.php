@@ -1,25 +1,24 @@
 <?php
-
-/**
-* PHP class update the tmp custom table use to verify the change between
-* the last import import of a product 
-* @package    UpdateProduct
-* @author     Carlos Borges (carboma89@gmail.com)
-**/
-
 require_once ("connection.php");
 require_once ("HandleOperationsException.php");
 require_once ("Logger.php");
 
+/**
+* PHP class update the tmp custom table used to verify the changes between
+* the last import and the new product import 
+* @package    UpdateProduct
+* @author     Carlos Borges (carboma89@gmail.com)
+**/
+
+
 class ProductUpdate{
-     private $logger=null;
-        
+     private $logger=null;        
     public function __construct(){
         $this->logger = new Logger();
     }
     
     /** 
-    *Function that updates checks if product exists informations
+    *Checks if product exists 
     *@params int $reference
     *@return string prestashop id if exists, false if not exits
     */
@@ -41,7 +40,7 @@ class ProductUpdate{
     }
     
     /** 
-    *Function that inserts product informations
+    *Inserts product informations
     *@params int $psIdImage, int $psIdImage, string $coloranalysis, string $md5Digest,
     *string $imgPath
     */
@@ -49,13 +48,8 @@ class ProductUpdate{
          $connection = connectionServer();
             $sql = "INSERT INTO ps_tmp_product (ps_id, reference, attivo, categoria, prezzo, supplier,                manufacture, qta, qta_min, lunghezza, altezza,larghezza,colore,quantita,taglia, nome, modello, linea, codice_colore, codice_taglia, url, immagine )VALUES('".$ps_id."','".$reference."','".$attivo."',            '".$categoria."','".$prezzo."','".$supplier."','".$manufacture."','".$qta."','".$qta_min."',
  '".$lunghezza."','".$altezza."','".$larghezza."','".$colore."','".$quantita."','".$taglia."','".$nome."','".$modello."','".$linea."','".$codice_colore."','".$codice_taglia."','".$url."','".$immagine."')";
-            try{
                 $res = mysql_query($sql,$connection);
-            }catch(Exception $e){
-                echo $e."";
-            }
             if($res){
-                $this->logger->postMessage("Il prodotto $ps_id e' stato inserito correttamente ");
             }else{
                  $errno = mysql_errno($connection);
                  $error = mysql_error($connection);
@@ -72,20 +66,15 @@ class ProductUpdate{
     }
     
     /** 
-    *Function that updates product informations
-    *@params int $ps_od, string $attivo,string $prezzo,string $qta,string $qta_min,string $lunghezza,string
+    *Updates product informations
+    *@params int $ps_id, string $attivo,string $prezzo,string $qta,string $qta_min,string $lunghezza,string
     *$altezza,string $larghezza,string $nome,string $modello,string $linea 
     */
     public function updateProduct($ps_id, $attivo, $prezzo, $qta, $qta_min, $lunghezza, $altezza, $larghezza, $nome, $modello, $linea,$colore, $taglia ){
          $connection = connectionServer();
             $sql = "UPDATE  ps_tmp_product SET attivo = '".$attivo."', prezzo = '".$prezzo."', qta = '".$qta."', qta_min = '".$qta_min."', lunghezza = '".$lunghezza."', altezza = '".$altezza."',larghezza = '".$larghezza."', nome = '".$nome."', modello = '".$modello."' , linea = '".$linea."' WHERE ps_id = '".$ps_id."' AND colore = '".$colore."' AND taglia = '".$taglia."'";
-            try{
                 $res = mysql_query($sql,$connection);
-            }catch(Exception $e){
-                echo $e."";
-            }
             if($res){
-                $this->logger->postMessage("Il prodotto $ps_id e' stato modificato correttamente ");
             }else{
                  $errno = mysql_errno($connection);
                  $error = mysql_error($connection);

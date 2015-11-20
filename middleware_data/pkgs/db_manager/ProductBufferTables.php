@@ -1,8 +1,14 @@
 <?php
-
 require_once ("connection.php");
 require_once ("HandleOperationsException.php");
 require_once ("Logger.php");
+
+    /**
+    * PHP class update the buffer custom table use to verify the changes between
+    * the last import and the new import of product informations
+    * @package    UpdateProduct
+    * @author     Carlos Borges (carboma89@gmail.com)
+    **/
 
 class ProductBufferTables{
      private $logger=null;
@@ -11,22 +17,20 @@ class ProductBufferTables{
         $this->logger = new Logger();
     }
     
-    
+        /** 
+        *Inserts new product into buffer table
+        *@params  string $reference, string $attivo, string $categoria, string $prezzo, string $supplier, string $manufacture, string $qta, string $qta_min, string $lunghezza, string $altezza, string $larghezza, string $colore, string $quantita, string $taglia, string $nome, string $modello, string $linea, string $codice_colore, string $codice_taglia, string $url, string $immagine
+        */
     public function insertProduct( $reference, $attivo, $categoria, $prezzo, $supplier, $manufacture, $qta, $qta_min, $lunghezza, $altezza, $larghezza, $colore, $quantita, $taglia, $nome, $modello, $linea, $codice_colore, $codice_taglia, $url, $immagine){
          $connection = connectionServer();
             $sql ="INSERT INTO ps_buffer_product (reference, attivo, categoria, prezzo, supplier,                manufacture, qta, qta_min, lunghezza, altezza,larghezza,colore,quantita,taglia, nome, modello, linea, codice_colore, codice_taglia, url, immagine )VALUES('".$reference."','".$attivo."',            '".$categoria."','".$prezzo."','".$supplier."','".$manufacture."','".$qta."','".$qta_min."',
  '".$lunghezza."','".$altezza."','".$larghezza."','".$colore."','".$quantita."','".$taglia."','".$nome."','".$modello."','".$linea."','".$codice_colore."','".$codice_taglia."','".$url."','".$immagine."')";
-            try{
                 $res = mysql_query($sql,$connection);
-            }catch(Exception $e){
-                echo $e."";
-            }
             if($res){
                 $this->logger->postMessage("Il prodotto e' stato inserito correttamente ");
             }else{
                  $errno = mysql_errno($connection);
                  $error = mysql_error($connection);
-                 echo "sono qua  $error ; $errno<br/>";
                  switch ($errno) {
                      case 1062:
                         throw new HandleOperationsException($error);
@@ -39,20 +43,17 @@ class ProductBufferTables{
             closeConnectionServer($connection);
     }
     
+    /**
+    *Truncate buffer table
+    **/
       public function freeBufferTable(){
          $connection = connectionServer();
             $sql = "TRUNCATE TABLE ps_buffer_product";
-            try{
                 $res = mysql_query($sql,$connection);
-            }catch(Exception $e){
-                echo $e."";
-            }
             if($res){
-                $this->logger->postMessage("La tabella buffer è stata svuotata");
             }else{
                  $errno = mysql_errno($connection);
                  $error = mysql_error($connection);
-                 echo "sono qua  $error ; $errno<br/>";
                  switch ($errno) {
                      case 1062:
                         throw new HandleOperationsException($error);

@@ -1,15 +1,15 @@
 <?php
-
+    require_once ("connection.php");
+    require_once ("HandleOperationsException.php");
+    require_once ("Logger.php");
     /**
-    * PHP class update the tmp custom table use to verify the change between
-    * the last import and the new import of images of a product 
+    * PHP class update the tmp custom table use to verify the changes between
+    * the last import and the new import of product images 
     * @package    UpdateProduct
     * @author     Carlos Borges (carboma89@gmail.com)
     **/
 
-    require_once ("connection.php");
-    require_once ("HandleOperationsException.php");
-    require_once ("Logger.php");
+ 
     
     class ImageUpdate{
         private $logger=null;
@@ -36,8 +36,7 @@
                 $sql = "UPDATE ps_tmp_image SET color_analysis ='".$colorAnalysis."' ,md5_digest = '".$md5Digest."' ,                     new_path = '".$imgPath."',old_path = '".$oldPath["newPath"]."', status = '0' WHERE ( ps_id =  
                 '".$psIdImage."')";
                 $res = mysql_query($sql,$connection);
-                if($res){
-                    $this->logger->postMessage("Il prodotto $psIdProduc e' stato aggiornato correttamente ");
+                if($res){//se l'inserimento è stato completato
                 }
                 else{
                     $errno = mysql_errno($connection);
@@ -56,7 +55,7 @@
         }
         
         /** 
-        *Function that inserts images informations
+        *Inserts images informations to DB
         *@params int $psIdImage, int $psIdImage, string $coloranalysis, string $md5Digest,
         *string $imgPath
         */
@@ -64,13 +63,8 @@
             $connection = connectionServer();
             $sql = "INSERT INTO ps_tmp_image ( ps_id, color_analysis,md5_digest, new_path,status,fk_ps_id)
                 VALUES('".$psIdImage."','".$colorAnalysis."','".$md5Digest."','".$imgPath."','0','".$psIdProduc."')";
-            try{
                 $res = mysql_query($sql,$connection);
-            }catch(Exception $e){
-                echo $e."";
-            }
-            if($res){
-                $this->logger->postMessage("Il prodotto $psIdProduc e' stato inserito correttamente ");
+            if($res){//se l'inserimento è stato completato
             }else{
                  $errno = mysql_errno($connection);
                  $error = mysql_error($connection);
@@ -88,7 +82,7 @@
         
         
         /**
-        *Function that checks if there is a images into DB
+        *Checks if there is images in to DB
         *@params string $psId
         *@return true if exist the image in DB , false otherwise
         *
@@ -107,7 +101,7 @@
         }
             
         /**
-        *Function that returns images informations from db
+        *Returns images informations from db
         *@params int $psIdImage
         *@return an associative array with coloranalysis anda md5Digest information
         **/
@@ -124,7 +118,7 @@
         
         
          /**
-        * Private function that checks if the product exists into the tmp table searching by product key
+        * Checks if the product exists into the tmp table searching by product key
         *@params string $psId
         @return true if exist the product in DB , false otherwise
         */

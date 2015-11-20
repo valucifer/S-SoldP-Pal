@@ -5,27 +5,27 @@ require_once ("ImageUpdate.php");
 require_once ("ViewManager.php");
 require_once ("Logger.php");
 
-class UpdateTmpTables{ 
     /**
     * PHP class that provides functions to update the informations of the tmp product table 
     * @package    UpdateProduct
     * @author     Carlos Borges (carboma89@gmail.com)
     **/
+
+class UpdateTmpTables{ 
+
     private $logger = null;
     public function __construct(){
         $this->logger = new Logger();
     }
 
     /**
-    *This function provide if the new images of product are the same, if not than update image path and
+    *Checks if the new images of product are the same, if not than update image path and
     *information into the DB tmp table
     *@params string $imagePath, int $psIdProduct, int $psIdImage
     **/
     public function updateImageField ($imagePath ,$psIdProduct, $psIdImage){
-
         $toUpdate = new ImageUpdate();
         $comparator = new ImageChecker();
-
         if($toUpdate->ifImageExist($psIdImage)){
             $imgInformation = $toUpdate->getImageInformation($psIdImage);
             $differences = $comparator->areImagesDifferent($imagePath,  40, 1, $imgInformation['md5Digest'], $imgInformation['colorAnalysis'] );
@@ -38,7 +38,7 @@ class UpdateTmpTables{
     }
 
     /**
-    *This function provideinsert image path and information into the DB tmp table
+    *Inserts image path and information into the DB tmp table
     *@params string $imagePath, int $psIdProduct, int $psIdImage
     **/
     public function insertImageField ($imagePath, $psIdProduct, $psIdImage){
@@ -49,9 +49,7 @@ class UpdateTmpTables{
     }
     
     
-    /**
-    *
-    **/
+
     public function insertTmpProducts($array_product,$key){
         $view_manager = new ViewManager();
         $result =$view_manager->getSqlNewProducts($array_product,$key);
@@ -60,7 +58,6 @@ class UpdateTmpTables{
             $res=null;
             $res = mysql_query($sql,$connection);
             if($res){
-                $this->logger->postMessage("Il prodotto $array_product e' stato inserito correttamente ");
             }else{
                  $errno = mysql_errno($connection);
                  $error = mysql_error($connection);
@@ -77,9 +74,7 @@ class UpdateTmpTables{
         closeConnectionServer($connection);
     }
     
-    /**
-    *
-    **/
+
     public function updateTmpProducts($array_product,$key){
         $view_manager = new ViewManager();
         $result =$view_manager->getSqlChangedProducts($array_product,$key);
@@ -88,7 +83,6 @@ class UpdateTmpTables{
             $res=null;
             $res = mysql_query($sql,$connection);
             if($res){
-                $this->logger->postMessage("Il prodotto $array_product e' stato modificato correttamente ");
             }else{
                  $errno = mysql_errno($connection);
                  $error = mysql_error($connection);

@@ -1,4 +1,15 @@
 <?php
+    /**
+    * PHP class update the tmp custom table use to verify the change between
+    * the last import and the new import of images of a product 
+    * @package    UpdateProduct
+    * @author     Carlos Borges (carboma89@gmail.com)
+    **/
+
+    /**
+    *Connection to database
+    *@return string
+    **/
 	function connectionServer(){
 		$SERVERNAME = "localhost:3306";
 		$USERNAME = "root";
@@ -23,6 +34,10 @@
 		return $connection;
 	}
 	
+    /**
+    *Closes database Connection
+    *@return string
+    **/
 	function closeConnectionServer($server){
 		//close the connection
 		$close_connection = mysql_close($server);
@@ -31,4 +46,5 @@
 		}
 		return $close_connection;
 	}
+
     ?>
