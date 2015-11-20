@@ -863,7 +863,7 @@ class PrestashopProduct{
             $this->controlCategoriesForActivateTheir($ids_categories_array);
         }
 
-        $this->updateCombinantionsForPrestashop($id_product, $url_photo, $triple_cod_col_siz, $array_combinations, $language);
+        $change_new_image = $this->updateCombinantionsForPrestashop($id_product, $url_photo, $triple_cod_col_siz, $array_combinations, $language);
 
         $return = array();
         $array_images_combinations_of_the_product = $product->getImages($language);
@@ -876,6 +876,7 @@ class PrestashopProduct{
             array_push($element, $id_image_of_the_product.";".$name_of_the_image );
         }
         array_push($return, $element);
+		array_push($return, $change_new_image);
         return $return;
     }
 
@@ -887,7 +888,7 @@ class PrestashopProduct{
 	* @param array $triple_cod_col_siz
 	* @param array $array_combinations
 	* @param integer $language
-	* @return array
+	* @return bool
 	* @see $this->createAttributeGroups
 	* @see $this->setArrayElementForLinkRewrite
 	* @see $this->getCodeColor
@@ -897,7 +898,7 @@ class PrestashopProduct{
 	*/
     private function updateCombinantionsForPrestashop($id_product, $url_photo, $triple_cod_col_siz, $array_combinations, $language = 1){
         $product = new Product((int)$id_product);
-
+		$flag_new_image = false;
         $price = '0.000';//(float)$product->price;
         $reference = $product->reference;
         $id_supplier = (int)$product->id_supplier;
@@ -1022,6 +1023,7 @@ class PrestashopProduct{
                         else{
                             $id_image = $image_for_prestashop->insertImageInPrestashop($id_product, trim($url_photo), trim($tmp_photo[$i]));
                             array_push($id_images, $id_image);
+							$flag_new_image = true;
                         }
                     }
                 }
@@ -1042,6 +1044,7 @@ class PrestashopProduct{
                         if(empty($id_image)){
 							$id_image = $image_for_prestashop->insertImageInPrestashop($id_product, trim($url_photo), trim($tmp_photo[$i]));
                             array_push($id_images, $id_image);
+							$flag_new_image = true;
                         }
                     }
                 }
@@ -1054,6 +1057,7 @@ class PrestashopProduct{
                 }
             }
         }		
+		return $flag_new_image;
     }
 
 }
