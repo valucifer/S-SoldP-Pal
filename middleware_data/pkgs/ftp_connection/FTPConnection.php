@@ -151,6 +151,16 @@ class FTPConnection{
     public function getPSSemaphoresPath(){
         return $this->semaphores_array;
     }
+    
+    /**
+	 * Delete semaphore in remote folder. This method is called when an exception occur, before operations are completed.
+	 * 
+	 * @params 
+	 * @return
+	 */
+    public function revertCleanup(){
+        ftp_delete ($this->connection , $this->ftp_folder_path."/".$this->semaphore_name);
+    }
 
     /**
 	 * Removes semaphore file and all contents from remote folder.
