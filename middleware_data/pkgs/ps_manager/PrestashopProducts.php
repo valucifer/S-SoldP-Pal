@@ -1,4 +1,8 @@
 <?php
+include "../../config/config.inc.php";//da controllare durante l'installazione finale (Carlos Borges)
+include "../../init.php";
+require_once ("Mapping.php");
+
 /**
 * This class handles images in Prestashop
 *
@@ -6,11 +10,6 @@
 * @version 1.0
 *
 */
-
-include "../../config/config.inc.php";//da controllare durante l'installazione finale (Carlos Borges)
-include "../../init.php";
-require_once ("Mapping.php");
-
 class PrestashopImageHandler{
 	
     public function __construct(){}
