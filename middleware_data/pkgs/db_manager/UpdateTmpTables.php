@@ -2,6 +2,7 @@
 <?php
 require_once ("ImageChecker.php");
 require_once ("ImageUpdate.php");
+require_once ("ViewManager.php");
 
 class UpdateTmpTables{ 
     /**
@@ -46,6 +47,42 @@ class UpdateTmpTables{
         $differences = $comparator->areImagesDifferent($imagePath, 40, 1," ", " " );
         $toUpdate->insertImageInformation($psIdProduct, $psIdImage,$differences[0], $differences[1],$imagePath);
     }
+    
+    
+    /**
+    *
+    **/
+    public function updateTmpProducts($array_product,$key){
+        $view_manager = new ViewManager();
+        echo"<br/> sono qua 1 $array_product,$key";
+        $result =$view_manager->getSqlNewProducts($key);
+        $connection = connectionServer();
+        echo"<br/> sono qua 2";
+        echo"<br/> sono qua 3";
+        print_r($result);
+        foreach($result as $sql){
+            echo "</br> $sql";
+            $res = mysql_query($sql,$connection);
+            echo "</br>risultato $res";
+            if($res){
+                $this->logger->postMessage("Il prodotto $ps_id e' stato inserito correttamente ");
+            }else{
+                 $errno = mysql_errno($connection);
+                 $error = mysql_error($connection);
+                 switch ($errno) {
+                     case 1062:
+                        throw new HandleOperationsException($error);
+                     break;
+                     default:
+                     throw new HandleOperationsException($error);
+                     break;
+                 }
+             }  
+        }
+        closeConnectionServer($connection);
+    }
+           
+    
 }
 
 ?>

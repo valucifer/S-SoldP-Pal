@@ -65,7 +65,6 @@
             echo "<br/> sono in insertImageInformation";
             $sql = "INSERT INTO ps_tmp_image ( ps_id, color_analysis,md5_digest, new_path,status,fk_ps_id)
                 VALUES('".$psIdImage."','".$colorAnalysis."','".$md5Digest."','".$imgPath."','0','".$psIdProduc."')";
-            echo "sql : $sql";
             try{
                 $res = mysql_query($sql,$connection);
             }catch(Exception $e){
