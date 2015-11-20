@@ -898,7 +898,8 @@ class PrestashopProduct{
 	*/
     private function updateCombinantionsForPrestashop($id_product, $url_photo, $triple_cod_col_siz, $array_combinations, $language = 1){
         $product = new Product((int)$id_product);
-		$flag_new_image = false;
+		$id_new_images = array();
+		
         $price = '0.000';//(float)$product->price;
         $reference = $product->reference;
         $id_supplier = (int)$product->id_supplier;
@@ -1011,7 +1012,8 @@ class PrestashopProduct{
                 }
 
             }
-            if($flag_just_exist_color || $flag_just_exist_size){
+            
+			if($flag_just_exist_color || $flag_just_exist_size){
                 $id_images = array();
                 $tmp_photo = explode(".jpg,",$image);
                 for($i = 0; $i < sizeof($tmp_photo); $i++){
@@ -1023,7 +1025,7 @@ class PrestashopProduct{
                         else{
                             $id_image = $image_for_prestashop->insertImageInPrestashop($id_product, trim($url_photo), trim($tmp_photo[$i]));
                             array_push($id_images, $id_image);
-							$flag_new_image = true;
+							array_push($id_new_images,$id_image);
                         }
                     }
                 }
@@ -1044,7 +1046,7 @@ class PrestashopProduct{
                         if(empty($id_image)){
 							$id_image = $image_for_prestashop->insertImageInPrestashop($id_product, trim($url_photo), trim($tmp_photo[$i]));
                             array_push($id_images, $id_image);
-							$flag_new_image = true;
+							array_push($id_new_images,$id_image);
                         }
                     }
                 }
@@ -1057,7 +1059,7 @@ class PrestashopProduct{
                 }
             }
         }		
-		return $flag_new_image;
+		return $id_new_images;
     }
 
 }
