@@ -19,7 +19,9 @@ $ftp_connection->handleSemaphore();
 $sems = $ftp_connection->getPSSemaphoresPath();
 $update_prestashop = new PrestashopUpdate();
 foreach ($sems as $sem){
-   $update_prestashop-> startUpdate("./files/".$sem);
+    echo"SAM $sem";
+    $update_prestashop-> startUpdate("./files/".$sem);
+    $update_prestashop-> updatePsProduct();
 }
 $ftp_connection->cleanUp();
 
