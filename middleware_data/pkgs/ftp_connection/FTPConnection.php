@@ -50,7 +50,6 @@ class FTPConnection{
             ftp_chdir($this->connection, $this->ftp_folder_path);
             ftp_pasv($this->connection, true);
             $this->logger = new Logger();
-            $this->handleSemaphore();
         }
     }
 
@@ -60,8 +59,7 @@ class FTPConnection{
 	 * @params 
 	 * @return 
 	 */
-
-    private function handleSemaphore(){
+    public function handleSemaphore(){
         //retreive all remote files to check if semaphore exists
         $remote_contents = ftp_nlist($this->connection, $this->ftp_folder_path);
 

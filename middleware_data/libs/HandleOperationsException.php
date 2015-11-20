@@ -1,5 +1,6 @@
 <?php
 require_once("Analog.php");
+require_once("FTPConnection.php");
 
 interface IException
 {
@@ -27,6 +28,9 @@ class HandleOperationsException extends Exception implements IException{
         Analog::handler (Analog\Handler\File::init ($this->log_file));
         parent::__construct($message, $code);
         Analog::log ($this->__toString(), Analog::ERROR);
+        $ftp_connection = new FTPConnection();
+        $ftp_connection->connect();
+        $ftp_connection->revertCleanup();
     }
     
     public function __toString(){
