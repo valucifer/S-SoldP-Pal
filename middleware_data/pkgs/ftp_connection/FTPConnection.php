@@ -151,7 +151,7 @@ class FTPConnection{
     }
     
     /**
-	 * Delete semaphore in remote folder. This method is called when an exception occur, before operations are completed.
+	 * Deletes semaphore in remote folder. This method is called when an exception occur, before operations are completed.
 	 * 
 	 * @params 
 	 * @return
