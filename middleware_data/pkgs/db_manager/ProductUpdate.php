@@ -25,7 +25,7 @@ class ProductUpdate{
     */
     public function productExists($reference){
             $connection = connectionServer();
-            $sql = "SELECT ps_id FROM  ps_tmp_products WHERE ( reference = '".$reference."')";
+            $sql = "SELECT ps_id FROM  ps_tmp_product WHERE ( reference = '".$reference."')";
             $result = mysql_query($sql,$connection);
             if (mysql_num_rows($result) > 0){
                 $toReturn = null;
@@ -79,7 +79,6 @@ class ProductUpdate{
     public function updateProduct($ps_id, $attivo, $prezzo, $qta, $qta_min, $lunghezza, $altezza, $larghezza, $nome, $modello, $linea,$colore, $taglia ){
          $connection = connectionServer();
             $sql = "UPDATE  ps_tmp_product SET attivo = '".$attivo."', prezzo = '".$prezzo."', qta = '".$qta."', qta_min = '".$qta_min."', lunghezza = '".$lunghezza."', altezza = '".$altezza."',larghezza = '".$larghezza."', nome = '".$nome."', modello = '".$modello."' , linea = '".$linea."' WHERE ps_id = '".$ps_id."' AND colore = '".$colore."' AND taglia = '".$taglia."'";
-        echo "</br> $sql";
             try{
                 $res = mysql_query($sql,$connection);
             }catch(Exception $e){
@@ -90,7 +89,6 @@ class ProductUpdate{
             }else{
                  $errno = mysql_errno($connection);
                  $error = mysql_error($connection);
-                 echo "sono qua  $error ; $errno<br/>";
                  switch ($errno) {
                      case 1062:
                         throw new HandleOperationsException($error);

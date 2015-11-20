@@ -1,5 +1,11 @@
 <?php
 
+/**
+* PHP class update prestashop products information from views  and images
+* @package    UpdateProduct
+* @author     Carlos Borges (carboma89@gmail.com), Valentino Vivone, Nello Saulino
+**/
+
 require_once ("Mapping.php");
 require_once ("UpdateTmpTables.php");
 require_once ("ProductUpdate.php");
@@ -17,8 +23,14 @@ class PrestashopUpdate{
     private $array_combinations = null;
     private $url_photo;
 
-    public function __construct($mapping_path){
-            echo"<br/> 1";
+    public function __construct(){
+    }
+
+    /** 
+    *Function that initialize the mapping and the buffer table
+    *@params string $mapping_path
+    */
+    public function startUpdate($mapping_path){
         $tmp = explode ('_',$mapping_path);
         $this->url_photo = $tmp[0].'_FOTO/';
         $this->logger = new Logger();
@@ -49,10 +61,13 @@ class PrestashopUpdate{
         
     }
 
-    //solo se esiste il prodotto
+    /** 
+    *Function that update images if it change
+    *@params string $ps_product_id, string $images_url
+    */
     private function _updatePsImages($ps_product_id, $images_url){
+        echo"<br/> sono entrato in _updatePsImages ";
         $image_manager = new PrestashopImageHandler();
-        print_r($images_url);
         for($i = 0; $i<sizeof($images_url); $i++){
             $image_id = $image_manager->getIdImageByName($images_url[$i]);
             $tmp_manager = new UpdateTmpTables();
@@ -61,23 +76,40 @@ class PrestashopUpdate{
                 $tmp_manager->insertImageField ($this->url_photo.$images_url[$i],$ps_product_id,$psIdImage);*/
 
             }else{//update immagine già esistente
-                echo "<br>$this->url_photo.$images_url[$i],$ps_product_id,$image_id<br>";
                 $result = $tmp_manager->updateImageField ($this->url_photo.$images_url[$i],$ps_product_id,$image_id);
                 if($result){
-                    echo"<br>Sono entrato<br>";
+                    
                     $image_manager->updateImageInPrestashop($ps_product_id, $image_id, $this->url_photo, $images_url[$i]);//update su prestashop
+                    echo"<br>ho modificato l immagine <br>";
                 }else{
-                    echo "le immagini sono uguali non si fa l'inserimento, non inserico su prestashop </br>";
+                    echo "<br>le immagini sono uguali non si fa l'inserimento, non inserico su prestashop </br>";
                 }
             }
         }    
     }
 
+    /** 
+    *Function that update or insert product information
+    */
     public function updatePsProduct(){
         $product_update = new ProductUpdate();
         $insert_product = new PrestashopProduct();
         $new_products_manager = new ViewManager();
         $tmp_manager = new UpdateTmpTables();
+        $all_products = $new_products_manager-> getAllProducts();
+        echo"<br/> inizio aggiornamento foto ****";
+        foreach($all_products as $product){
+            $array_reference = $product[0];
+            $key=$array_reference['Reference'];
+            asort($product[1]);
+            asort($product[2]);
+            $result = $product_update->productExists($key);
+            if($result){
+                $url = $this->formatUrlPhoto($key);
+                $this->_updatePsImages($result,$url);
+            }
+        }
+        echo"<br/> fine aggiornamento foto ****";
         echo"<br/> inizio inserimento nuovi prodotti ****";
         $new_products = $new_products_manager-> getNewProduct();
         foreach($new_products as $product){
@@ -97,18 +129,12 @@ class PrestashopUpdate{
         echo"<br/> fine inserimento nuovi prodotti ****";
         echo"<br/> inizio aggiornamento prodotti****";
         $changed_products = $new_products_manager->getProductDifferences();
-        print_r($changed_products);
         foreach($changed_products as $product){
             $array_reference = $product[0];
             $key = $array_reference['Reference'];
             asort($product[1]);
             asort($product[2]);
             $array_product = $insert_product->updateProductForPrestashop($product[0], (int) $product[3], $this->url_photo,$product[1], $product[2]);
-            
-            print_r($array_product);
-            print_r($product[3]);
-            
-            
             if( !empty($array_product[3]) ){
                 foreach($array_product[3] as $new_img){
                     $new_photo_infos = explode(';',$new_img);
@@ -119,7 +145,9 @@ class PrestashopUpdate{
         }
         echo"<br/> fine aggiornamento prodotti****";
         $buffer_manager = new ProductBufferTables();
-        //$buffer_manager->freeBufferTable();
+        $buffer_manager->freeBufferTable();
+        
+        
         /*foreach($this->keys as $key){
             $result = $product_update->productExists($key);
             if(! $result ){
@@ -152,7 +180,12 @@ class PrestashopUpdate{
             }
         }*/
     }
-
+  
+    /** 
+    *Private function that formats Url
+    *@params string $key
+    *@return url formatting
+    */
     private function formatUrlPhoto($key){
         $array_single_product = $this->array_mapping[$key];
         $array_url = $array_single_product['URL'];

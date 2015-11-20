@@ -56,7 +56,6 @@ class UpdateTmpTables{
         $view_manager = new ViewManager();
         $result =$view_manager->getSqlNewProducts($array_product,$key);
         $connection = connectionServer();
-        print_r($result);
         foreach($result as $sql){
             $res=null;
             $res = mysql_query($sql,$connection);
@@ -85,7 +84,6 @@ class UpdateTmpTables{
         $view_manager = new ViewManager();
         $result =$view_manager->getSqlChangedProducts($array_product,$key);
         $connection = connectionServer();
-        print_r($result);
         foreach($result as $sql){
             $res=null;
             $res = mysql_query($sql,$connection);

@@ -207,8 +207,103 @@ class ViewManager{
 		}
     }
     
+    /**
+	* Gets all products contain in the buffer.
+	*
+	* @return array of elements if this view contains their, else return false.
+	* @see MappingArray createSingleArrayTriple()
+	* @see MappingArray createSingleArrayMapping()
+	* @see MappingArray createSingleArrayCombination()
+	*
+	*/
+    public function getAllProducts(){
+		$connection = connectionServer();
+        echo"<br> entro nel getAll";
+		$mapping = new MappingArray();
+		
+        $active = "";	$category = "";	 $price = "";	$supplier = ""; $name = "";	$collection = "";
+		$manufacture = "";	$qta = "";	$qta_min = "";	$size = "";	$height = "";	$width = "";
+		$name_color = array();	$quantity = array();	$name_size = array();	$model = "";
+		$code_color = array();	$url = "";	$name_photo = array();	$code_size = array();
+		
+		$sql = "SELECT * FROM ps_buffer_product WHERE 1 ORDER BY reference ASC";
+		
+		$to_return = array();
+        $result = mysql_query($sql,$connection);
+		
+		if (mysql_num_rows($result) > 0){
+            $new_reference ='';
+			while($row = mysql_fetch_array( $result )){
+                
+				if(empty($new_reference)){
+                    $new_reference = $row[0];
+                }
+				
+                if($new_reference === $row[0]){
+				    $active = $row[1];	$category = $row[2];	$price = $row[3];
+				    $supplier = $row[4];	$manufacture = $row[5];	$qta = $row[6];
+				    $qta_min = $row[7]; $size = $row[8];	$height = $row[9];
+				    $width = $row[10];	array_push($name_color, $row[11]);	array_push($quantity, $row[12]);
+				    array_push($name_size, $row[13]);	$name = $row[14];	$model = $row[15];
+				    $collection = $row[16];	array_push($code_color, $row[17]);	$url = $row[19];
+				    array_push($name_photo, $row[20]);	array_push($code_size, $row[18]);
+                }else{
+					$array_mapping = $mapping->createSingleArrayMapping($price, $active, $new_reference, $name, 
+																	   $category, $supplier, $manufacture, $qta, $qta_min,$width, 
+																	   $height, $size, $model, $collection, $url);
+																		
+                    $array_triple = $mapping->createSingleArrayTriple($new_reference, $code_color, $code_size);
+					
+                    $array_combinations = $mapping->createSingleArrayCombination($new_reference, $code_color, $code_size, $name_color, 
+																				 $name_size, $name_photo, $quantity); 
+                    $element = array();
+                    array_push($element,$array_mapping);
+                    array_push($element,$array_triple);
+                    array_push($element,$array_combinations);
+					
+                    array_push($to_return,$element);
+                    $new_reference = $row[0];
+					
+					$name_color = array();	$quantity = array();	$name_size = array();
+					$code_color = array();	$name_photo = array();	$code_size = array();
+					
+                   $active = $row[1];	$category = $row[2];	$price = $row[3];
+				    $supplier = $row[4];	$manufacture = $row[5];	$qta = $row[6];
+				    $qta_min = $row[7]; $size = $row[8];	$height = $row[9];
+				    $width = $row[10];	array_push($name_color, $row[11]);	array_push($quantity, $row[12]);
+				    array_push($name_size, $row[13]);	$name = $row[14];	$model = $row[15];
+				    $collection = $row[16];	array_push($code_color, $row[17]);	$url = $row[19];
+				    array_push($name_photo, $row[20]);	array_push($code_size, $row[18]);
+		
+                }
+			}
+							
+            $array_mapping = $mapping->createSingleArrayMapping($price, $active, $new_reference, $name, $category, $supplier, 
+																$manufacture, $qta, $qta_min,$width, $height, $size, $model, 
+																$collection, $url);
+																
+			$array_triple = $mapping->createSingleArrayTriple($new_reference, $code_color, $code_size);
+			
+			$array_combinations = $mapping->createSingleArrayCombination($new_reference, $code_color, $code_size, 
+																		 $name_color, $name_size, $name_photo, $quantity); 
+																		 
+			$element = array();
+			array_push($element,$array_mapping);
+			array_push($element,$array_triple);
+			array_push($element,$array_combinations);
+			
+			array_push($to_return,$element);
+            
+			closeConnectionServer($connection);
+			return $to_return;    
+		} else {
+			closeConnectionServer($connection);
+			return FALSE;
+		}
+    }
+    
 	/**
-	* Get all products contain in the view products_differences.
+	* Gets all products contain in the view products_differences.
 	*
 	* @return array of elements if this view contains their, else return false.
 	* @see MappingArray createSingleArrayTriple()
