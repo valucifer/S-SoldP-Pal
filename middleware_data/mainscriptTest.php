@@ -15,11 +15,11 @@ set_include_path(get_include_path() . PATH_SEPARATOR .__DIR__. '/files');
 
 require_once("Mapping.php");
 require_once("PrestashopProducts.php");
-
+/*
 $mapping = new Mapping("./files/A20151016144918_SEM.chk");
 print_r($mapping->getItemMaster());
+*/
 
-/*
 $manager = new PrestashopUpdate("./files/A20151008161213_SEM.chk");
 $manager->updatePsProduct();
 	
@@ -72,7 +72,7 @@ $manager->updatePsProduct();
 	echo "<br> ***************************** prova inserimenti ***************************** <br>";
 	print_r($result);
 	echo "<br> ***************************** prova inserimenti ***************************** <br>";
-*/
+
 	
 	
 	
