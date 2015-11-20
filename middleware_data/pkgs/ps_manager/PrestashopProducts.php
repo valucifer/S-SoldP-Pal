@@ -1025,7 +1025,7 @@ class PrestashopProduct{
                         else{
                             $id_image = $image_for_prestashop->insertImageInPrestashop($id_product, trim($url_photo), trim($tmp_photo[$i]));
                             array_push($id_images, $id_image);
-							array_push($id_new_images,$id_image);
+							array_push($id_new_images,$id_image.";".trim($tmp_photo[$i]));
                         }
                     }
                 }
@@ -1046,7 +1046,7 @@ class PrestashopProduct{
                         if(empty($id_image)){
 							$id_image = $image_for_prestashop->insertImageInPrestashop($id_product, trim($url_photo), trim($tmp_photo[$i]));
                             array_push($id_images, $id_image);
-							array_push($id_new_images,$id_image);
+							array_push($id_new_images,$id_image.";".trim($tmp_photo[$i]));
                         }
                     }
                 }
