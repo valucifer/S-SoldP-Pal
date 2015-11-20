@@ -898,7 +898,7 @@ class PrestashopProduct{
     private function updateCombinantionsForPrestashop($id_product, $url_photo, $triple_cod_col_siz, $array_combinations, $language = 1){
         $product = new Product((int)$id_product);
 
-        $price = 0.000;//(float)$product->price;
+        $price = '0.000';//(float)$product->price;
         $reference = $product->reference;
         $id_supplier = (int)$product->id_supplier;
 
@@ -1010,7 +1010,6 @@ class PrestashopProduct{
                 }
 
             }
-
             if($flag_just_exist_color || $flag_just_exist_size){
                 $id_images = array();
                 $tmp_photo = explode(".jpg,",$image);
@@ -1038,17 +1037,16 @@ class PrestashopProduct{
                 $tmp_photo = explode(".jpg,",$image);
                 for($i = 0; $i < sizeof($tmp_photo); $i++){
                     if(!empty($tmp_photo[$i])){
-                        $image_for_prestashop = new PrestashopImageHandler();
+						$image_for_prestashop = new PrestashopImageHandler();
                         $id_image = $image_for_prestashop->getIdImageByName(trim($tmp_photo[$i]));
                         if(empty($id_image)){
-                            $id_image = $image_for_prestashop->insertImageInPrestashop($id_product, trim($url_photo), trim($tmp_photo[$i]));
+							$id_image = $image_for_prestashop->insertImageInPrestashop($id_product, trim($url_photo), trim($tmp_photo[$i]));
                             array_push($id_images, $id_image);
                         }
                     }
                 }
                 if(!empty($id_images)){
-                    $id_product_attributes = $product->addProductAttribute($price, 0, 0, 0, $quantity, "", $reference, $id_supplier, 0, 1);
-
+					$id_product_attributes = $product->addProductAttribute($price, 0, 0, 0, $quantity, "", $reference, $id_supplier, 0, 1);
                     $combinations = new CombinationCore((int)$id_product_attributes);
 
                     $combinations->setAttributes($id_attributes_for_combinations);
