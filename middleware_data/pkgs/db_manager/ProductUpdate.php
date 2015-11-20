@@ -46,11 +46,9 @@ class ProductUpdate{
     *string $imgPath
     */
     public function insertProduct($ps_id, $reference, $attivo, $categoria, $prezzo, $supplier, $manufacture, $qta, $qta_min, $lunghezza, $altezza, $larghezza, $colore, $quantita, $taglia, $nome, $modello, $linea, $codice_colore, $codice_taglia, $url, $immagine ){
-        echo"entro";
          $connection = connectionServer();
             $sql = "INSERT INTO ps_tmp_product (ps_id, reference, attivo, categoria, prezzo, supplier,                manufacture, qta, qta_min, lunghezza, altezza,larghezza,colore,quantita,taglia, nome, modello, linea, codice_colore, codice_taglia, url, immagine )VALUES('".$ps_id."','".$reference."','".$attivo."',            '".$categoria."','".$prezzo."','".$supplier."','".$manufacture."','".$qta."','".$qta_min."',
  '".$lunghezza."','".$altezza."','".$larghezza."','".$colore."','".$quantita."','".$taglia."','".$nome."','".$modello."','".$linea."','".$codice_colore."','".$codice_taglia."','".$url."','".$immagine."')";
-        echo "</br> $sql";
             try{
                 $res = mysql_query($sql,$connection);
             }catch(Exception $e){
@@ -79,7 +77,6 @@ class ProductUpdate{
     *$altezza,string $larghezza,string $nome,string $modello,string $linea 
     */
     public function updateProduct($ps_id, $attivo, $prezzo, $qta, $qta_min, $lunghezza, $altezza, $larghezza, $nome, $modello, $linea,$colore, $taglia ){
-        echo"entro";
          $connection = connectionServer();
             $sql = "UPDATE  ps_tmp_product SET attivo = '".$attivo."', prezzo = '".$prezzo."', qta = '".$qta."', qta_min = '".$qta_min."', lunghezza = '".$lunghezza."', altezza = '".$altezza."',larghezza = '".$larghezza."', nome = '".$nome."', modello = '".$modello."' , linea = '".$linea."' WHERE ps_id = '".$ps_id."' AND colore = '".$colore."' AND taglia = '".$taglia."'";
         echo "</br> $sql";

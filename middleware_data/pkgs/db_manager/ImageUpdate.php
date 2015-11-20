@@ -62,7 +62,6 @@
         */
         public function insertImageInformation($psIdProduc,$psIdImage,$colorAnalysis, $md5Digest,$imgPath){
             $connection = connectionServer();
-            echo "<br/> sono in insertImageInformation";
             $sql = "INSERT INTO ps_tmp_image ( ps_id, color_analysis,md5_digest, new_path,status,fk_ps_id)
                 VALUES('".$psIdImage."','".$colorAnalysis."','".$md5Digest."','".$imgPath."','0','".$psIdProduc."')";
             try{
@@ -75,7 +74,6 @@
             }else{
                  $errno = mysql_errno($connection);
                  $error = mysql_error($connection);
-                 echo "sono qua  $error ; $errno<br/>";
                  switch ($errno) {
                      case 1062:
                         throw new HandleOperationsException($error);

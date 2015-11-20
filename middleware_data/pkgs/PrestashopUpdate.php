@@ -57,9 +57,9 @@ class PrestashopUpdate{
             $image_id = $image_manager->getIdImageByName($images_url[$i]);
             $tmp_manager = new UpdateTmpTables();
             if($image_id===""){//primo inserimento dell'immagine
-                /**$psIdImage = $image_manager->updateImageInPrestashop($ps_product_id,$image_id,$this->url_photo,$images_url[$i]);**/
-                $tmp_manager->insertImageField ($this->url_photo.$images_url[$i],$ps_product_id,$psIdImage);
-                return 1;
+                /**$psIdImage = $image_manager->updateImageInPrestashop($ps_product_id,$image_id,$this->url_photo,$images_url[$i]);
+                $tmp_manager->insertImageField ($this->url_photo.$images_url[$i],$ps_product_id,$psIdImage);*/
+
             }else{//update immagine già esistente
                 echo "<br>$this->url_photo.$images_url[$i],$ps_product_id,$image_id<br>";
                 $result = $tmp_manager->updateImageField ($this->url_photo.$images_url[$i],$ps_product_id,$image_id);
@@ -75,15 +75,16 @@ class PrestashopUpdate{
 
     public function updatePsProduct(){
         $product_update = new ProductUpdate();
-        $tmp_manager = new UpdateTmpTables();
         $insert_product = new PrestashopProduct();
         $new_products_manager = new ViewManager();
+        $tmp_manager = new UpdateTmpTables();
+        echo"<br/> inizio inserimento nuovi prodotti ****";
         $new_products = $new_products_manager-> getNewProduct();
         foreach($new_products as $product){
-            $image_manager = new PrestashopImageHandler();
-            $tmp_manager = new UpdateTmpTables();
             $array_reference = $product[0];
             $key=$array_reference['Reference'];
+            asort($product[1]);
+            asort($product[2]);
             $array_product = $insert_product->insertProductForPrestashop($product[0], $this->url_photo,$product[1], $product[2]);
             $array_images_id = $array_product[1];
             for($i=0;$i<sizeof($array_images_id);$i++){
@@ -91,8 +92,34 @@ class PrestashopUpdate{
                 if(empty($tmp)) break;
                 $tmp_manager->insertImageField ($this->url_photo.$tmp[1],$array_product[0],$tmp[0]);
             }
+            $tmp_manager->insertTmpProducts($array_product[0],$key);
+        }
+        echo"<br/> fine inserimento nuovi prodotti ****";
+        echo"<br/> inizio aggiornamento prodotti****";
+        $changed_products = $new_products_manager->getProductDifferences();
+        print_r($changed_products);
+        foreach($changed_products as $product){
+            $array_reference = $product[0];
+            $key = $array_reference['Reference'];
+            asort($product[1]);
+            asort($product[2]);
+            $array_product = $insert_product->updateProductForPrestashop($product[0], (int) $product[3], $this->url_photo,$product[1], $product[2]);
+            
+            print_r($array_product);
+            print_r($product[3]);
+            
+            
+            if( !empty($array_product[3]) ){
+                foreach($array_product[3] as $new_img){
+                    $new_photo_infos = explode(';',$new_img);
+                    $tmp_manager->insertImageField ($this->url_photo.$new_photo_infos[1],$array_product[0],$new_photo_infos[1]);
+                }
+            }
             $tmp_manager->updateTmpProducts($array_product[0],$key);
         }
+        echo"<br/> fine aggiornamento prodotti****";
+        $buffer_manager = new ProductBufferTables();
+        //$buffer_manager->freeBufferTable();
         /*foreach($this->keys as $key){
             $result = $product_update->productExists($key);
             if(! $result ){
