@@ -1,9 +1,23 @@
 
 -- -----------------------------------------------------
--- Table `prestashop`.`ps_tmp_product`
+-- Table `prestashop`.`ps_tmp_image`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `prestashop`.`ps_tmp_product` (
+CREATE TABLE IF NOT EXISTS `prestashop`.`ps_tmp_image` (
   `ps_id` INT NOT NULL,
+  `old_path` VARCHAR(45) NULL,
+  `new_path` VARCHAR(45) NULL,
+  `md5_digest` LONGTEXT NULL,
+  `color_analysis` LONGTEXT NULL,
+  `status` INT NULL,
+  `fk_ps_id` INT NOT NULL,
+  PRIMARY KEY (`ps_id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `prestashop`.`ps_buffer_product`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `prestashop`.`ps_buffer_product` (
   `reference` VARCHAR(100) NOT NULL,
   `attivo` INT NULL,
   `categoria` VARCHAR(200) NULL,
@@ -29,30 +43,10 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `prestashop`.`ps_tmp_image`
+-- Table `prestashop`.`ps_tmp_product`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `prestashop`.`ps_tmp_image` (
+CREATE TABLE IF NOT EXISTS `prestashop`.`ps_tmp_product` (
   `ps_id` INT NOT NULL,
-  `old_path` VARCHAR(45) NULL,
-  `new_path` VARCHAR(45) NULL,
-  `md5_digest` LONGTEXT NULL,
-  `color_analysis` LONGTEXT NULL,
-  `status` INT NULL,
-  `fk_ps_id` INT NOT NULL,
-  PRIMARY KEY (`ps_id`),
-  INDEX `fk_ps_tmp_image_ps_tmp_product_idx` (`fk_ps_id` ASC),
-  CONSTRAINT `fk_ps_tmp_image_ps_tmp_product`
-    FOREIGN KEY (`fk_ps_id`)
-    REFERENCES `prestashop`.`ps_tmp_product` (`ps_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `prestashop`.`ps_buffer_product`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `prestashop`.`ps_buffer_product` (
   `reference` VARCHAR(100) NOT NULL,
   `attivo` INT NULL,
   `categoria` VARCHAR(200) NULL,
