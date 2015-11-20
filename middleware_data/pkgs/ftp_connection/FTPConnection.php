@@ -1,4 +1,7 @@
 <?php
+
+require_once("HandleOperationsException.php");
+require_once("Logger.php");
 /**
  * This class handles FTP connection to remote folder and create a local directory to ensure a better files processing.
  * Note that this class also handles a semaphore file uploaded on remote directory to create a sort of atomic informations processing.
@@ -6,9 +9,6 @@
  *
  * @author Nello Saulino <nello.saulino@gmail.com>
  */
-
-require_once("HandleOperationsException.php");
-require_once("Logger.php");
 
 class FTPConnection{
 

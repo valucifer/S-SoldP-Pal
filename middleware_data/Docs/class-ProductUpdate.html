@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>Class ProductUpdate</title>
+
+	<link rel="stylesheet" href="resources/style.css?e99947befd7bf673c6b43ff75e9e0f170c88a60e">
+
+</head>
+
+<body>
+<div id="left">
+	<div id="menu">
+		<a href="index.html" title="Overview"><span>Overview</span></a>
+
+
+		<div id="groups">
+				<h3>Packages</h3>
+			<ul>
+				<li>
+					<a href="package-None.html">
+						None					</a>
+
+						</li>
+				<li>
+					<a href="package-UpdateProduct.html">
+						UpdateProduct					</a>
+
+						</li>
+			</ul>
+		</div>
+
+		<hr>
+
+
+		<div id="elements">
+			<h3>Classes</h3>
+			<ul>
+				<li><a href="class-ImageUpdate.html">ImageUpdate</a></li>
+				<li><a href="class-PrestashopUpdate.html">PrestashopUpdate</a></li>
+				<li><a href="class-ProductBufferTables.html">ProductBufferTables</a></li>
+				<li class="active"><a href="class-ProductUpdate.html">ProductUpdate</a></li>
+				<li><a href="class-UpdateTmpTables.html">UpdateTmpTables</a></li>
+			</ul>
+
+
+
+
+
+			<h3>Functions</h3>
+			<ul>
+				<li><a href="function-closeConnectionServer.html">closeConnectionServer</a></li>
+				<li><a href="function-connectionServer.html">connectionServer</a></li>
+			</ul>
+		</div>
+	</div>
+</div>
+
+<div id="splitter"></div>
+
+<div id="right">
+<div id="rightInner">
+	<form id="search">
+		<input type="hidden" name="cx" value="">
+		<input type="hidden" name="ie" value="UTF-8">
+		<input type="text" name="q" class="text" placeholder="Search">
+	</form>
+
+	<div id="navigation">
+		<ul>
+			<li>
+				<a href="index.html" title="Overview"><span>Overview</span></a>
+			</li>
+			<li>
+<span>Package</span>			</li>
+			<li class="active">
+<span>Class</span>			</li>
+		</ul>
+		<ul>
+		</ul>
+		<ul>
+		</ul>
+	</div>
+
+<div id="content" class="class">
+	<h1>Class ProductUpdate</h1>
+
+
+	<div class="description">
+	<p>PHP class update the tmp custom table used to verify the changes between
+the last import and the new product import</p>
+	</div>
+
+
+
+
+
+
+
+
+
+	<div class="info">
+		
+		
+		
+		<b>Package:</b> <a href="package-UpdateProduct.html">UpdateProduct</a><br>
+
+				<b>Author:</b>
+				Carlos Borges (carboma89@gmail.com)<br>
+			<b>Located at</b> <a href="source-class-ProductUpdate.html#8-93" title="Go to source code">db_manager/ProductUpdate.php</a>
+		<br>
+	</div>
+
+
+
+	<table class="summary methods" id="methods">
+	<caption>Methods summary</caption>
+	<tr data-order="__construct" id="___construct">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#___construct">#</a>
+		<code><a href="source-class-ProductUpdate.html#16-18" title="Go to source code">__construct</a>( )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="productExists" id="_productExists">
+
+		<td class="attributes"><code>
+			 public 
+
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_productExists">#</a>
+		<code><a href="source-class-ProductUpdate.html#20-40" title="Go to source code">productExists</a>( <span> <var>$reference</var></span> )</code>
+
+		<div class="description short">
+			<p>Checks if product exists</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Checks if product exists</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					string<br>prestashop id if exists, false if not exits
+				</div>
+
+
+				<h4>Params</h4>
+				<div class="list">
+						int $reference<br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="insertProduct" id="_insertProduct">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_insertProduct">#</a>
+		<code><a href="source-class-ProductUpdate.html#42-66" title="Go to source code">insertProduct</a>( <span> <var>$ps_id</var></span>, <span> <var>$reference</var></span>, <span> <var>$attivo</var></span>, <span> <var>$categoria</var></span>, <span> <var>$prezzo</var></span>, <span> <var>$supplier</var></span>, <span> <var>$manufacture</var></span>, <span> <var>$qta</var></span>, <span> <var>$qta_min</var></span>, <span> <var>$lunghezza</var></span>, <span> <var>$altezza</var></span>, <span> <var>$larghezza</var></span>, <span> <var>$colore</var></span>, <span> <var>$quantita</var></span>, <span> <var>$taglia</var></span>, <span> <var>$nome</var></span>, <span> <var>$modello</var></span>, <span> <var>$linea</var></span>, <span> <var>$codice_colore</var></span>, <span> <var>$codice_taglia</var></span>, <span> <var>$url</var></span>, <span> <var>$immagine</var></span> )</code>
+
+		<div class="description short">
+			<p>Inserts product informations</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Inserts product informations</p>
+
+
+
+
+
+				<h4>Params</h4>
+				<div class="list">
+						<p>int $psIdImage, int $psIdImage, string $coloranalysis, string $md5Digest,
+string $imgPath</p><br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="updateProduct" id="_updateProduct">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_updateProduct">#</a>
+		<code><a href="source-class-ProductUpdate.html#68-91" title="Go to source code">updateProduct</a>( <span> <var>$ps_id</var></span>, <span> <var>$attivo</var></span>, <span> <var>$prezzo</var></span>, <span> <var>$qta</var></span>, <span> <var>$qta_min</var></span>, <span> <var>$lunghezza</var></span>, <span> <var>$altezza</var></span>, <span> <var>$larghezza</var></span>, <span> <var>$nome</var></span>, <span> <var>$modello</var></span>, <span> <var>$linea</var></span>, <span> <var>$colore</var></span>, <span> <var>$taglia</var></span> )</code>
+
+		<div class="description short">
+			<p>Updates product informations</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Updates product informations</p>
+
+
+
+
+
+				<h4>Params</h4>
+				<div class="list">
+						<p>int $ps_id, string $attivo,string $prezzo,string $qta,string $qta_min,string $lunghezza,string
+$altezza,string $larghezza,string $nome,string $modello,string $linea</p><br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+	<div id="footer">
+		 API documentation generated by <a href="http://apigen.org">ApiGen</a>
+	</div>
+</div>
+</div>
+<script src="resources/combined.js"></script>
+<script src="elementlist.js"></script>
+</body>
+</html>

@@ -8,7 +8,7 @@ require_once ("ViewManager.php");
 require_once ("Logger.php");
 
 /**
-* PHP class update prestashop products information from views  and images
+* Class that updates prestashop products informations from views and images
 * @package    UpdateProduct
 * @author     Carlos Borges (carboma89@gmail.com), Valentino Vivone, Nello Saulino
 **/
@@ -30,7 +30,7 @@ class PrestashopUpdate{
     }
 
     /** 
-    *Function that initialize the mapping and the buffer table
+    *Initializes the mapping and the buffer table
     *@params string $mapping_path
     */
     public function startUpdate($mapping_path){
@@ -65,7 +65,7 @@ class PrestashopUpdate{
     }
 
     /** 
-    *Function that update images if it change
+    *Updates images if it change
     *@params string $ps_product_id, string $images_url
     */
     private function _updatePsImages($ps_product_id, $images_url){
@@ -84,7 +84,7 @@ class PrestashopUpdate{
     }
 
     /** 
-    *Function that update or insert product information
+    *Updates or insert product informations
     */
     public function updatePsProduct(){
         $product_update = new ProductUpdate();
@@ -137,7 +137,6 @@ class PrestashopUpdate{
         $logger->postMessage("Fine aggiornamento ","DEBUG");
         $buffer_manager = new ProductBufferTables();
         $buffer_manager->freeBufferTable();
-
     }
   
     /** 

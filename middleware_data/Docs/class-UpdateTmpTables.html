@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>Class UpdateTmpTables</title>
+
+	<link rel="stylesheet" href="resources/style.css?e99947befd7bf673c6b43ff75e9e0f170c88a60e">
+
+</head>
+
+<body>
+<div id="left">
+	<div id="menu">
+		<a href="index.html" title="Overview"><span>Overview</span></a>
+
+
+		<div id="groups">
+				<h3>Packages</h3>
+			<ul>
+				<li>
+					<a href="package-None.html">
+						None					</a>
+
+						</li>
+				<li>
+					<a href="package-UpdateProduct.html">
+						UpdateProduct					</a>
+
+						</li>
+			</ul>
+		</div>
+
+		<hr>
+
+
+		<div id="elements">
+			<h3>Classes</h3>
+			<ul>
+				<li><a href="class-ImageUpdate.html">ImageUpdate</a></li>
+				<li><a href="class-PrestashopUpdate.html">PrestashopUpdate</a></li>
+				<li><a href="class-ProductBufferTables.html">ProductBufferTables</a></li>
+				<li><a href="class-ProductUpdate.html">ProductUpdate</a></li>
+				<li class="active"><a href="class-UpdateTmpTables.html">UpdateTmpTables</a></li>
+			</ul>
+
+
+
+
+
+			<h3>Functions</h3>
+			<ul>
+				<li><a href="function-closeConnectionServer.html">closeConnectionServer</a></li>
+				<li><a href="function-connectionServer.html">connectionServer</a></li>
+			</ul>
+		</div>
+	</div>
+</div>
+
+<div id="splitter"></div>
+
+<div id="right">
+<div id="rightInner">
+	<form id="search">
+		<input type="hidden" name="cx" value="">
+		<input type="hidden" name="ie" value="UTF-8">
+		<input type="text" name="q" class="text" placeholder="Search">
+	</form>
+
+	<div id="navigation">
+		<ul>
+			<li>
+				<a href="index.html" title="Overview"><span>Overview</span></a>
+			</li>
+			<li>
+<span>Package</span>			</li>
+			<li class="active">
+<span>Class</span>			</li>
+		</ul>
+		<ul>
+		</ul>
+		<ul>
+		</ul>
+	</div>
+
+<div id="content" class="class">
+	<h1>Class UpdateTmpTables</h1>
+
+
+	<div class="description">
+	<p>PHP class that provides functions to update the informations of the tmp product table</p>
+	</div>
+
+
+
+
+
+
+
+
+
+	<div class="info">
+		
+		
+		
+		<b>Package:</b> <a href="package-UpdateProduct.html">UpdateProduct</a><br>
+
+				<b>Author:</b>
+				Carlos Borges (carboma89@gmail.com)<br>
+			<b>Located at</b> <a href="source-class-UpdateTmpTables.html#9-103" title="Go to source code">db_manager/UpdateTmpTables.php</a>
+		<br>
+	</div>
+
+
+
+	<table class="summary methods" id="methods">
+	<caption>Methods summary</caption>
+	<tr data-order="__construct" id="___construct">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#___construct">#</a>
+		<code><a href="source-class-UpdateTmpTables.html#17-19" title="Go to source code">__construct</a>( )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="updateImageField" id="_updateImageField">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_updateImageField">#</a>
+		<code><a href="source-class-UpdateTmpTables.html#21-38" title="Go to source code">updateImageField</a>( <span> <var>$imagePath</var></span>, <span> <var>$psIdProduct</var></span>, <span> <var>$psIdImage</var></span> )</code>
+
+		<div class="description short">
+			<p>Checks if the new images of product are the same, if not than update image path and
+information into the DB tmp table</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Checks if the new images of product are the same, if not than update image path and
+information into the DB tmp table</p>
+
+
+
+
+
+				<h4>Params</h4>
+				<div class="list">
+						string $imagePath, int $psIdProduct, int $psIdImage<br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="insertImageField" id="_insertImageField">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_insertImageField">#</a>
+		<code><a href="source-class-UpdateTmpTables.html#40-49" title="Go to source code">insertImageField</a>( <span> <var>$imagePath</var></span>, <span> <var>$psIdProduct</var></span>, <span> <var>$psIdImage</var></span> )</code>
+
+		<div class="description short">
+			<p>Inserts image path and information into the DB tmp table</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Inserts image path and information into the DB tmp table</p>
+
+
+
+
+
+				<h4>Params</h4>
+				<div class="list">
+						string $imagePath, int $psIdProduct, int $psIdImage<br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="insertTmpProducts" id="_insertTmpProducts">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_insertTmpProducts">#</a>
+		<code><a href="source-class-UpdateTmpTables.html#53-75" title="Go to source code">insertTmpProducts</a>( <span> <var>$array_product</var></span>, <span> <var>$key</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="updateTmpProducts" id="_updateTmpProducts">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_updateTmpProducts">#</a>
+		<code><a href="source-class-UpdateTmpTables.html#78-100" title="Go to source code">updateTmpProducts</a>( <span> <var>$array_product</var></span>, <span> <var>$key</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+	<div id="footer">
+		 API documentation generated by <a href="http://apigen.org">ApiGen</a>
+	</div>
+</div>
+</div>
+<script src="resources/combined.js"></script>
+<script src="elementlist.js"></script>
+</body>
+</html>

@@ -1,4 +1,6 @@
 <?php
+require_once("ColorChecker.php");
+require_once("HandleOperationsException.php");
 
 /**
  * This class checks if two images are equals or not.
@@ -6,9 +8,6 @@
  *
  * @author Nello Saulino <nello.saulino@gmail.com>
  */
-
-require_once("ColorChecker.php");
-require_once("HandleOperationsException.php");
 
 class ImageChecker{
     
