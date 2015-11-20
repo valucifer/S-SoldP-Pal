@@ -231,8 +231,11 @@ class Mapping{
             $element["Larghezza"] = str_replace(",",".",trim($tmp[12]));
             $element["Altezza"] = str_replace(",",".",trim($tmp[13]));
             $element["Lunghezza"] = str_replace(",",".",trim($tmp[11]));
-            $element["Modello"] = str_replace("\"","",trim($name_model));
-            $element["Linea"] = str_replace("\"","",trim($name_collez));
+			
+            $array_replace = array("\"","'");
+			
+            $element["Modello"] = str_replace($array_replace,"",trim($name_model));
+            $element["Linea"] = str_replace($array_replace,"",trim($name_collez));
 
             $return[$tmp[0]] = $element;
         }
@@ -326,10 +329,12 @@ class Mapping{
 
             }
 
+            $array_replace = array("\"","'");
+			
             //Remove \" of the strings
-            $name = str_replace("\"","",$name);
-            $business_unit = str_replace("\"","",$business_unit);
-            $griffe = str_replace("\"","",$griffe);
+            $name = str_replace($array_replace,"",$name);
+            $business_unit = str_replace($array_replace,"",$business_unit);
+            $griffe = str_replace($array_replace,"",$griffe);
 
             $return[$reference] = $reference.";".$name.";".$business_unit.";".$griffe;
         }
@@ -377,43 +382,6 @@ class Mapping{
         return $return;
 
     }
-
-    //DA DOMANDARE se si deve considerare la combinazione o i singoli per quanto riguarda la quantità
-    /*private function getQuantity(){
-			//Con questa funzione avremo la quantità e la quantità minima del singolo 
-			//articolo contenuto nel file _TB_ART_DET_DISP. 
-			//Tali caratteristiche saranno ricavate andando a cercare il codice dell'articolo.
-
-			$return = array();
-			$sizeKey = sizeof($this->keys);
-			$sizeArrayTBARTDETDISP =  sizeof($this->_TB_ART_DET_DISP);
-
-			//$count viene utilizzato come indice di scorrimento. (poichè gli elementi nel file sono stati ordinati, è inutile andare
-			//a scorrere tutto il file; bensì si salva l'ultimo indice e si riparte da questo).
-			$count = 0;
-			for($i = 0; $i < $sizeKey; $i++){
-				$element = array();
-				for($j = $count; $j < $sizeArrayTBARTDETDISP; $j++){
-					$tmp = explode(";",$this->_TB_ART_DET_DISP[$j]);
-					if(sizeof($tmp) === 1) 
-						break;
-					$tripleTBARTDET = $tmp[0].";".$tmp[1].";".$tmp[2];
-					if($this->keys[$i] === $tmp[0]){
-						$element[$tripleTBARTDET] = $tmp[4].";1";//Qtà;1 => Qtà: quantità, 1: quantità minima dell'articolo (DA DOMANDARE)
-					}else{
-						$count = $j;
-						break;
-					}
-				}
-				$return[$this->keys[$i]] = $element;
-			}
-
-			return $return;
-
-			//Esempio di Output:
-			//[KEY1] => QTA';1
-			//[KEY2] => QTA';1
-		}*/
 
     /**
 		* Creates a key => value array where key is the product code and value is "product quantity; min product quantity"
@@ -589,7 +557,8 @@ class Mapping{
                     break;
 
                 if($tmp[0] === "TAGLIA" && $tmp[1] === $cod_size && $tmp[2] === "IT"){
-                    $return = $cod_size.":".str_replace("\"","",$tmp[3]);
+					$array_replace = array("\"","'");
+                    $return = $cod_size.":".str_replace($array_replace,"",$tmp[3]);
                     break;
                 }
 
