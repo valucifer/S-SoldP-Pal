@@ -18,8 +18,8 @@ class ColorComparison{
     }
 
     /*
-    * Returns first three colors most present on image except for white (image background).
-    * @params $image_path image path
+    * Returns first three colors most present on image except for image background.
+    * @params $image_path the image path
     */
     public function getThreeMainColors($image_path, $debug = false){
         $colors = $this->colorChecker->Get_Color($image_path, 10, false, false, 30);

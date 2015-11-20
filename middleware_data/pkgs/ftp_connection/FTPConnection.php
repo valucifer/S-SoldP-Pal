@@ -142,12 +142,18 @@ class FTPConnection{
         }
     }
 
+    /**
+	 * Gets all semaphores names from remote folder.
+	 * 
+	 * @params 
+	 * @return $semaphore_array that contains semaphore's names
+	 */
     public function getPSSemaphoresPath(){
         return $this->semaphores_array;
     }
 
     /**
-	 * Removes semaphore file 'cause performed operations are successfully executed.
+	 * Removes semaphore file and all contents from remote folder.
 	 * 
 	 * @params 
 	 * @return 
