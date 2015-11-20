@@ -1,11 +1,4 @@
 <?php
-    /**
-	* Connects to database.
-	* 
-	* @param 
-	* @return $connection 
-	*
-	*/
 	function connectionServer(){
 		$SERVERNAME = "localhost:3306";
 		$USERNAME = "root";
@@ -29,14 +22,7 @@
 		
 		return $connection;
 	}
-
-	/**
-	* Handles close connection to database.
-	* 
-	* @param 
-	* @return $connection 
-	*
-	*/
+	
 	function closeConnectionServer($server){
 		//close the connection
 		$close_connection = mysql_close($server);
