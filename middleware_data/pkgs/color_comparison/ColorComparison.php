@@ -13,11 +13,15 @@ class ColorComparison{
 
     private $colorChecker = null;
 
+    /**
+    * Initializes context.
+    * @params $image_path the image path
+    */
     public function __construct(){
         $this->colorChecker = new GetMostCommonColors();
     }
 
-    /*
+    /**
     * Returns first three colors most present on image except for image background.
     * @params $image_path the image path
     */

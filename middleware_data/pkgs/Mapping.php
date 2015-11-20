@@ -20,7 +20,7 @@ class Mapping{
     private $_TB_DESCR_LIN;
     private $keys;
 
-    /*
+    /**
 		* Initializes inner logic structures.
 		* 
 		* @param string $path a string that represents a valid {TIMESTAMP}_SEM.chk pathname
@@ -74,7 +74,7 @@ class Mapping{
         }
     }
 
-    /*
+    /**
 		* Controls if a file given as input is well-formed
 		* 
 		* @param array $array 
@@ -101,7 +101,7 @@ class Mapping{
         return $flag;
     }
 
-    /*
+    /**
 		* Sorts elements contained into $path file.
 		* 
 		* @param string $path
@@ -129,7 +129,7 @@ class Mapping{
         fclose($_TB);
     }
 
-    /*
+    /**
 		* Extracts the file's elements and put them into an array.
 		* 
 		* @param string $path
@@ -148,7 +148,7 @@ class Mapping{
         return $path_file;
     }
 
-    /*
+    /**
 		* Creates elements' arrays 
 		* 
 		* @param string $path
@@ -162,7 +162,7 @@ class Mapping{
         return $this->extractInFile($path);
     }
 
-    /*
+    /**
 		* Creates an arrays of keys. This keys are products codes. 
 		* 
 		* @return array
@@ -185,7 +185,7 @@ class Mapping{
 
     }
 
-    /*
+    /**
 		* Creates a key => value array where key is the product code and value is an array that contains
 		* width, height, size, product model and collection
 		* 
@@ -240,7 +240,7 @@ class Mapping{
         return $return;
     }
 
-    /*
+    /**
 		* Creates a  key => value array where key is formatted in the following way : "product code; product color code; product size code". value is formatted in the following way "product code; product color code; product size code".
 		* 
 		* @return array
@@ -278,7 +278,7 @@ class Mapping{
 
     }
 
-    /*
+    /**
 		* Creates a key => value array where key is the product code, and value is "product code; product name; model code; supplier of the product"
 		* @return array
 		*
@@ -337,7 +337,7 @@ class Mapping{
         return $return;
     }
 
-    /*
+    /**
 		* Creates a key => value array where key is the product code and value is "product price; flag of salable product"
 		* 
 		* @return array
@@ -415,7 +415,7 @@ class Mapping{
 			//[KEY2] => QTA';1
 		}*/
 
-    /*
+    /**
 		* Creates a key => value array where key is the product code and value is "product quantity; min product quantity"
 		* 
 		* @return array
@@ -450,7 +450,7 @@ class Mapping{
         return $return;
     }
 
-    /*
+    /**
 		* Creates a key => value array where key is product code and value is "product code; product color code".
 		* 
 		* @return array
@@ -473,7 +473,7 @@ class Mapping{
 
     }
 
-    /*
+    /**
 		* Creates a key => value array where key is the product code and value is a key => value array with: key = key is the duple representing product code and product color; value = product photo name.
 		* 
 		* @return array
@@ -510,7 +510,7 @@ class Mapping{
         return $return;
     }
 
-    /*
+    /**
 		* Creates a string with the following format: "color code: color name".
 		* 
 		* @param string $cod_color
@@ -539,7 +539,7 @@ class Mapping{
         return $return;
     }
 
-    /*
+    /**
 		* Creates string representing a single product quantity.
 		* 
 		* @param string $cod_size
@@ -570,7 +570,7 @@ class Mapping{
         return $return;
     }
 
-    /*
+    /**
 		* Creates a "product size: product name" string.
 		* 
 		* @param string $cod_size
@@ -599,7 +599,7 @@ class Mapping{
         return $return;
     }
 
-    /*
+    /**
 		* Creates string representing a photo name.
 		* 
 		* @param string $cod_size
@@ -628,7 +628,7 @@ class Mapping{
         return $return;
     }
 
-    /*
+    /**
 		* Creates a key => value array where key is the elements duple (product code and color code), and value is an array of triple (product code, color code, size code).
 		* @see $this->getColors
 		* @see $this->getSizes
@@ -675,7 +675,7 @@ class Mapping{
 
     }
 
-    /*
+    /**
 		* Creates a Mapping array with "key = product code"
 		* 
 		* @see $this->getPriceAndSalable
@@ -726,7 +726,7 @@ class Mapping{
         return $return;
     }
 
-    /*
+    /**
 		* Creates a Combinations array with "key = triple"
 		* 
 		* @see $this->getAttributesValuesAndImagesForCombinations
@@ -758,8 +758,8 @@ class Mapping{
 	
 }
 
-/*
-* Creates arrays of elements to be inserted into Prestashop.
+/**
+* Handles arrays of elements to be inserted into Prestashop.
 *
 * @author Valentino Vivone <v.vivone.5389@gmail.com>
 * @version 1.0
@@ -773,7 +773,7 @@ class MappingArray{
     public function __construct(){
     }
     
-	/*
+	/**
 		* Creates an array with combinations of a product.
 		* 
 		* @param string $reference
@@ -805,7 +805,7 @@ class MappingArray{
 		
 	}
     
-    /*
+    /**
 		* Creates an array with triples of a product {product code;colore code;size code}.
 		* 
 		* @param string $reference
@@ -822,7 +822,7 @@ class MappingArray{
 		return $return;
 	}
     
-    /*
+    /**
 		* Creates an array with attribute of a product.
 		* 
 		* @param float $price
