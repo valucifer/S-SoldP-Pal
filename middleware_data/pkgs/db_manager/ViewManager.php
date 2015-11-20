@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
 *
 * @author Valentino Vivone <v.vivone.5389@gmail.com>
 * @version 1.0
@@ -20,7 +20,7 @@ class ViewManager{
         $this->logger = new Logger();
     }
     
-	/*
+	/**
 	* Get all products contain in the view new_products.
 	*
 	* @return array of elements if this view contains their, else return false.
@@ -113,7 +113,7 @@ class ViewManager{
 		}
     }
     
-	/*
+	/**
 	* Get all products contain in the view products_differences.
 	*
 	* @return array of elements if this view contains their, else return false.
@@ -206,7 +206,7 @@ class ViewManager{
 		}
     }
     
-	/*
+	/**
 	* Get all products contain in the view products_differences.
 	*
 	* @return array of elements if this view contains their, else return false.
