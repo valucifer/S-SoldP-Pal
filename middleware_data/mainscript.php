@@ -13,29 +13,17 @@ set_include_path(get_include_path() . PATH_SEPARATOR . __DIR__.'/libs/color_lib'
 set_include_path(get_include_path() . PATH_SEPARATOR .__DIR__. '/files');
 
 
-
-/*require_once("PrestashopUpdate.php");
-
-
-
-echo "inizio aggiornamento </br>";
-$updatePS = new PrestashopUpdate('./files/A20151102142434_SEM.chk');
-echo "inizio aggiornamento </br>";
-$updatePS->updatePsProduct();
-echo "aggiornamento completato </br>";*/
-
-
 require_once("FTPConnection.php");
-require_once("Mapping.php");
-
+require_once("PrestashopUpdate.php");
+echo"<br/> inizio update";
 $ftp_connection = new FTPConnection();
 $ftp_connection->connect();
 $sems = $ftp_connection->getPSSemaphoresPath();
-$mapping = null;
+$update_prestashop = new PrestashopUpdate();
 foreach ($sems as $sem){
-    
+   $update_prestashop-> startUpdate("./files/".$sem);
 }
-
+echo"<br/>  cleanUp";
 $ftp_connection->cleanUp();
-
+echo"<br/> fine update";
 ?>
