@@ -141,7 +141,7 @@ class FTPConnection{
             }
         }
     }
-
+    
     public function getPSSemaphoresPath(){
         return $this->semaphores_array;
     }
@@ -153,31 +153,27 @@ class FTPConnection{
 	 * @return 
 	 */
     public function cleanUp(){
-        $folder_to_remove = array();
         //delete semaphore, 'cause all the operations are ok.
-        ftp_delete($this->connection , $this->ftp_folder_path."/".$this->semaphore_name);
+        ftp_delete ($this->connection , $this->ftp_folder_path."/".$this->semaphore_name);
         //delete downloaded files
-        $this->_deleteDirectory($this->local_dir);
+        $this->deleteDirectory($this->local_dir);
         //delete ftp folder
         $remote_contents = ftp_nlist($this->connection, $this->ftp_folder_path);
-        foreach($remote_contents as &$content){
-            $file_info = pathinfo($content);
-            if(!isset($file_info["extension"])){
-                //we encountered a folder. This folder(s) will be processed later
-                array_push($folder_to_remove, $content);
-                continue;
+        foreach( $this->semaphores_array as &$sem ){    
+            $tmp_array = explode("_", $sem);
+            foreach( $remote_contents as &$remCon ){
+                if( strpos($remCon, $tmp_array[0]) ){
+                    $file_info = pathinfo($remCon);
+                    if(!isset($file_info["extension"])){
+                        //we encountered a folder. This folder(s) will be processed later
+                        continue;
+                    }
+                    ftp_delete($this->connection, $this->local_dir."/".$file_info["filename"].".".$file_info["extension"], $remCon, FTP_ASCII);
+                }
             }
-            ftp_delete($this->connection, $content);
         }
-        
-        foreach($folder_to_remove as $folder){
-            ftp_chdir($this->connection, $folder);
-            $folder_contents = ftp_nlist($this->connection, $folder);
-            foreach($folder_contents as $fold){
-                ftp_delete($this->connection, $fold);
-            }
-            ftp_chdir($this->connection, $this->ftp_folder_path);
-            ftp_rmdir($this->connection, $folder);
+        foreach($this->folders_name as $folder){
+            ftp_rmdir($this->connection, $this->local_dir."/".$folder);
         }
     }
 

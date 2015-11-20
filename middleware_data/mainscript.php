@@ -14,7 +14,7 @@ set_include_path(get_include_path() . PATH_SEPARATOR .__DIR__. '/files');
 
 
 
-require_once("PrestashopUpdate.php");
+/*require_once("PrestashopUpdate.php");
 
 
 
@@ -22,7 +22,20 @@ echo "inizio aggiornamento </br>";
 $updatePS = new PrestashopUpdate('./files/A20151102142434_SEM.chk');
 echo "inizio aggiornamento </br>";
 $updatePS->updatePsProduct();
-echo "aggiornamento completato </br>";
+echo "aggiornamento completato </br>";*/
 
+
+require_once("FTPConnection.php");
+require_once("Mapping.php");
+
+$ftp_connection = new FTPConnection();
+$ftp_connection->connect();
+$sems = $ftp_connection->getPSSemaphoresPath();
+$mapping = null;
+foreach ($sems as $sem){
+    
+}
+
+$ftp_connection->cleanUp();
 
 ?>
