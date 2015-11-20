@@ -1046,18 +1046,56 @@ class PrestashopProduct{
                         if(empty($id_image)){
 							$id_image = $image_for_prestashop->insertImageInPrestashop($id_product, trim($url_photo), trim($tmp_photo[$i]));
                             array_push($id_images, $id_image);
-							array_push($id_new_images,$id_image.";".trim($tmp_photo[$i]));
+							array_push($id_new_images,$id_image.";".trim($tmp_photo[$i]).".jpg");
                         }
                     }
-                }
-                if(!empty($id_images)){
-					$id_product_attributes = $product->addProductAttribute($price, 0, 0, 0, $quantity, "", $reference, $id_supplier, 0, 1);
-                    $combinations = new CombinationCore((int)$id_product_attributes);
-
-                    $combinations->setAttributes($id_attributes_for_combinations);
-                    $combinations->setImages($id_images);
-                }
-            }
+                }		
+				
+				if(!empty($id_images)){
+					
+					$array_product_attribute_combinations_get = $product->getCombinationImages($language);
+					for($i = 0; $i < sizeof($id_images); $i++){
+						$id_della_immagine = $id_images[$i];
+						
+						foreach($array_product_attribute_combinations_get as $single_array_of_attribute_product){
+							foreach($single_array_of_attribute_product as $array_di_combinazioni){
+								$id_arr_comb = $array_di_combinazioni['id_product_attribute'];
+								
+								$combinazioni_attributi = new CombinationCore((int)$id_arr_comb);
+								$attribute_combinations = $combinazioni_attributi->getAttributesName($language);
+								
+								$attr_comb1 = $attribute_combinations[0];
+								$attr_comb2 = $attribute_combinations[1];
+								$id_attr_comb1 = $attr_comb1['id_attribute'];
+								$id_attr_comb2 = $attr_comb2['id_attribute'];
+								
+								$id_attributi_input = $id_attributes_for_combinations;
+								$id_color_or_size = $id_attributi_input[0];
+								$id_size_or_color = $id_attributi_input[1];
+								
+								if($id_color_or_size == $id_attr_comb1 || $id_color_or_size == $id_attr_comb2){
+									if($id_size_or_color == $id_attr_comb1 || $id_size_or_color == $id_attr_comb2){
+										$new_image = array();
+										$new_array_image = $combinazioni_attributi->getWsImages();
+										for($j = 0; $j < sizeof($new_array_image); $j++){
+											$tmp_image_ = $new_array_image[$j];
+											array_push($new_image,(int)$tmp_image_['id']);
+										}
+										array_push($new_image,$id_della_immagine);
+										$fff = $product->updateProductAttribute($id_arr_comb, 0, 
+																	$price, 0, 0, 0, $new_image, 
+																	$reference, $id_supplier, 0, 1, null, null, 1, 
+																	'0000-00-00');
+									}
+								}
+								
+							}
+						}
+						
+					}
+				}
+			
+			}
         }		
 		return $id_new_images;
     }
