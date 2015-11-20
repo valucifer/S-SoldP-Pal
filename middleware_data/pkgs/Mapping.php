@@ -755,16 +755,23 @@ class Mapping{
 
         return $return;
     }
-
-	
 	
 }
 
+/*
+* Creates arrays of elements to be inserted into Prestashop.
+*
+* @author Valentino Vivone <v.vivone.5389@gmail.com>
+* @version 1.0
+*
+*/
 class MappingArray{
- 
+	/*
+		* @return
+		*
+		*/
     public function __construct(){
     }
-    
     
 	/*
 		* Creates an array with combinations of a product.
@@ -798,7 +805,7 @@ class MappingArray{
 		
 	}
     
-    	/*
+    /*
 		* Creates an array with triples of a product {product code;colore code;size code}.
 		* 
 		* @param string $reference
