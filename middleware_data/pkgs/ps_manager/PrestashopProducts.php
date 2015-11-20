@@ -1,6 +1,6 @@
 <?php
-/*
-* Manage Product and Image in Prestashop
+/**
+* This class handles images in Prestashop
 *
 * @author Valentino Vivone <v.vivone.5389@gmail.com>
 * @version 1.0
@@ -13,14 +13,9 @@ require_once ("Mapping.php");
 
 class PrestashopImageHandler{
 	
-	/*
-	*
-	* @return
-	*
-	*/
     public function __construct(){}
 	
-	/*
+	/**
 	* Inserts product's image in Prestashop.
 	* 
 	* @param integer $id_product
@@ -64,13 +59,10 @@ class PrestashopImageHandler{
         return $image->id;
     }
 
-	/*
-	* Updates product's image in Prestashop.
+	/**
+	* Updates product image in Prestashop.
 	* 
-	* @param integer $id_product
-	* @param integer $id_img
-	* @param string $url
-	* @param string $name_photo
+	* @param integer $id_product, integer $id_img, string $url, string $name_photo
 	* @return integer 
 	* @see $this->copyImg
 	*
@@ -112,8 +104,8 @@ class PrestashopImageHandler{
         }
     }
 
-	/*
-	* Resizes product's image or categories'image in Prestashop.
+	/**
+	* Resizes image product or image category in Prestashop.
 	* 
 	* @param integer $id_entity
 	* @param integer $id_image
@@ -162,8 +154,8 @@ class PrestashopImageHandler{
         return true;
     }
 
-	/*
-	* Releases a image's id in Prestashop. It requires a name of the image.
+	/**
+	* Releases a image id in Prestashop. It requires the image name.
 	* 
 	* @param string $name_photo
 	* @param integer $language
@@ -199,16 +191,18 @@ class PrestashopImageHandler{
 
 }
 
+/**
+* This class handles products in Prestashop
+*
+* @author Valentino Vivone <v.vivone.5389@gmail.com>
+* @version 1.0
+*
+*/
 class PrestashopProduct{
 
-	/*
-	*
-	* @return
-	*
-	*/
     public function __construct(){}
 	
-	/*
+	/**
 	* Create an key => value array where the key is the language and the value is a name of element.
 	* If $name_element is a name of the element, then $is_name is equal true, else if $name_element is a
 	* link_rewrite of the name, then $is_name is equal false.
@@ -230,7 +224,7 @@ class PrestashopProduct{
         }
     }
 
-	/*
+	/**
 	* Create a Category in Prestashop.
 	* 
 	* @param string $name_category
@@ -260,8 +254,8 @@ class PrestashopProduct{
         return $id_category;			
     }
 
-	/*
-	* Create a Supplier in Prestashop if this not exists, else return supplier id.
+	/**
+	* Creates a Supplier in Prestashop if not exists, returns supplier id elsewhere.
 	* 
 	* @param string $name_supplier
 	* @return integer 
@@ -281,8 +275,8 @@ class PrestashopProduct{
         return $id_supplier;
     }
 
-	/*
-	* Create a Manufacturer in Prestashop if this not exists, else return manufacturer id.
+	/**
+	* Creates a Manufacturer in Prestashop if not exists, return manufacturer id elsewhere.
 	* 
 	* @param string $name_manufacturer
 	* @return integer 
@@ -302,8 +296,8 @@ class PrestashopProduct{
         return $id_manufacturer;
     }
 
-	/*
-	* Create product's features in Prestashop.
+	/**
+	* Creates product features in Prestashop.
 	* 
 	* @param integer $id_product
 	* @param integer $language
@@ -349,7 +343,7 @@ class PrestashopProduct{
 
     }
 
-	/*
+	/**
 	* Inserts a product in Prestashop.
 	* 
 	* @param array $product_attributes
@@ -448,8 +442,8 @@ class PrestashopProduct{
         return $return;
     }
 
-	/*
-	* Creates a Combination of the product.
+	/**
+	* Creates a product Combination.
 	* 
 	* @param integer $id_product
 	* @param string $url_photo
@@ -594,8 +588,8 @@ class PrestashopProduct{
         }
     }
 
-	/*
-	* Returns a code of the color taken input.
+	/**
+	* Returns a color code from color name take as input.
 	* 
 	* @param string $name_color
 	* @return string
@@ -624,8 +618,8 @@ class PrestashopProduct{
         return $colors[$name_color];
     }
 
-	/*
-	* Creates a a group of attributes on Prestashop.
+	/**
+	* Creates a group of attributes in Prestashop.
 	* 
 	* @param string $attribute_product
 	* @param integer $language
@@ -661,8 +655,8 @@ class PrestashopProduct{
 
     }
 
-	/*
-	* Controls and changes, if it's possible, category's active parameter if a product's active parameter change.
+	/**
+	* Controls and changes, if possible, category's active parameter if a product's active parameter changes.
 	* 
 	* @param array $ids_categories_array
 	* @return 
@@ -698,8 +692,8 @@ class PrestashopProduct{
 
     }
 
-	/*
-	* Controls if the variables are equal or not.
+	/**
+	* Controls if the prestashop entity names are equal or not.
 	* 
 	* @param string $actual_name
 	* @param string new_name
@@ -716,7 +710,7 @@ class PrestashopProduct{
         }
     }
 	
-	/*
+	/**
 	* Controls if the variables are equal or not.
 	* 
 	* @param string $old_value
@@ -747,7 +741,7 @@ class PrestashopProduct{
         }
     }
 
-	/*
+	/**
 	* Updates a product on Prestashop.
 	* 
 	* @param array $product_attributes
@@ -886,8 +880,8 @@ class PrestashopProduct{
         return $return;
     }
 
-	/*
-	* Updates combinations of product on Prestashop.
+	/**
+	* Updates product combinations on Prestashop.
 	* 
 	* @param integer $id_product
 	* @param string $url_photo

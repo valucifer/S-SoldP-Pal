@@ -1,5 +1,5 @@
 <?php
-/*
+/**
 * Mapping and Combinations related to file elements taken by input
 *
 * @author Valentino Vivone <v.vivone.5389@gmail.com>
