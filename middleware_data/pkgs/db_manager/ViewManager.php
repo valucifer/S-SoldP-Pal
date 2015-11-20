@@ -1,18 +1,16 @@
 <?php
 
-/**
-*
-* @author Valentino Vivone <v.vivone.5389@gmail.com>
-* @version 1.0
-*
-*/
-
-
 require_once ("Mapping.php");
 require_once ("connection.php");
 require_once ("HandleOperationsException.php");
 require_once ("Logger.php");
 
+/**
+* This class handles views in database.
+* @author Valentino Vivone <v.vivone.5389@gmail.com>
+* @version 1.0
+*
+*/
 class ViewManager{
     private $logger=null;
         
