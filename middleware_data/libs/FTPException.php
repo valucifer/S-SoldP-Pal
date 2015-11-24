@@ -1,8 +1,7 @@
 <?php
 require_once("Analog.php");
-require_once("FTPConnection.php");
 
-interface IException
+interface IFTPException
 {
     /* Protected methods inherited from Exception class */
     public function getMessage();                 // Exception message
@@ -17,7 +16,7 @@ interface IException
     public function __construct($message = null, $code = 0);
 }
 
-class HandleOperationsException extends Exception implements IException{
+class FTPException extends Exception implements IFTPException{
     
     private $log_file = null;
 
@@ -28,8 +27,8 @@ class HandleOperationsException extends Exception implements IException{
         Analog::handler (Analog\Handler\File::init ($this->log_file));
         parent::__construct($message, $code);
         Analog::log ($this->__toString(), Analog::ERROR);
-        $ftp_connection = new FTPConnection();
-        $ftp_connection->revertCleanup();
+        if( file_exists("FTP_SEMAMPHORE.smph") )
+            unlink("FTP_SEMAMPHORE.smph");
     }
     
     public function __toString(){

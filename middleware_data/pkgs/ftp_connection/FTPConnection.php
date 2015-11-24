@@ -1,7 +1,9 @@
 <?php
 
 require_once("HandleOperationsException.php");
+require_once("FTPException.php");
 require_once("Logger.php");
+require_once("settings.php");
 /**
  * This class handles FTP connection to remote folder and create a local directory to ensure a better files processing.
  * Note that this class also handles a semaphore file uploaded on remote directory to create a sort of atomic informations processing.
@@ -12,18 +14,15 @@ require_once("Logger.php");
 
 class FTPConnection{
 
-    private $ftp_server = "ftp14.ilbello.com";
-    private $ftp_port = 2114;
-    private $ftp_username = "pjgroup";
-    private $ftp_password = "3nRvgCMDYv";
     private $local_dir = "./files";
-    private $ftp_folder_path = "/iloko";
     private $semaphore_name = "FTP_SEMAMPHORE.smph";
     private $connection = null;
     private $timestamps_name = array();
     private $semaphores_array = array();
     private $folders_name = array();
     private $logger = null;
+    private $dir_size = 0;
+    private $local_size = 0;
 
     /**
 	 * Initializes class.
@@ -40,16 +39,17 @@ class FTPConnection{
 	 * @return 
 	 */
     public function connect(){
+        $this->logger = new Logger();
         if(is_null($this->connection)){
-            $this->connection = ftp_connect($this->ftp_server,$this->ftp_port,3000) or die("Couldn't connect to server");
-            if (@ftp_login($this->connection, $this->ftp_username, $this->ftp_password)) {
-                echo "Connected as $this->ftp_username@$this->ftp_server<br/>";
+            $this->connection = ftp_connect(MD_FTP_SERVER, MD_FTP_PORT, 90);
+            if(!$this->connection)
+                throw new FTPException("ftp connection failed!");
+            if (@ftp_login($this->connection, MD_FTP_USERNAME, MD_FTP_PASSWORD)) {
+                $this->logger->postMessage("Connected as ".MD_FTP_USERNAME."@".MD_FTP_SERVER,"INFO");
             } else {
-                throw new HandleOperationsException("Couldn't connect as $this->ftp_username");
+                throw new FTPException("Couldn't connect as ".MD_FTP_USERNAME);
             }
-            ftp_chdir($this->connection, $this->ftp_folder_path);
             ftp_pasv($this->connection, true);
-            $this->logger = new Logger();
         }
     }
 
@@ -60,29 +60,27 @@ class FTPConnection{
 	 * @return 
 	 */
     public function handleSemaphore(){
-        //retreive all remote files to check if semaphore exists
-        $remote_contents = ftp_nlist($this->connection, $this->ftp_folder_path);
 
-        if(!$remote_contents){
-            $this->logger->postMessage("Destination directory is empty!","WARNING");
-            return;
+        //if semaphore is still present on local directory, we need to stop everything, 'cause probably another process is being performed
+        if(file_exists($this->semaphore_name)){
+            $this->logger->postMessage("Ops...another process seems to be in place. There is a semaphore file.", "WARNING");
+            return false;
         }
 
-        //if semaphore is still present on remote directory, we need to stop everything, 'cause probably another process is being performed
-        if(in_array($this->ftp_folder_path."/".$this->semaphore_name, $remote_contents) ){
-            $this->logger->postMessage("Ops...another process seems to be in place.", "ERROR");
-            return;
-        }else{ 
-            //semaphore is not in remote folder, so we can proceed
-            $sem_file_resource = fopen($this->semaphore_name,"w");
-            fwrite($sem_file_resource, "1");
-            fclose($sem_file_resource);
-            //upload semaphore to remote path
-            if( !ftp_put($this->connection, $this->semaphore_name, $this->semaphore_name, FTP_ASCII) ){
-                throw new HandleOperationsException("Error uploading semaphore to remote directory.", "ERROR");
-            }
-            //delete semaphore on local dir
-            unlink($this->semaphore_name);
+        $sem_file_resource = fopen($this->semaphore_name,"w");
+        fwrite($sem_file_resource, "1");
+        fclose($sem_file_resource);
+
+        //retreive all remote files to check if semaphore exists
+        $remote_contents = ftp_nlist($this->connection, MD_FTP_ROOT_DIR);
+
+        //check size of remote folde
+
+        $this->dir_size = $this->getRemoteDirSize(MD_FTP_ROOT_DIR);
+
+        if(!$remote_contents){
+            $this->logger->postMessage("Error checking remote directory!","WARNING");
+            return false;
         }
 
         //check if local dir to store the whole remote directory structure exists. If not, then we create it
@@ -97,7 +95,10 @@ class FTPConnection{
                 continue;
             if($file_info["extension"] == "chk"){
                 //there's a semaphore with chk extension, so we can proceed
-                ftp_get($this->connection, $this->local_dir."/".$file_info["filename"].".".$file_info["extension"], $file, FTP_ASCII);
+                if(!ftp_get($this->connection, $this->local_dir."/".$file_info["filename"].".".$file_info["extension"], $file, FTP_ASCII)){
+                    throw new FTPException("Connection process is down. Can't download file from remote host. Please retry");
+                }
+                echo $file_info["basename"];
                 array_push($this->semaphores_array, $file_info["basename"]);
             }
         }
@@ -106,8 +107,9 @@ class FTPConnection{
         if(count($this->semaphores_array) > 0){
             asort($this->semaphores_array, SORT_STRING | SORT_FLAG_CASE | SORT_NATURAL);
         }else{
-            ftp_delete ($this->connection , $this->ftp_folder_path."/".$this->semaphore_name);
-            return;
+            $this->logger->postMessage("Remote directory is empty. Update process aborted.","WARNING");
+            unlink("FTP_SEMAMPHORE.smph");
+            return false;
         }
 
         //we isolate timestamps string, so we can get all files with a fixed timestamp
@@ -121,7 +123,11 @@ class FTPConnection{
                         array_push($this->folders_name, $file_info["filename"]);
                         continue;
                     }
-                    ftp_get($this->connection, $this->local_dir."/".$file_info["filename"].".".$file_info["extension"], $remCon, FTP_ASCII);
+                    if(!ftp_get($this->connection, $this->local_dir."/".$file_info["filename"].".".$file_info["extension"], $remCon, FTP_ASCII))
+                        throw new FTPException("Connection process is down. Can't download file from remote host. Please retry");
+                    $this->local_size += filesize($this->local_dir."/".$file_info["filename"].".".$file_info["extension"]);
+                    $percentage = round(($this->local_size * 100)/$this->dir_size, 1);
+                    $this->logger->postMessage("Download percentage: $percentage%", "INFO");
                 }
             }
         }
@@ -130,14 +136,19 @@ class FTPConnection{
         if( count($this->folders_name) > 0 ){
             foreach( $this->folders_name as $dir ){
                 mkdir($this->local_dir."/".$dir);
-                ftp_chdir($this->connection, $this->ftp_folder_path."/".$dir);
-                $dir_files = ftp_nlist($this->connection, $this->ftp_folder_path."/".$dir);
+                ftp_chdir($this->connection, MD_FTP_ROOT_DIR.$dir);
+                $dir_files = ftp_nlist($this->connection, MD_FTP_ROOT_DIR.$dir);
                 foreach($dir_files as $file){
                     $file_info = pathinfo($file);
-                    ftp_get($this->connection, $this->local_dir."/".$dir."/".$file_info["filename"].".".$file_info["extension"], $file, FTP_BINARY);
+                    if(!ftp_get($this->connection, $this->local_dir."/".$dir."/".$file_info["filename"].".".$file_info["extension"], $file, FTP_BINARY))
+                        throw new FTPException("Connection process is down. Can't download file from remote host. Please retry");
+                    $this->local_size += filesize($this->local_dir."/".$dir."/".$file_info["filename"].".".$file_info["extension"]);
+                    $percentage = round(($this->local_size * 100)/$this->dir_size,1);
+                    $this->logger->postMessage("Download percentage: $percentage%","INFO");
                 }
             }
         }
+        return true;
     }
 
     /**
@@ -149,7 +160,7 @@ class FTPConnection{
     public function getPSSemaphoresPath(){
         return $this->semaphores_array;
     }
-    
+
     /**
 	 * Deletes semaphore in remote folder. This method is called when an exception occur, before operations are completed.
 	 * 
@@ -157,7 +168,7 @@ class FTPConnection{
 	 * @return
 	 */
     public function revertCleanup(){
-        ftp_delete ($this->connection , $this->ftp_folder_path."/".$this->semaphore_name);
+        unlink("FTP_SEMAMPHORE.smph");
     }
 
     /**
@@ -169,11 +180,11 @@ class FTPConnection{
     public function cleanUp(){
         $folder_to_remove = array();
         //delete semaphore, 'cause all the operations are ok.
-        ftp_delete($this->connection , $this->ftp_folder_path."/".$this->semaphore_name);
+        unlink("FTP_SEMAMPHORE.smph");
         //delete downloaded files
         $this->_deleteDirectory($this->local_dir);
         //delete ftp folder
-        $remote_contents = ftp_nlist($this->connection, $this->ftp_folder_path);
+        $remote_contents = ftp_nlist($this->connection, MD_FTP_ROOT_DIR);
         foreach($remote_contents as &$content){
             $file_info = pathinfo($content);
             if(!isset($file_info["extension"])){
@@ -183,14 +194,14 @@ class FTPConnection{
             }
             ftp_delete($this->connection, $content);
         }
-        
+
         foreach($folder_to_remove as $folder){
             ftp_chdir($this->connection, $folder);
             $folder_contents = ftp_nlist($this->connection, $folder);
             foreach($folder_contents as $fold){
                 ftp_delete($this->connection, $fold);
             }
-            ftp_chdir($this->connection, $this->ftp_folder_path);
+            ftp_chdir($this->connection, MD_FTP_ROOT_DIR);
             ftp_rmdir($this->connection, $folder);
         }
     }
@@ -204,9 +215,22 @@ class FTPConnection{
     public function __destruct(){
         if(!is_null($this->connection)){
             if( !ftp_close($this->connection) )
-                throw new HandleOperationsException("Unable to close connection.", "ERROR");
+                throw new FTPException("Unable to close connection.", "ERROR");
         }
     }
+
+    private function getRemoteDirSize($dir){ 
+        $size = 0;
+        $remote_contents = ftp_nlist($this->connection, $dir);
+        foreach ($remote_contents as &$file){
+            $file_info = pathinfo($file);
+            if(!isset($file_info["extension"])){
+                $size += $this->getRemoteDirSize($file);
+            }
+            $size += ftp_size($this->connection, $file);
+        }
+        return $size; 
+    }  
 
     private function _deleteDirectory($dir) {
         if (!file_exists($dir)) {

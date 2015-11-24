@@ -111,7 +111,7 @@ class Mapping{
 		*/
     private function sortFile($path){
         $path_file = array();
-        $_TB = fopen(trim($path), "r") or die("Unable to open file!"); //Open file in 'r'
+        $_TB = fopen(trim($path), "r") or die("Unable to open file in r! $path"); //Open file in 'r'
 
         while(!feof($_TB)) {
             $tmp = fgets($_TB);
@@ -120,7 +120,7 @@ class Mapping{
 
         sort($path_file);
 
-        $_TB = fopen(trim($path), "w") or die("Unable to open file!"); //Open file in 'w'
+        $_TB = fopen(trim($path), "w") or die("Unable to open file in w! $path"); //Open file in 'w'
         $size = sizeof($path_file);
         for($i = 0; $i < $size; $i++){
             if($path_file[$i] !== "\n")

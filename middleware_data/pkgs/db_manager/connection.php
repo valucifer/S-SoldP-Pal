@@ -1,4 +1,5 @@
 <?php
+require_once("HandleOperationsException.php");
     /**
     * PHP class update the tmp custom table use to verify the change between
     * the last import and the new import of images of a product 
@@ -11,24 +12,20 @@
     *@return string
     **/
 	function connectionServer(){
-		$SERVERNAME = "localhost:3306";
-		$USERNAME = "root";
-		$PASSWORD = "root";
-
 		// Create connection
-		$connection = mysql_connect($SERVERNAME, $USERNAME, $PASSWORD);
+		$connection = mysql_connect(MD_DB_SERVER_NAME, MD_DB_USERNAME, MD_DB_PASSWORD);
 
 		// Check connection
 		if (!$connection) {
-			die("Connection failed: ".mysql_error());
+			throw new HandleOperationsException("Connection failed: ".mysql_error());
 		}
 		
 		//Create connection database
-		$database = mysql_select_db ("prestashop", $connection);
+		$database = mysql_select_db (MD_DB_NAME, $connection);
 		
 		//Check connection
 		if (!$database) {
-			die("Connection database failed: ". mysql_error());
+			throw new HandleOperationsException("Connection database failed: ". mysql_error());
 		}
 		
 		return $connection;
@@ -42,7 +39,7 @@
 		//close the connection
 		$close_connection = mysql_close($server);
 		if(!$close_connection) {
-			die("Close connection failed: ".mysql_error());
+			throw new HandleOperationsException("Close connection failed: ".mysql_error());
 		}
 		return $close_connection;
 	}

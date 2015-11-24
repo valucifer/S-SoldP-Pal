@@ -5,8 +5,6 @@ ini_set('max_execution_time', 600);
 
 $color_comparison = new ColorComparison();
 
-$files = scandir("imgs");
-
 $index = 1;
 $start = microtime(true);
 

@@ -218,9 +218,7 @@ class ViewManager{
 	*/
     public function getAllProducts(){
 		$connection = connectionServer();
-        echo"<br> entro nel getAll";
 		$mapping = new MappingArray();
-		
         $active = "";	$category = "";	 $price = "";	$supplier = ""; $name = "";	$collection = "";
 		$manufacture = "";	$qta = "";	$qta_min = "";	$size = "";	$height = "";	$width = "";
 		$name_color = array();	$quantity = array();	$name_size = array();	$model = "";
@@ -295,6 +293,7 @@ class ViewManager{
 			array_push($to_return,$element);
             
 			closeConnectionServer($connection);
+            
 			return $to_return;    
 		} else {
 			closeConnectionServer($connection);
