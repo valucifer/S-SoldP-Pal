@@ -40,7 +40,7 @@ foreach ($sems as $sem){
     $update_prestashop-> updatePsProduct();
     $logger->postMessage("Update $sem process completed.","DEBUG");
 }
-//$ftp_connection->cleanUp();
+$ftp_connection->cleanUp();
 $logger->postMessage("Update process completed.","INFO");
 
 ?>
