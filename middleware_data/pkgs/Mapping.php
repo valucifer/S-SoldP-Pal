@@ -1,4 +1,5 @@
 <?php
+require_once ("HandleOperationsException.php");
 /**
 * Mapping and Combinations related to file elements taken by input
 *
@@ -35,38 +36,38 @@ class Mapping{
         $tmp_array = $this->createArray($path);
 
         if(sizeof($tmp_array) === 1){
-            throw new Exception("Il file semaforo è vuoto");
+            throw new HandleOperationsException("Il file semaforo è vuoto");
         }else{
             $tmp_path = "./files/";
 
             $this->_TB_ART = $this->createArray($tmp_path.$tmp_array[1]);
 
             if(!$this->launchException($this->_TB_ART,17)){
-                throw new Exception("Il file ".$tmp_path.$tmp_array[1]."non rispetta la corretta sintassi oppure è vuoto");
+                throw new HandleOperationsException("Il file ".$tmp_path.$tmp_array[1]."non rispetta la corretta sintassi oppure è vuoto");
             }
 
             //$this->_TB_ART_DESCR = $this->createArray($tmp_path.$tmp_array[2]);
 
             $this->_TB_ART_DET = $this->createArray($tmp_path.$tmp_array[3]);
             if(!$this->launchException($this->_TB_ART_DET,8)){
-                throw new Exception("Il file ".$tmp_path.$tmp_array[3]."non rispetta la corretta sintassi oppure è vuoto");
+                throw new HandleOperationsException("Il file ".$tmp_path.$tmp_array[3]."non rispetta la corretta sintassi oppure è vuoto");
             }
 
             $this->_TB_ART_DET_DISP = $this->createArray($tmp_path.$tmp_array[4]);
             if(!$this->launchException($this->_TB_ART_DET_DISP,5)){
-                throw new Exception("Il file ".$tmp_path.$tmp_array[4]."non rispetta la corretta sintassi oppure è vuoto");
+                throw new HandleOperationsException("Il file ".$tmp_path.$tmp_array[4]."non rispetta la corretta sintassi oppure è vuoto");
             }
 
             $this->_TB_ART_DET_FOTO = $this->createArray($tmp_path.$tmp_array[5]);
             if(!$this->launchException($this->_TB_ART_DET_FOTO,5)){
-                throw new Exception("Il file ".$tmp_path.$tmp_array[5]."non rispetta la corretta sintassi oppure è vuoto");
+                throw new HandleOperationsException("Il file ".$tmp_path.$tmp_array[5]."non rispetta la corretta sintassi oppure è vuoto");
             }
 
             //$this->_TB_ART_DIBA = $this->createArray($tmp_path.$tmp_array[6]);
 
             $this->_TB_DESCR_LIN = $this->createArray($tmp_path.$tmp_array[7]);
             if(!$this->launchException($this->_TB_DESCR_LIN,4)){
-                throw new Exception("Il file ".$tmp_path.$tmp_array[7]."non rispetta la corretta sintassi oppure è vuoto");
+                throw new HandleOperationsException("Il file ".$tmp_path.$tmp_array[7]."non rispetta la corretta sintassi oppure è vuoto");
             }
 
             $this->keys = $this->keys();
