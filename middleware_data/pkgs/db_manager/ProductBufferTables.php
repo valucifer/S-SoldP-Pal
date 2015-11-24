@@ -27,7 +27,7 @@ class ProductBufferTables{
  '".$lunghezza."','".$altezza."','".$larghezza."','".$colore."','".$quantita."','".$taglia."','".$nome."','".$modello."','".$linea."','".$codice_colore."','".$codice_taglia."','".$url."','".$immagine."')";
                 $res = mysql_query($sql,$connection);
             if($res){
-                $this->logger->postMessage("Il prodotto e' stato inserito correttamente ");
+                $this->logger->postMessage("Product with reference $reference has been added successfully.");
             }else{
                  $errno = mysql_errno($connection);
                  $error = mysql_error($connection);

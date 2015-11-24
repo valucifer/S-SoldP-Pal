@@ -79,7 +79,7 @@ class FTPConnection{
         $this->dir_size = $this->getRemoteDirSize(MD_FTP_ROOT_DIR);
 
         if(!$remote_contents){
-            $this->logger->postMessage("Error checking remote directory!","WARNING");
+            $this->logger->postMessage("Error checking remote directory! Maybe it is empty?","WARNING");
             return false;
         }
 

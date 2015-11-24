@@ -23,22 +23,24 @@ $ftp_connection = new FTPConnection();
 $ftp_connection->connect();
 try{
     if(!$ftp_connection->handleSemaphore()){
+        $ftp_connection->revertCleanup();
+        $logger->postMessage("Update process completed. No products have been updated.","INFO");
         return;
     }
 }catch(Exception $e){
     throw new FTPException("Connection is down. Revert process is completed.","ERROR");
 }
-echo "here<br>";
+
 $sems = $ftp_connection->getPSSemaphoresPath();
-echo "here<br>";
+
 $update_prestashop = new PrestashopUpdate();
-echo "here<br>";
+
 foreach ($sems as $sem){
     echo "./files/".$sem;
     $update_prestashop-> startUpdate("./files/".$sem);
     
     $update_prestashop-> updatePsProduct();
-    $logger->postMessage("Update $sem process completed.","DEBUG");
+    $logger->postMessage("Update $sem completed.","DEBUG");
 }
 $ftp_connection->cleanUp();
 $logger->postMessage("Update process completed.","INFO");

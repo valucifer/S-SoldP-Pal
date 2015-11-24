@@ -92,7 +92,7 @@ class PrestashopUpdate{
         $new_products_manager = new ViewManager();
         $tmp_manager = new UpdateTmpTables();
         $all_products = $new_products_manager-> getAllProducts();
-        $this->logger->postMessage("Inizio aggiornamento ","DEBUG");
+        $this->logger->postMessage("Starting update...","DEBUG");
         foreach($all_products as $product){
             $array_reference = $product[0];
             $key=$array_reference['Reference'];
@@ -134,7 +134,7 @@ class PrestashopUpdate{
             }
             $tmp_manager->updateTmpProducts($array_product[0],$key);
         }
-        $this->logger->postMessage("Fine aggiornamento ","DEBUG");
+        $this->logger->postMessage("Update finished! Cleaning up...","DEBUG");
         $buffer_manager = new ProductBufferTables();
         $buffer_manager->freeBufferTable();
     }
