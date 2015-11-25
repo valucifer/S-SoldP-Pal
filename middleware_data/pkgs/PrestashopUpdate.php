@@ -100,8 +100,6 @@ class PrestashopUpdate{
             asort($product[2]);
             $result = $product_update->productExists($key);
             if($result){
-                $url = $this->formatUrlPhoto($key);
-                $this->_updatePsImages($result,$url);
                 foreach($product[1] as $triple){
                     $tmp_combination = $product[2];
                     $array_combination = $tmp_combination [$triple];
@@ -114,12 +112,14 @@ class PrestashopUpdate{
                             foreach($array_product[3] as $new_img){
                                 $new_photo_infos = explode(';',$new_img);
                                 $tmp_manager->insertImageField ($this->url_photo.$new_photo_infos[1],$array_product[0],$new_photo_infos[1]);
+                            }
+                        }
                     }
                 }
-                }
+                $url = $this->formatUrlPhoto($key);
+                $this->_updatePsImages($result,$url);
             }
-            }
-            
+
         } 
         $new_products = $new_products_manager-> getNewProduct();
         foreach($new_products as $product){

@@ -24,6 +24,7 @@ class UpdateTmpTables{
     *@params string $imagePath, int $psIdProduct, int $psIdImage
     **/
     public function updateImageField ($imagePath ,$psIdProduct, $psIdImage){
+         echo "<br>Entro in updateImageField<br>";
         $toUpdate = new ImageUpdate();
         $comparator = new ImageChecker();
         if($toUpdate->ifImageExist($psIdImage)){
@@ -32,6 +33,7 @@ class UpdateTmpTables{
             if(gettype($differences)==="string"){//if $differences is a string the two images are equals
                 return false;
             }
+            echo "<br>Sto facendo update della nuova immagine<br>";
             $toUpdate->updateImageInformation($psIdProduct, $psIdImage, $differences[0], $differences[1], $imagePath);
             return true;
         }

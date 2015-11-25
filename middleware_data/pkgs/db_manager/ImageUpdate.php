@@ -124,7 +124,7 @@
         */
         public function _ifProductExist($psId){
             $connection = connectionServer();
-            $sql = "SELECT * FROM  ps_tmp_products WHERE ( ps_id = '".$psId."')";
+            $sql = "SELECT * FROM  ps_tmp_product WHERE ( ps_id = '".$psId."')";
             $result = mysql_query($sql,$connection);
             if (mysql_num_rows($result) > 0){
                 closeConnectionServer($connection);

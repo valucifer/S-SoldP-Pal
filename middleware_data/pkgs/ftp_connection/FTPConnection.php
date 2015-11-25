@@ -30,7 +30,9 @@ class FTPConnection{
 	 * @params 
 	 * @return 
 	 */
-    public function __construct(){}
+    public function __construct(){
+        echo "FTP Connection init<br>";
+    }
 
     /**
 	 * Handles connection to remote folder.
@@ -39,6 +41,7 @@ class FTPConnection{
 	 * @return 
 	 */
     public function connect(){
+        echo "FTP connect<br>";
         $this->logger = new Logger();
         if(is_null($this->connection)){
             $this->connection = ftp_connect(MD_FTP_SERVER, MD_FTP_PORT, 90);
@@ -60,11 +63,13 @@ class FTPConnection{
 	 * @return 
 	 */
     public function handleSemaphore(){
+        
+        echo "handle<br>";
 
         //if semaphore is still present on local directory, we need to stop everything, 'cause probably another process is being performed
         if(file_exists($this->semaphore_name)){
             $this->logger->postMessage("Ops...another process seems to be in place. A semaphore file is present.", "WARNING");
-            return -1; //returns -1 because this return does not need to clean local semaphore
+            return "-1"; //returns -1 because this return does not need to clean local semaphore
         }
 
         $sem_file_resource = fopen($this->semaphore_name,"w");

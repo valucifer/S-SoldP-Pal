@@ -23,13 +23,14 @@ $ftp_connection = new FTPConnection();
 $ftp_connection->connect();
 try{
     $result = $ftp_connection->handleSemaphore();
+    echo "$result <br>";
     if(!$result){
         $ftp_connection->revertCleanup();
         $logger->postMessage("Update process completed. No products have been processed.","INFO");
         return;
-    }else if($result == -1){
+    }else if($result === "-1"){
         //no clean up operations here.
-        $logger->postMessage("Update process completed. No products have been processed.","INFO");
+        $logger->postMessage("Update process completed. No products have been processed. (no cleanup)","INFO");
         return;
     }
 }catch(Exception $e){
