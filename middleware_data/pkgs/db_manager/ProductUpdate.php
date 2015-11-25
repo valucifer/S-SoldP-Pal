@@ -39,6 +39,21 @@ class ProductUpdate{
             }
     }
     
+    
+    public function colorSizeExists($reference, $ps_id, $code_color, $code_size){
+         $connection = connectionServer();
+            $sql = "SELECT * FROM  ps_tmp_product WHERE ( reference = '".$reference."'AND ps_id ='".$ps_id."' AND (codice_ colore = '".$code_color."' AND codice_taglia ='".$code_size."'))";
+            $result = mysql_query($sql,$connection);
+            if (mysql_num_rows($result) > 0){
+                closeConnectionServer($connection);
+                return FALSE;    
+            } else {
+                closeConnectionServer($connection);
+                return TRUE;
+            }
+    }
+    
+    
     /** 
     *Inserts product informations
     *@params int $psIdImage, int $psIdImage, string $coloranalysis, string $md5Digest,

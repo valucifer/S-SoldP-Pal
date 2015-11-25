@@ -102,8 +102,25 @@ class PrestashopUpdate{
             if($result){
                 $url = $this->formatUrlPhoto($key);
                 $this->_updatePsImages($result,$url);
+                foreach($product[1] as $triple){
+                    $tmp_combination = $product[2];
+                    $array_combination = $tmp_combination [$triple];
+                    $tmp_code = $array_combination ['Codici'];
+                    $tmp_explode_code = explode(',',$tmp_code);
+                    if($product_update->colorSizeExists($key, $result,$tmp_explode_code[0], $tmp_explode_code[1])){
+                        $array_product = $insert_product->updateProductForPrestashop($product[0], (int) $result, $this->url_photo,$product[1], $product[2]);
+                        $tmp_manager->insertTmpProducts($result,$key);
+                        if( !empty($array_product[3]) ){
+                            foreach($array_product[3] as $new_img){
+                                $new_photo_infos = explode(';',$new_img);
+                                $tmp_manager->insertImageField ($this->url_photo.$new_photo_infos[1],$array_product[0],$new_photo_infos[1]);
+                    }
+                }
+                }
             }
-        }
+            }
+            
+        } 
         $new_products = $new_products_manager-> getNewProduct();
         foreach($new_products as $product){
             $array_reference = $product[0];
