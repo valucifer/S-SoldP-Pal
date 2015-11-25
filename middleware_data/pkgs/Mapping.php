@@ -111,8 +111,11 @@ class Mapping{
 		*/
     private function sortFile($path){
         $path_file = array();
-        $_TB = fopen(trim($path), "r") or die("Unable to open file in r! $path"); //Open file in 'r'
-
+        $_TB = fopen(trim($path), "r");
+		
+		if(!$_TB)
+			throw new HandleOperationsException("Unable to open file! $path");
+		
         while(!feof($_TB)) {
             $tmp = fgets($_TB);
             array_push($path_file, $tmp);
@@ -120,7 +123,12 @@ class Mapping{
 
         sort($path_file);
 
-        $_TB = fopen(trim($path), "w") or die("Unable to open file in w! $path"); //Open file in 'w'
+        $_TB = fopen(trim($path), "w");
+		
+		if(!$_TB)
+			throw new HandleOperationsException("Unable to open file! $path");
+		
+		
         $size = sizeof($path_file);
         for($i = 0; $i < $size; $i++){
             if($path_file[$i] !== "\n")
@@ -139,8 +147,11 @@ class Mapping{
 		*/
     private function extractInFile($path){
         $path_file = array();
-        $_TB = fopen(trim($path), "r") or die("Unable to open file!"); //Open file in 'r'
+        $_TB = fopen(trim($path), "r");
 
+		if(!$_TB)
+			throw new HandleOperationsException("Unable to open file! $path");
+		
         while(!feof($_TB)) {
             $tmp = fgets($_TB);
             array_push($path_file, $tmp);
