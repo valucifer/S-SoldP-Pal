@@ -101,7 +101,7 @@ ps_buffer_product.prezzo, ps_buffer_product.supplier, ps_buffer_product.manufact
 ps_buffer_product.qta_min, ps_buffer_product.lunghezza, ps_buffer_product.altezza, ps_buffer_product.larghezza, ps_buffer_product.colore,
 ps_buffer_product.quantita,ps_buffer_product.taglia, ps_buffer_product.nome, ps_buffer_product.modello,ps_buffer_product.linea, 
 ps_buffer_product.codice_colore, ps_buffer_product.url, ps_buffer_product.immagine, ps_buffer_product.codice_taglia FROM ps_buffer_product, ps_tmp_product WHERE ((ps_buffer_product.reference = ps_tmp_product.reference
-AND ps_buffer_product.colore = ps_tmp_product.colore AND ps_buffer_product.taglia = ps_tmp_product.taglia )AND( ps_buffer_product.attivo <> ps_tmp_product.attivo 
+AND ps_buffer_product.codice_colore = ps_tmp_product.codice_colore AND ps_buffer_product.codice_taglia = ps_tmp_product.codice_taglia )AND( ps_buffer_product.attivo <> ps_tmp_product.attivo 
 OR ps_buffer_product.prezzo <> ps_tmp_product.prezzo OR ps_buffer_product.qta <> ps_tmp_product.qta OR ps_buffer_product.qta_min <> ps_tmp_product.qta_min 
 OR ps_buffer_product.lunghezza <> ps_tmp_product.lunghezza OR ps_buffer_product.altezza <> ps_tmp_product.altezza
 OR ps_buffer_product.larghezza <> ps_tmp_product.larghezza OR ps_buffer_product.quantita <> ps_tmp_product.quantita
