@@ -63,7 +63,7 @@ class FTPConnection{
 
         //if semaphore is still present on local directory, we need to stop everything, 'cause probably another process is being performed
         if(file_exists($this->semaphore_name)){
-            $this->logger->postMessage("Ops...another process seems to be in place. There is a semaphore file.", "WARNING");
+            $this->logger->postMessage("Ops...another process seems to be in place. A semaphore file is present.", "WARNING");
             return false;
         }
 
@@ -79,12 +79,9 @@ class FTPConnection{
         $this->dir_size = $this->getRemoteDirSize(MD_FTP_ROOT_DIR);
 
         if(!$remote_contents){
-            $this->logger->postMessage("Error checking remote directory! Maybe it is empty?","WARNING");
+            $this->logger->postMessage("Error checking remote directory! Maybe it's empty...","WARNING");
             return false;
         }
-        
-        //we upload semaphore file to remote dir to prevent new updates. This will be deleted at the end of update process
-        ftp_put($this->connection, MD_FTP_ROOT_DIR, $sem_file_resource, FTP_ASCII);
 
         //check if local dir to store the whole remote directory structure exists. If not, then we create it
         if(!file_exists($this->local_dir)){
@@ -99,7 +96,7 @@ class FTPConnection{
             if($file_info["extension"] == "chk"){
                 //there's a semaphore with chk extension, so we can proceed
                 if(!ftp_get($this->connection, $this->local_dir."/".$file_info["filename"].".".$file_info["extension"], $file, FTP_ASCII)){
-                    throw new FTPException("Connection process is down. Can't download file from remote host. Please retry");
+                    throw new FTPException("Connection process is down. Can't download files from remote host. Please retry.");
                 }
                 echo $file_info["basename"];
                 array_push($this->semaphores_array, $file_info["basename"]);
@@ -127,7 +124,7 @@ class FTPConnection{
                         continue;
                     }
                     if(!ftp_get($this->connection, $this->local_dir."/".$file_info["filename"].".".$file_info["extension"], $remCon, FTP_ASCII))
-                        throw new FTPException("Connection process is down. Can't download file from remote host. Please retry");
+                        throw new FTPException("Connection process is down. Can't download files from remote host. Please retry");
                     $this->local_size += filesize($this->local_dir."/".$file_info["filename"].".".$file_info["extension"]);
                     $percentage = round(($this->local_size * 100)/$this->dir_size, 1);
                     $this->logger->postMessage("Download percentage: $percentage%", "INFO");
@@ -144,7 +141,7 @@ class FTPConnection{
                 foreach($dir_files as $file){
                     $file_info = pathinfo($file);
                     if(!ftp_get($this->connection, $this->local_dir."/".$dir."/".$file_info["filename"].".".$file_info["extension"], $file, FTP_BINARY))
-                        throw new FTPException("Connection process is down. Can't download file from remote host. Please retry");
+                        throw new FTPException("Connection process is down. Can't download files from remote host. Please retry");
                     $this->local_size += filesize($this->local_dir."/".$dir."/".$file_info["filename"].".".$file_info["extension"]);
                     $percentage = round(($this->local_size * 100)/$this->dir_size,1);
                     $this->logger->postMessage("Download percentage: $percentage%","INFO");
