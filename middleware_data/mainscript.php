@@ -22,9 +22,14 @@ $logger = new Logger();
 $ftp_connection = new FTPConnection();
 $ftp_connection->connect();
 try{
-    if(!$ftp_connection->handleSemaphore()){
+    $result = $ftp_connection->handleSemaphore();
+    if(!$result){
         $ftp_connection->revertCleanup();
-        $logger->postMessage("Update process completed. No products have been updated.","INFO");
+        $logger->postMessage("Update process completed. No products have been processed.","INFO");
+        return;
+    }else if($result == -1){
+        //no clean up operations here.
+        $logger->postMessage("Update process completed. No products have been processed.","INFO");
         return;
     }
 }catch(Exception $e){
@@ -36,13 +41,12 @@ $sems = $ftp_connection->getPSSemaphoresPath();
 $update_prestashop = new PrestashopUpdate();
 
 foreach ($sems as $sem){
-    echo "./files/".$sem;
     $update_prestashop-> startUpdate("./files/".$sem);
     
     $update_prestashop-> updatePsProduct();
     $logger->postMessage("Update $sem completed.","DEBUG");
 }
-$ftp_connection->cleanUp();
+//$ftp_connection->cleanUp();
 $logger->postMessage("Update process completed.","INFO");
 
 ?>

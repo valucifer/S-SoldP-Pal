@@ -61,7 +61,7 @@ class PrestashopUpdate{
                 $buffer->insertProduct( $key, $single_mapping['Attivo'], $single_mapping['Categorie'], $single_mapping['Prezzo'], $single_mapping['Supplier'], $single_mapping['Manufacture'], $single_mapping['Qta'], $single_mapping['Qta_min'], $feature['Lunghezza'], $feature['Altezza'], $feature['Larghezza'], $colore, $quantita, $taglia, $single_mapping['Nome'], $feature['Modello'], $feature['Linea'], $codice_colore, $codice_taglia, $single_mapping['URL'], $immagine);
             }        
         }
-        
+
     }
 
     /** 
@@ -120,25 +120,27 @@ class PrestashopUpdate{
             $tmp_manager->insertTmpProducts($array_product[0],$key);
         }
         $changed_products = $new_products_manager->getProductDifferences();
-        foreach($changed_products as $product){
-            $array_reference = $product[0];
-            $key = $array_reference['Reference'];
-            asort($product[1]);
-            asort($product[2]);
-            $array_product = $insert_product->updateProductForPrestashop($product[0], (int) $product[3], $this->url_photo,$product[1], $product[2]);
-            if( !empty($array_product[3]) ){
-                foreach($array_product[3] as $new_img){
-                    $new_photo_infos = explode(';',$new_img);
-                    $tmp_manager->insertImageField ($this->url_photo.$new_photo_infos[1],$array_product[0],$new_photo_infos[1]);
+        if(!empty($changed_products)){
+            foreach($changed_products as $product){
+                $array_reference = $product[0];
+                $key = $array_reference['Reference'];
+                asort($product[1]);
+                asort($product[2]);
+                $array_product = $insert_product->updateProductForPrestashop($product[0], (int) $product[3], $this->url_photo,$product[1], $product[2]);
+                if( !empty($array_product[3]) ){
+                    foreach($array_product[3] as $new_img){
+                        $new_photo_infos = explode(';',$new_img);
+                        $tmp_manager->insertImageField ($this->url_photo.$new_photo_infos[1],$array_product[0],$new_photo_infos[1]);
+                    }
                 }
+                $tmp_manager->updateTmpProducts($array_product[0],$key);
             }
-            $tmp_manager->updateTmpProducts($array_product[0],$key);
         }
         $this->logger->postMessage("Update finished! Cleaning up...","DEBUG");
         $buffer_manager = new ProductBufferTables();
         $buffer_manager->freeBufferTable();
     }
-  
+
     /** 
     *Private function that formats Url
     *@params string $key

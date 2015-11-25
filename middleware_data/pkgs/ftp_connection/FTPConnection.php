@@ -64,7 +64,7 @@ class FTPConnection{
         //if semaphore is still present on local directory, we need to stop everything, 'cause probably another process is being performed
         if(file_exists($this->semaphore_name)){
             $this->logger->postMessage("Ops...another process seems to be in place. A semaphore file is present.", "WARNING");
-            return false;
+            return -1; //returns -1 because this return does not need to clean local semaphore
         }
 
         $sem_file_resource = fopen($this->semaphore_name,"w");
@@ -98,7 +98,6 @@ class FTPConnection{
                 if(!ftp_get($this->connection, $this->local_dir."/".$file_info["filename"].".".$file_info["extension"], $file, FTP_ASCII)){
                     throw new FTPException("Connection process is down. Can't download files from remote host. Please retry.");
                 }
-                echo $file_info["basename"];
                 array_push($this->semaphores_array, $file_info["basename"]);
             }
         }

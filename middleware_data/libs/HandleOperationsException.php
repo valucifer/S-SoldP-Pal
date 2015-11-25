@@ -28,11 +28,11 @@ class HandleOperationsException extends Exception implements IException{
         Analog::handler (Analog\Handler\File::init ($this->log_file));
         parent::__construct($message, $code);
         Analog::log ($this->__toString(), Analog::ERROR);
-        $ftp_connection = new FTPConnection();
-        $ftp_connection->revertCleanup();
     }
     
     public function __toString(){
+        $ftp_connection = new FTPConnection();
+        $ftp_connection->revertCleanup();
         return get_class($this) . " '{$this->message}' in {$this->file}(line:{$this->line})\n"
                                 . "{$this->getTraceAsString()}";
     }
