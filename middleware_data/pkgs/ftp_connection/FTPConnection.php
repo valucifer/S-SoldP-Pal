@@ -82,6 +82,9 @@ class FTPConnection{
             $this->logger->postMessage("Error checking remote directory! Maybe it is empty?","WARNING");
             return false;
         }
+        
+        //we upload semaphore file to remote dir to prevent new updates. This will be deleted at the end of update process
+        ftp_put($this->connection, MD_FTP_ROOT_DIR, $sem_file_resource, FTP_ASCII);
 
         //check if local dir to store the whole remote directory structure exists. If not, then we create it
         if(!file_exists($this->local_dir)){
@@ -172,7 +175,7 @@ class FTPConnection{
     }
 
     /**
-	 * Removes semaphore file and all contents from remote folder.
+	 * Removes semaphore file and all contents from remote folder. This method also removes middleware semaphore file, so another upload process can be performed.
 	 * 
 	 * @params 
 	 * @return 
