@@ -87,6 +87,12 @@ class FTPConnection{
             mkdir($this->local_dir);
         }
 
+        //check if there are other files on local dir
+        $local_contents = scandir($this->local_dir);
+        if( count($local_contents) > 0 ){
+            $this->_deleteDirectory($this->local_dir);
+        }
+
         //check if a remote semaphore exists.
         foreach ($remote_contents as &$file){
             $file_info = pathinfo($file);
