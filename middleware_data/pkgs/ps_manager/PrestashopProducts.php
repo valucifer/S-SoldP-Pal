@@ -11,10 +11,10 @@ require_once ("Mapping.php");
 *
 */
 class PrestashopImageHandler{
-	
+
     public function __construct(){}
-	
-	/**
+
+    /**
 	* Inserts product's image in Prestashop.
 	* 
 	* @param integer $id_product
@@ -34,7 +34,7 @@ class PrestashopImageHandler{
         $tmp = explode(".",$name_photo);
         $name_photo_product = "";
         $name_for_legend = "";
-		
+
         if(count($tmp) == 1){
             $name_photo_product = trim($url).$name_photo.".jpg";
             $name_for_legend = $name_photo.".jpg";
@@ -48,17 +48,17 @@ class PrestashopImageHandler{
 
         if (($image->validateFields(false, true)) === true && ($image->validateFieldsLang(false, true)) === true && $image->add()){
             $image->associateTo($shops);
-			
+
             if (!$this->copyImg($id_product, $image->id, $name_photo_product, 'products')){
                 $image->delete();
             }
-			
+
         }
-		
+
         return $image->id;
     }
 
-	/**
+    /**
 	* Updates product image in Prestashop.
 	* 
 	* @param integer $id_product, integer $id_img, string $url, string $name_photo
@@ -68,7 +68,7 @@ class PrestashopImageHandler{
 	*/
     public function updateImageInPrestashop($id_product, $id_img, $url, $name_photo){
         if(empty($id_img)) 
-            return (int)$this->insertImageInPrestashop($id_prod,$url,$name_photo);
+            return (int)$this->insertImageInPrestashop($id_product,$url,$name_photo);
         else{
             $shops = Shop::getShops(true, null, true);    
             $image = new ImageCore((int)$id_img);
@@ -78,7 +78,7 @@ class PrestashopImageHandler{
             $name_photo_product = "";
 
             $name_for_legend = "";
-			
+
             if(count($tmp) == 1){
                 $name_photo_product = trim($url).$name_photo.".jpg";
                 $name_for_legend = $name_photo.".jpg";
@@ -92,18 +92,18 @@ class PrestashopImageHandler{
 
             if (($image->validateFields(false, true)) === true && ($image->validateFieldsLang(false, true)) === true && $image->update()){
                 $image->associateTo($shops);
-				
+
                 if (!$this->copyImg($id_product, $id_img, $name_photo_product, 'products')){
                     $image->delete();
                 }
-				
+
             }
-			
+
             return (int)$image->id;
         }
     }
 
-	/**
+    /**
 	* Resizes image product or image category in Prestashop.
 	* 
 	* @param integer $id_entity
@@ -153,7 +153,7 @@ class PrestashopImageHandler{
         return true;
     }
 
-	/**
+    /**
 	* Releases a image id in Prestashop. It requires the image name.
 	* 
 	* @param string $name_photo
@@ -168,7 +168,7 @@ class PrestashopImageHandler{
 
         $tmp = explode(".",$name_photo);
         $name_photo_product = "";
-		
+
         if(count($tmp) == 1)
             $name_photo_product = $name_photo.".jpg";
         else
@@ -182,9 +182,9 @@ class PrestashopImageHandler{
                 $id = (int)$array_image->id;
                 break;
             }
-			
+
         }
-		
+
         return (int)$id;
     }
 
@@ -200,8 +200,8 @@ class PrestashopImageHandler{
 class PrestashopProduct{
 
     public function __construct(){}
-	
-	/**
+
+    /**
 	* Create an key => value array where the key is the language and the value is a name of element.
 	* If $name_element is a name of the element, then $is_name is equal true, else if $name_element is a
 	* link_rewrite of the name, then $is_name is equal false.
@@ -223,7 +223,7 @@ class PrestashopProduct{
         }
     }
 
-	/**
+    /**
 	* Create a Category in Prestashop.
 	* 
 	* @param string $name_category
@@ -253,7 +253,7 @@ class PrestashopProduct{
         return $id_category;			
     }
 
-	/**
+    /**
 	* Creates a Supplier in Prestashop if not exists, returns supplier id elsewhere.
 	* 
 	* @param string $name_supplier
@@ -274,7 +274,7 @@ class PrestashopProduct{
         return $id_supplier;
     }
 
-	/**
+    /**
 	* Creates a Manufacturer in Prestashop if not exists, return manufacturer id elsewhere.
 	* 
 	* @param string $name_manufacturer
@@ -295,7 +295,7 @@ class PrestashopProduct{
         return $id_manufacturer;
     }
 
-	/**
+    /**
 	* Creates product features in Prestashop.
 	* 
 	* @param integer $id_product
@@ -342,7 +342,7 @@ class PrestashopProduct{
 
     }
 
-	/**
+    /**
 	* Inserts a product in Prestashop.
 	* 
 	* @param array $product_attributes
@@ -441,7 +441,7 @@ class PrestashopProduct{
         return $return;
     }
 
-	/**
+    /**
 	* Creates a product Combination.
 	* 
 	* @param integer $id_product
@@ -559,7 +559,7 @@ class PrestashopProduct{
                     }
                 }
             }
-			
+
             $id_images = array();
             $tmp_photo = explode(".jpg,",$image);
 
@@ -587,7 +587,7 @@ class PrestashopProduct{
         }
     }
 
-	/**
+    /**
 	* Returns a color code from color name take as input.
 	* 
 	* @param string $name_color
@@ -595,6 +595,7 @@ class PrestashopProduct{
 	*
 	*/
     private function getCodeColor($name_color){
+        $return = "";
         $colors  =  array('blue alice'=>'F0F8FF','alice blu'=>'F0F8FF','bianco antico'=>'FAEBD7','aqua'=>'00FFFF','acqua'=>'00FFFF','acqua marina'=>'7FFFD4', 'azzurro'=>'F0FFFF','beige'=>'F5F5DC','biscotto'=>'FFE4C4',
                           'nero'=>'000000','blanched almond'=>'FFEBCD','mandorla sbiancata'=>'FFEBCD','blue'=>'0000FF','blu'=>'0000FF','blue violet'=>'8A2BE2','blue viola'=>'8A2BE2','blu violetto'=>'8A2BE2','marrone di fuoco'=>'A52A2A',
                           'burly wood'=>'DEB887','legno corpulento'=>'DEB887','legno'=>'DEB887','cadet blue'=>'5F9EA0','cadetto blu'=>'5F9EA0','chartreuse'=>'7FFF00','cioccolato'=>'D2691E','corallo'=>'FF7F50','bluetto'=>'6495ED',
@@ -614,10 +615,12 @@ class PrestashopProduct{
                           'blu acciaio'=>'4682B4','abbronzatura'=>'D2B48C','teal'=>'008080','cardo'=>'D8BFD8','pomodoro'=>'FF6347','turchese'=>'40E0D0','viola'=>'EE82EE','frumento'=>'F5DEB3','bianco'=>'FFFFFF','bianco fumo'=>'F5F5F5',
                           'giallo'=>'FFFF00','giallo verde'=>'9ACD32');
 
-        return $colors[$name_color];
+        if(!array_key_exists($name_color, $colors)){
+            return "FFFFFF";
+        }else return $colors[$name_color];
     }
 
-	/**
+    /**
 	* Creates a group of attributes in Prestashop.
 	* 
 	* @param string $attribute_product
@@ -654,7 +657,7 @@ class PrestashopProduct{
 
     }
 
-	/**
+    /**
 	* Controls and changes, if possible, category's active parameter if a product's active parameter changes.
 	* 
 	* @param array $ids_categories_array
@@ -691,7 +694,7 @@ class PrestashopProduct{
 
     }
 
-	/**
+    /**
 	* Controls if the prestashop entity names are equal or not.
 	* 
 	* @param string $actual_name
@@ -708,8 +711,8 @@ class PrestashopProduct{
             return false;
         }
     }
-	
-	/**
+
+    /**
 	* Controls if the variables are equal or not.
 	* 
 	* @param string $old_value
@@ -740,7 +743,7 @@ class PrestashopProduct{
         }
     }
 
-	/**
+    /**
 	* Updates a product on Prestashop.
 	* 
 	* @param array $product_attributes
@@ -864,10 +867,14 @@ class PrestashopProduct{
         }
 
         $change_new_image = $this->updateCombinantionsForPrestashop($id_product, $url_photo, $triple_cod_col_siz, $array_combinations, $language);
+        
+        
+        $string_triple = array();
 
         $return = array();
-        $array_images_combinations_of_the_product = $product->getImages($language);
         array_push($return, $product->id);
+        
+        $array_images_combinations_of_the_product = $product->getImages($language);
 
         $element = array();
         foreach($array_images_combinations_of_the_product as $array_combo_image){
@@ -875,12 +882,23 @@ class PrestashopProduct{
             $id_image_of_the_product = $array_combo_image['id_image'];
             array_push($element, $id_image_of_the_product.";".$name_of_the_image );
         }
+        
         array_push($return, $element);
-		array_push($return, $change_new_image);
+        
+        foreach($change_new_image as $array_combo_image){
+            $fetch_tmp = explode(";",$array_combo_image);
+            $fetch_jpg = explode(".jpg", $fetch_tmp[1]);
+            $fetch_image_name = explode(",", $fetch_jpg[0]);
+            array_push($string_triple, $fetch_image_name[2]);
+        }
+        
+        array_push($return, $change_new_image);
+        
+        array_push($return, $string_triple);
         return $return;
     }
 
-	/**
+    /**
 	* Updates product combinations on Prestashop.
 	* 
 	* @param integer $id_product
@@ -898,8 +916,8 @@ class PrestashopProduct{
 	*/
     private function updateCombinantionsForPrestashop($id_product, $url_photo, $triple_cod_col_siz, $array_combinations, $language = 1){
         $product = new Product((int)$id_product);
-		$id_new_images = array();
-		
+        $id_new_images = array();
+
         $price = '0.000';//(float)$product->price;
         $reference = $product->reference;
         $id_supplier = (int)$product->id_supplier;
@@ -916,8 +934,8 @@ class PrestashopProduct{
             $variable_tmp_values = explode(",",$values);
 
             $id_attributes_for_combinations = array();
-            $flag_just_exist_color = true;
-            $flag_just_exist_size = true;
+            $flag_just_exist_color = 1;
+            $flag_just_exist_size = 1;
 
             for($i = 0; $i < sizeof($variable_tmp_attributes); $i++){
                 $code = "";
@@ -938,12 +956,12 @@ class PrestashopProduct{
                                 array_push($id_attributes_for_combinations, $attribute_for_product->id);
                             }
                         }else{
-                            $flag = true;
+                            $flag = 1;
                             foreach($product_attribute_for_not_reply as $more_attributes){
                                 if($more_attributes['attribute_name'] === $variable_tmp_values[$i]){
                                     array_push($id_attributes_for_combinations, (int)$more_attributes['id_attribute']);
-                                    $flag = false;
-                                    $flag_just_exist_color = false;
+                                    $flag = 0;
+                                    $flag_just_exist_color = 0;
                                     break;
                                 }
                             }
@@ -971,23 +989,23 @@ class PrestashopProduct{
                             $attribute_for_product->add();
                             array_push($id_attributes_for_combinations, $attribute_for_product->id);
                         }else{
-                            $flag = true;
+                            $flag = 1;
                             foreach($product_attribute_for_not_reply as $more_attributes){
                                 $vrbls_1 = trim($more_attributes['attribute_name']);
                                 $vrbls_2 = trim($variable_tmp_values[$i]);
                                 if(gettype($vrbls_1) === "string" && gettype($vrbls_2) === "string"){
                                     if($vrbls_1 === $vrbls_2){
                                         array_push($id_attributes_for_combinations, (int)$more_attributes['id_attribute']);
-                                        $flag = false;
-                                        $flag_just_exist_size = false;
+                                        $flag = 0;
+                                        $flag_just_exist_size = 0;
                                         break;
                                     }
                                 }
                                 if(gettype($vrbls_1) === "integer" && gettype($vrbls_2) === "integer"){
                                     if($vrbls_1 == $vrbls_2){
                                         array_push($id_attributes_for_combinations, (int)$more_attributes['id_attribute']);
-                                        $flag = false;
-                                        $flag_just_exist_size = false;
+                                        $flag = 0;
+                                        $flag_just_exist_size = 0;
                                         break;
                                     }
                                 }
@@ -1004,16 +1022,16 @@ class PrestashopProduct{
                     }
                 }else{
                     if(strtolower($variable_tmp_attributes[$i]) === "colore" || strtolower($variable_tmp_attributes[$i]) === "colori"){
-                        $flag_just_exist_color = false;
+                        $flag_just_exist_color = 0;
                     }
                     if(strtolower($variable_tmp_attributes[$i]) === "taglia" || strtolower($variable_tmp_attributes[$i]) === "taglie"){
-                        $flag_just_exist_size = false;
+                        $flag_just_exist_size = 0;
                     }
                 }
 
             }
             
-			if($flag_just_exist_color || $flag_just_exist_size){
+            if($flag_just_exist_color || $flag_just_exist_size){
                 $id_images = array();
                 $tmp_photo = explode(".jpg,",$image);
                 for($i = 0; $i < sizeof($tmp_photo); $i++){
@@ -1025,7 +1043,7 @@ class PrestashopProduct{
                         else{
                             $id_image = $image_for_prestashop->insertImageInPrestashop($id_product, trim($url_photo), trim($tmp_photo[$i]));
                             array_push($id_images, $id_image);
-							array_push($id_new_images,$id_image.";".trim($tmp_photo[$i]));
+                            array_push($id_new_images,$id_image.";".trim($tmp_photo[$i]).'.jpg');
                         }
                     }
                 }
@@ -1041,63 +1059,64 @@ class PrestashopProduct{
                 $tmp_photo = explode(".jpg,",$image);
                 for($i = 0; $i < sizeof($tmp_photo); $i++){
                     if(!empty($tmp_photo[$i])){
-						$image_for_prestashop = new PrestashopImageHandler();
+                        $image_for_prestashop = new PrestashopImageHandler();
                         $id_image = $image_for_prestashop->getIdImageByName(trim($tmp_photo[$i]));
                         if(empty($id_image)){
-							$id_image = $image_for_prestashop->insertImageInPrestashop($id_product, trim($url_photo), trim($tmp_photo[$i]));
+                            $id_image = $image_for_prestashop->insertImageInPrestashop($id_product, trim($url_photo), trim($tmp_photo[$i]));
                             array_push($id_images, $id_image);
-							array_push($id_new_images,$id_image.";".trim($tmp_photo[$i]).".jpg");
+                            array_push($id_new_images,$id_image.";".trim($tmp_photo[$i]).".jpg");
                         }
                     }
                 }		
-				
-				if(!empty($id_images)){
-					
-					$array_product_attribute_combinations_get = $product->getCombinationImages($language);
-					for($i = 0; $i < sizeof($id_images); $i++){
-						$id_della_immagine = $id_images[$i];
-						
-						foreach($array_product_attribute_combinations_get as $single_array_of_attribute_product){
-							foreach($single_array_of_attribute_product as $array_di_combinazioni){
-								$id_arr_comb = $array_di_combinazioni['id_product_attribute'];
-								
-								$combinazioni_attributi = new CombinationCore((int)$id_arr_comb);
-								$attribute_combinations = $combinazioni_attributi->getAttributesName($language);
-								
-								$attr_comb1 = $attribute_combinations[0];
-								$attr_comb2 = $attribute_combinations[1];
-								$id_attr_comb1 = $attr_comb1['id_attribute'];
-								$id_attr_comb2 = $attr_comb2['id_attribute'];
-								
-								$id_attributi_input = $id_attributes_for_combinations;
-								$id_color_or_size = $id_attributi_input[0];
-								$id_size_or_color = $id_attributi_input[1];
-								
-								if($id_color_or_size == $id_attr_comb1 || $id_color_or_size == $id_attr_comb2){
-									if($id_size_or_color == $id_attr_comb1 || $id_size_or_color == $id_attr_comb2){
-										$new_image = array();
-										$new_array_image = $combinazioni_attributi->getWsImages();
-										for($j = 0; $j < sizeof($new_array_image); $j++){
-											$tmp_image_ = $new_array_image[$j];
-											array_push($new_image,(int)$tmp_image_['id']);
-										}
-										array_push($new_image,$id_della_immagine);
-										$fff = $product->updateProductAttribute($id_arr_comb, 0, 
-																	$price, 0, 0, 0, $new_image, 
-																	$reference, $id_supplier, 0, 1, null, null, 1, 
-																	'0000-00-00');
-									}
-								}
-								
-							}
-						}
-						
-					}
-				}
-			
-			}
-        }		
-		return $id_new_images;
+
+                if(!empty($id_images)){
+
+                    $array_product_attribute_combinations_get = $product->getCombinationImages($language);
+                    for($i = 0; $i < sizeof($id_images); $i++){
+                        $id_della_immagine = $id_images[$i];
+
+                        foreach($array_product_attribute_combinations_get as $single_array_of_attribute_product){
+                            foreach($single_array_of_attribute_product as $array_di_combinazioni){
+                                $id_arr_comb = $array_di_combinazioni['id_product_attribute'];
+
+                                $combinazioni_attributi = new CombinationCore((int)$id_arr_comb);
+                                $attribute_combinations = $combinazioni_attributi->getAttributesName($language);
+
+                                $attr_comb1 = $attribute_combinations[0];
+                                $attr_comb2 = $attribute_combinations[1];
+                                $id_attr_comb1 = $attr_comb1['id_attribute'];
+                                $id_attr_comb2 = $attr_comb2['id_attribute'];
+
+                                $id_attributi_input = $id_attributes_for_combinations;
+                                $id_color_or_size = $id_attributi_input[0];
+                                $id_size_or_color = $id_attributi_input[1];
+
+                                if($id_color_or_size == $id_attr_comb1 || $id_color_or_size == $id_attr_comb2){
+                                    if($id_size_or_color == $id_attr_comb1 || $id_size_or_color == $id_attr_comb2){
+                                        $new_image = array();
+                                        $new_array_image = $combinazioni_attributi->getWsImages();
+                                        for($j = 0; $j < sizeof($new_array_image); $j++){
+                                            $tmp_image_ = $new_array_image[$j];
+                                            array_push($new_image,(int)$tmp_image_['id']);
+                                        }
+                                        array_push($new_image,$id_della_immagine);
+                                        $fff = $product->updateProductAttribute($id_arr_comb, 0, 
+                                                                                $price, 0, 0, 0, $new_image, 
+                                                                                $reference, $id_supplier, 0, 1, null, null, 1, 
+                                                                                '0000-00-00');
+                                    }
+                                }
+
+                            }
+                        }
+
+                    }
+                }
+
+            }
+        }	
+        
+        return $id_new_images;
     }
 
 }

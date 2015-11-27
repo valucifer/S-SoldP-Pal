@@ -13,8 +13,6 @@ require_once ("Logger.php");
 * @author     Carlos Borges (carboma89@gmail.com), Valentino Vivone, Nello Saulino
 **/
 
-
-
 class PrestashopUpdate{
 
     private $logger=null;
@@ -29,14 +27,10 @@ class PrestashopUpdate{
         $this->logger = new Logger();
     }
 
-    /** 
-    *Initializes the mapping and the buffer table
-    *@params string $mapping_path
-    */
     public function startUpdate($mapping_path){
+        $this->mapping = new Mapping($mapping_path);
         $tmp = explode ('_',$mapping_path);
         $this->url_photo = $tmp[0].'_FOTO/';
-        $this->logger = new Logger();
         $this->mapping = new Mapping($mapping_path);
         $this->keys= $this->mapping->keys();
         $this->triple= $this->mapping->triple();
@@ -61,9 +55,89 @@ class PrestashopUpdate{
                 $buffer->insertProduct( $key, $single_mapping['Attivo'], $single_mapping['Categorie'], $single_mapping['Prezzo'], $single_mapping['Supplier'], $single_mapping['Manufacture'], $single_mapping['Qta'], $single_mapping['Qta_min'], $feature['Lunghezza'], $feature['Altezza'], $feature['Larghezza'], $colore, $quantita, $taglia, $single_mapping['Nome'], $feature['Modello'], $feature['Linea'], $codice_colore, $codice_taglia, $single_mapping['URL'], $immagine);
             }        
         }
-
     }
 
+    public function firstStep(){
+        $new_products_manager = new ViewManager();
+        $tmp_manager = new UpdateTmpTables();
+        $insert_product = new PrestashopProduct();
+        $product_update = new ProductUpdate();
+
+        //prendo tutti i prodotti
+        $all_products = $new_products_manager->getAllProducts();
+        foreach($all_products as $product){
+            $array_reference = $product[0];
+            $key = $array_reference['Reference'];
+            asort($product[1]);
+            asort($product[2]);
+            $result = $product_update->productExists($key);
+            if(gettype($result)==="integer"){
+                foreach($product[1] as $triple){
+                    $tmp_combination = $product[2];
+                    $array_combination = $tmp_combination [$triple];
+                    $tmp_code = $array_combination ['Codici'];
+                    $tmp_explode_code = explode(',',$tmp_code);
+                    if($product_update->colorSizeExists($key, $result,$tmp_explode_code[0], $tmp_explode_code[1])){
+                        $array_product = $insert_product->updateProductForPrestashop($product[0], (int) $result, $this->url_photo,$product[1], $product[2]);
+                        $tmp_manager->insertTmpProducts($result,$key);
+                        if( !empty($array_product[2]) ){
+                            foreach($array_product[2] as $new_img){
+                                $new_photo_infos = explode(';',$new_img);
+                                $tmp_manager->insertImageField ($this->url_photo.$new_photo_infos[1],$array_product[0],$new_photo_infos[0]);
+                            }
+                        }
+                    }
+                }
+                $url = $this->formatUrlPhoto($key);
+                $this->_updatePsImages($result,$url);
+            }
+
+        }
+
+        //prendo i prodotti nuovi
+        $newProducts = $new_products_manager->getNewProduct();
+        if(!empty($newProducts)){
+            foreach($newProducts as $product){
+                $array_reference = $product[0];
+                $key = $array_reference['Reference'];
+                asort($product[1]);
+                asort($product[2]);
+                $array_product = $insert_product->insertProductForPrestashop($product[0], $this->url_photo,$product[1], $product[2]);
+                $array_images_id = $array_product[1];
+                for( $i=0; $i<sizeof($array_images_id); $i++){
+                    $tmp = explode (';',$array_images_id[$i]);
+                    if(empty($tmp)) break;
+                    $tmp_manager->insertImageField ($this->url_photo.$tmp[1],$array_product[0],$tmp[0]);
+                }
+                $tmp_manager->insertTmpProducts((int)$array_product[0],$key);
+            }
+        }
+
+        //differenze nei prodotti
+        $products_differences = $new_products_manager->getProductDifferences();
+        if(!empty($products_differences)){
+            foreach($products_differences as $product){
+                $array_reference = $product[0];
+                $key = $array_reference['Reference'];
+                asort($product[1]);
+                asort($product[2]);
+                $array_product = $insert_product->updateProductForPrestashop($product[0], (int) $product[3], $this->url_photo, $product[1], $product[2]);
+                if( !empty($array_product[2]) ){
+                    foreach($array_product[2] as $new_img){
+                        $new_photo_infos = explode(';',$new_img);
+                        $tmp_manager->insertImageField($this->url_photo.$new_photo_infos[1],$array_product[0],$new_photo_infos[0]);
+                    }
+                }
+                $tmp_manager->updateTmpProducts((int)$array_product[0],$key);
+            }
+        }
+        
+        $this->logger->postMessage("Update finished! Cleaning up...","DEBUG");
+        $buffer_manager = new ProductBufferTables();
+        $buffer_manager->freeBufferTable();
+
+    }
+    
     /** 
     *Updates images if it change
     *@params string $ps_product_id, string $images_url
@@ -81,81 +155,6 @@ class PrestashopUpdate{
                 }
             }
         }    
-    }
-
-    /** 
-    *Updates or insert product informations
-    */
-    public function updatePsProduct(){
-        $product_update = new ProductUpdate();
-        $insert_product = new PrestashopProduct();
-        $new_products_manager = new ViewManager();
-        $tmp_manager = new UpdateTmpTables();
-        $all_products = $new_products_manager-> getAllProducts();
-        $this->logger->postMessage("Starting update...","DEBUG");
-        foreach($all_products as $product){
-            $array_reference = $product[0];
-            $key=$array_reference['Reference'];
-            asort($product[1]);
-            asort($product[2]);
-            $result = $product_update->productExists($key);
-            if($result){
-                foreach($product[1] as $triple){
-                    $tmp_combination = $product[2];
-                    $array_combination = $tmp_combination [$triple];
-                    $tmp_code = $array_combination ['Codici'];
-                    $tmp_explode_code = explode(',',$tmp_code);
-                    if($product_update->colorSizeExists($key, $result,$tmp_explode_code[0], $tmp_explode_code[1])){
-                        $array_product = $insert_product->updateProductForPrestashop($product[0], (int) $result, $this->url_photo,$product[1], $product[2]);
-                        $tmp_manager->insertTmpProducts($result,$key);
-                        if( !empty($array_product[3]) ){
-                            foreach($array_product[3] as $new_img){
-                                $new_photo_infos = explode(';',$new_img);
-                                $tmp_manager->insertImageField ($this->url_photo.$new_photo_infos[1],$array_product[0],$new_photo_infos[1]);
-                            }
-                        }
-                    }
-                }
-                $url = $this->formatUrlPhoto($key);
-                $this->_updatePsImages($result,$url);
-            }
-
-        } 
-        $new_products = $new_products_manager-> getNewProduct();
-        foreach($new_products as $product){
-            $array_reference = $product[0];
-            $key=$array_reference['Reference'];
-            asort($product[1]);
-            asort($product[2]);
-            $array_product = $insert_product->insertProductForPrestashop($product[0], $this->url_photo,$product[1], $product[2]);
-            $array_images_id = $array_product[1];
-            for($i=0;$i<sizeof($array_images_id);$i++){
-                $tmp = explode (';',$array_images_id[$i]);
-                if(empty($tmp)) break;
-                $tmp_manager->insertImageField ($this->url_photo.$tmp[1],$array_product[0],$tmp[0]);
-            }
-            $tmp_manager->insertTmpProducts($array_product[0],$key);
-        }
-        $changed_products = $new_products_manager->getProductDifferences();
-        if(!empty($changed_products)){
-            foreach($changed_products as $product){
-                $array_reference = $product[0];
-                $key = $array_reference['Reference'];
-                asort($product[1]);
-                asort($product[2]);
-                $array_product = $insert_product->updateProductForPrestashop($product[0], (int) $product[3], $this->url_photo,$product[1], $product[2]);
-                if( !empty($array_product[3]) ){
-                    foreach($array_product[3] as $new_img){
-                        $new_photo_infos = explode(';',$new_img);
-                        $tmp_manager->insertImageField ($this->url_photo.$new_photo_infos[1],$array_product[0],$new_photo_infos[1]);
-                    }
-                }
-                $tmp_manager->updateTmpProducts($array_product[0],$key);
-            }
-        }
-        $this->logger->postMessage("Update finished! Cleaning up...","DEBUG");
-        $buffer_manager = new ProductBufferTables();
-        $buffer_manager->freeBufferTable();
     }
 
     /** 

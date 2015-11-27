@@ -21,12 +21,15 @@ class HandleOperationsException extends Exception implements IException{
     
     private $log_file = null;
 
-    public function __construct($message = null, $code = 0){
+    public function __construct($message = "Unknown error", $code = 0){
         $this->log_file = './log_files/Log.txt';
         if (!$message) 
             throw new $this('Unknown '. get_class($this));
         Analog::handler (Analog\Handler\File::init ($this->log_file));
-        parent::__construct($message, $code);
+        if(gettype($message) !== "string"){
+            $message = "Unknown error";
+        }
+        parent::__construct($message, 10);
         Analog::log ($this->__toString(), Analog::ERROR);
     }
     

@@ -23,7 +23,6 @@ $ftp_connection = new FTPConnection();
 $ftp_connection->connect();
 try{
     $result = $ftp_connection->handleSemaphore();
-    echo "$result <br>";
     if(!$result){
         $ftp_connection->revertCleanup();
         $logger->postMessage("Update process completed. No products have been processed.","INFO");
@@ -44,10 +43,10 @@ $update_prestashop = new PrestashopUpdate();
 foreach ($sems as $sem){
     $update_prestashop-> startUpdate("./files/".$sem);
     
-    $update_prestashop-> updatePsProduct();
+    $update_prestashop-> firstStep();
     $logger->postMessage("Update $sem completed.","DEBUG");
 }
-//$ftp_connection->cleanUp();
+$ftp_connection->cleanUp();
 $logger->postMessage("Update process completed.","INFO");
 
 ?>

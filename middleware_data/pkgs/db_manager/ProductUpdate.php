@@ -24,32 +24,33 @@ class ProductUpdate{
     */
     public function productExists($reference){
             $connection = connectionServer();
-            $sql = "SELECT ps_id FROM  ps_tmp_product WHERE ( reference = '".$reference."')";
+            $sql = "SELECT * FROM  ps_tmp_product WHERE ( reference = '".$reference."')";
             $result = mysql_query($sql,$connection);
             if (mysql_num_rows($result) > 0){
                 $toReturn = null;
                 while($row = mysql_fetch_array( $result )){
-                    $toReturn =$row[0]; 
+                    $toReturn = (int) $row[0]; 
                 }
                 closeConnectionServer($connection);
                 return $toReturn;    
             } else {
                 closeConnectionServer($connection);
-                return FALSE;
+                return "false";
             }
     }
     
     
     public function colorSizeExists($reference, $ps_id, $code_color, $code_size){
          $connection = connectionServer();
-            $sql = "SELECT * FROM  ps_tmp_product WHERE ( reference = '".$reference."'AND ps_id ='".$ps_id."' AND (codice_ colore = '".$code_color."' AND codice_taglia ='".$code_size."'))";
+            $sql = "SELECT * FROM  ps_tmp_product WHERE ( reference = '".$reference."' AND ps_id ='".$ps_id."' AND (codice_colore = '".$code_color."' AND codice_taglia ='".$code_size."'))";
             $result = mysql_query($sql,$connection);
+            $nrow = mysql_num_rows($result);
             if (mysql_num_rows($result) > 0){
                 closeConnectionServer($connection);
-                return FALSE;    
+                return 0;    
             } else {
                 closeConnectionServer($connection);
-                return TRUE;
+                return 1;
             }
     }
     

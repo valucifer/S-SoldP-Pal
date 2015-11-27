@@ -5,7 +5,7 @@ require_once ("ImageUpdate.php");
 require_once ("ViewManager.php");
 require_once ("Logger.php");
 
-    /**
+/**
     * PHP class that provides functions to update the informations of the tmp product table 
     * @package    UpdateProduct
     * @author     Carlos Borges (carboma89@gmail.com)
@@ -24,7 +24,6 @@ class UpdateTmpTables{
     *@params string $imagePath, int $psIdProduct, int $psIdImage
     **/
     public function updateImageField ($imagePath ,$psIdProduct, $psIdImage){
-         echo "<br>Entro in updateImageField<br>";
         $toUpdate = new ImageUpdate();
         $comparator = new ImageChecker();
         if($toUpdate->ifImageExist($psIdImage)){
@@ -33,7 +32,6 @@ class UpdateTmpTables{
             if(gettype($differences)==="string"){//if $differences is a string the two images are equals
                 return false;
             }
-            echo "<br>Sto facendo update della nuova immagine<br>";
             $toUpdate->updateImageInformation($psIdProduct, $psIdImage, $differences[0], $differences[1], $imagePath);
             return true;
         }
@@ -49,59 +47,131 @@ class UpdateTmpTables{
         $differences = $comparator->areImagesDifferent($imagePath, 40, 1," ", " " );
         $toUpdate->insertImageInformation($psIdProduct, $psIdImage,$differences[0], $differences[1],$imagePath);
     }
-    
-    
+
+
 
     public function insertTmpProducts($array_product,$key){
         $view_manager = new ViewManager();
-        $result =$view_manager->getSqlNewProducts($array_product,$key);
+        $result = $view_manager->getSqlNewProducts($array_product,$key);
+        $connection = connectionServer();
+        if( !empty($result) ){
+            foreach($result as $sql){
+                $res=null;
+                $res = mysql_query($sql,$connection);
+                if($res){
+                }else{
+                    $errno = mysql_errno($connection);
+                    $error = mysql_error($connection);
+                    switch ($errno) {
+                        case 1062:
+                            throw new HandleOperationsException($error);
+                            break;
+                        default:
+                            throw new HandleOperationsException($error);
+                            break;
+                    }
+                }  
+            }
+        }else{
+            $result = $view_manager->getSqlColorsAndSizeProducts($array_product,$key);
+            $connection = connectionServer();
+            if( !empty($result) ){
+                foreach($result as $sql){
+                    $res=null;
+                    $res = mysql_query($sql,$connection);
+                    if($res){
+                    }else{
+                        $errno = mysql_errno($connection);
+                        $error = mysql_error($connection);
+                        switch ($errno) {
+                            case 1062:
+                                throw new HandleOperationsException($error);
+                                break;
+                            default:
+                                throw new HandleOperationsException($error);
+                                break;
+                        }
+                    }  
+                }
+            }
+        }
+        closeConnectionServer($connection);
+    }
+
+    public function _insertTmpProducts($array_product,$key,$triple){
+        $view_manager = new ViewManager();
+        $result = $view_manager->_getSqlNewProducts($array_product,$key, $triple);
         $connection = connectionServer();
         foreach($result as $sql){
             $res=null;
             $res = mysql_query($sql,$connection);
             if($res){
             }else{
-                 $errno = mysql_errno($connection);
-                 $error = mysql_error($connection);
-                 switch ($errno) {
-                     case 1062:
+                $errno = mysql_errno($connection);
+                $error = mysql_error($connection);
+                switch ($errno) {
+                    case 1062:
                         throw new HandleOperationsException($error);
-                     break;
-                     default:
-                     throw new HandleOperationsException($error);
-                     break;
-                 }
-             }  
+                        break;
+                    default:
+                        throw new HandleOperationsException($error);
+                        break;
+                }
+            }  
         }
         closeConnectionServer($connection);
     }
-    
+
 
     public function updateTmpProducts($array_product,$key){
         $view_manager = new ViewManager();
-        $result =$view_manager->getSqlChangedProducts($array_product,$key);
+        $result = $view_manager->getSqlChangedProducts($array_product,$key);
         $connection = connectionServer();
         foreach($result as $sql){
             $res=null;
             $res = mysql_query($sql,$connection);
             if($res){
             }else{
-                 $errno = mysql_errno($connection);
-                 $error = mysql_error($connection);
-                 switch ($errno) {
-                     case 1062:
+                $errno = mysql_errno($connection);
+                $error = mysql_error($connection);
+                switch ($errno) {
+                    case 1062:
                         throw new HandleOperationsException($error);
-                     break;
-                     default:
-                     throw new HandleOperationsException($error);
-                     break;
-                 }
-             }  
+                        break;
+                    default:
+                        throw new HandleOperationsException($error);
+                        break;
+                }
+            }  
         }
         closeConnectionServer($connection);
     }
-           
-    
+
+    public function _updateTmpProducts($array_product,$key){
+        $view_manager = new ViewManager();
+        $result = $view_manager->_getSqlChangedProducts($array_product,$key);
+        $connection = connectionServer();
+        foreach($result as $sql){
+            $res=null;
+            $res = mysql_query($sql,$connection);
+            if($res){
+            }else{
+                $errno = mysql_errno($connection);
+                $error = mysql_error($connection);
+                switch ($errno) {
+                    case 1062:
+                        throw new HandleOperationsException($error);
+                        break;
+                    default:
+                        throw new HandleOperationsException($error);
+                        break;
+                }
+            }  
+        }
+        closeConnectionServer($connection);
+    }
+
+
 }
 
 ?>
