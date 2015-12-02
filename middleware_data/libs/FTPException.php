@@ -17,10 +17,13 @@ interface IFTPException
 }
 
 class FTPException extends Exception implements IFTPException{
-    
+
     private $log_file = null;
 
     public function __construct($message = null, $code = 0){
+        if(!file_exists("./log_files")){
+            mkdir('./log_files');
+        }
         $this->log_file = './log_files/Log.txt';
         if (!$message) 
             throw new $this('Unknown '. get_class($this));
@@ -30,10 +33,10 @@ class FTPException extends Exception implements IFTPException{
         if( file_exists("FTP_SEMAMPHORE.smph") )
             unlink("FTP_SEMAMPHORE.smph");
     }
-    
+
     public function __toString(){
         return get_class($this) . " '{$this->message}' in {$this->file}(line:{$this->line})\n"
-                                . "{$this->getTraceAsString()}";
+            . "{$this->getTraceAsString()}";
     }
 
 }

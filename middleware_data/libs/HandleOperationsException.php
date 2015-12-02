@@ -18,10 +18,13 @@ interface IException
 }
 
 class HandleOperationsException extends Exception implements IException{
-    
+
     private $log_file = null;
 
     public function __construct($message = "Unknown error", $code = 0){
+        if(!file_exists("./log_files")){
+            mkdir('./log_files');
+        }
         $this->log_file = './log_files/Log.txt';
         if (!$message) 
             throw new $this('Unknown '. get_class($this));
@@ -32,12 +35,12 @@ class HandleOperationsException extends Exception implements IException{
         parent::__construct($message, 10);
         Analog::log ($this->__toString(), Analog::ERROR);
     }
-    
+
     public function __toString(){
         $ftp_connection = new FTPConnection();
         $ftp_connection->revertCleanup();
         return get_class($this) . " '{$this->message}' in {$this->file}(line:{$this->line})\n"
-                                . "{$this->getTraceAsString()}";
+            . "{$this->getTraceAsString()}";
     }
 
 }

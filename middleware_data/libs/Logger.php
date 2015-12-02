@@ -8,6 +8,9 @@ class Logger{
     private $log_file = null;
 
     public function __construct(){
+        if(!file_exists("./log_files")){
+            mkdir('./log_files');
+        }
         $this->log_file = "./log_files/Log.txt";
         if( file_exists($this->log_file) )
             if( filesize($this->log_file) >= MD_LOG_FILE_SIZE )
