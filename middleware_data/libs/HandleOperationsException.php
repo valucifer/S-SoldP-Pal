@@ -1,6 +1,6 @@
 <?php
 require_once("Analog.php");
-require_once("FTPConnection.php");
+require_once("HandleFilesFolder.php");
 
 interface IException
 {
@@ -34,11 +34,14 @@ class HandleOperationsException extends Exception implements IException{
         }
         parent::__construct($message, 10);
         Analog::log ($this->__toString(), Analog::ERROR);
+        $handleFilesFolder = new HandleFilesFolder();
+        $handleFilesFolder->handle();
+        if( file_exists("FTP_SEMAMPHORE.smph") ){
+            unlink("FTP_SEMAMPHORE.smph");
+        }
     }
 
     public function __toString(){
-        $ftp_connection = new FTPConnection();
-        $ftp_connection->revertCleanup();
         return get_class($this) . " '{$this->message}' in {$this->file}(line:{$this->line})\n"
             . "{$this->getTraceAsString()}";
     }

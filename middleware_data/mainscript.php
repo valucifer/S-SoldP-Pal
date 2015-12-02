@@ -17,8 +17,10 @@ require_once("PrestashopUpdate.php");
 require_once("settings.php");
 require_once("FTPException.php");
 require_once("Logger.php");
+require_once("ErrorLogger.php");
 
 $logger = new Logger();
+$error_log = new ErrorLogger();
 $ftp_connection = new FTPConnection();
 $ftp_connection->connect();
 try{
@@ -36,16 +38,21 @@ try{
     throw new FTPException("Connection is down. Revert process is completed.","ERROR");
 }
 
-$sems = $ftp_connection->getPSSemaphoresPath();
+try{
+    $sems = $ftp_connection->getPSSemaphoresPath();
 
-$update_prestashop = new PrestashopUpdate();
-
-foreach ($sems as $sem){
-    $update_prestashop-> startUpdate("./files/".$sem);
+    $update_prestashop = new PrestashopUpdate();
     
-    $update_prestashop-> firstStep();
-    $logger->postMessage("Update $sem completed.","DEBUG");
+    $update_prestashop->startUpdate("./files/".$sems);
+    $update_prestashop->firstStep();
+    $logger->postMessage("Update $sems completed.","DEBUG");
+    
+}catch(Exception $e){
+    $error_log->postMessage($e);
+    throw new Exception("Error exception. Please, see ErrorLog.txt in log_files directory.");
+
 }
+
 $ftp_connection->cleanUp();
 $logger->postMessage("Update process completed.","INFO");
 

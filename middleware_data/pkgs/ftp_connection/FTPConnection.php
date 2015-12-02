@@ -23,6 +23,8 @@ class FTPConnection{
     private $logger = null;
     private $dir_size = 0;
     private $local_size = 0;
+    private $semaphores_array_size = 0;
+    private $remote_contents = null;
 
     /**
 	 * Initializes class.
@@ -71,78 +73,89 @@ class FTPConnection{
         fclose($sem_file_resource);
 
         //retreive all remote files to check if semaphore exists
-        $remote_contents = ftp_nlist($this->connection, MD_FTP_ROOT_DIR);
-
-        //check size of remote folde
-
-        $this->dir_size = $this->getRemoteDirSize(MD_FTP_ROOT_DIR);
-
-        if(!$remote_contents){
+        $this->remote_contents = ftp_nlist($this->connection, MD_FTP_ROOT_DIR);
+        
+        if(!$this->remote_contents){
             $this->logger->postMessage("Error checking remote directory! Maybe it's empty...","WARNING");
             return false;
         }
 
-        //check if local dir to store the whole remote directory structure exists. If not, then we create it
-        if(!file_exists($this->local_dir)){
-            mkdir($this->local_dir);
-        }
-
         //check if a remote semaphore exists.
-        foreach ($remote_contents as &$file){
+        foreach ($this->remote_contents as $file){
             $file_info = pathinfo($file);
             if(!isset($file_info["extension"]))
                 continue;
             if($file_info["extension"] == "chk"){
                 //there's a semaphore with chk extension, so we can proceed
-                if(!ftp_get($this->connection, $this->local_dir."/".$file_info["filename"].".".$file_info["extension"], $file, FTP_ASCII)){
-                    throw new FTPException("Connection process is down. Can't download files from remote host. Please retry.");
-                }
                 array_push($this->semaphores_array, $file_info["basename"]);
             }
         }
 
         //we order semaphore files. So we can perform operations ordered by time
         if(count($this->semaphores_array) > 0){
-            asort($this->semaphores_array, SORT_STRING | SORT_FLAG_CASE | SORT_NATURAL);
+            natcasesort($this->semaphores_array);
+            $this->semaphores_array_size = sizeof($this->semaphores_array)-1;
         }else{
             $this->logger->postMessage("Remote directory is empty. Update process aborted.","WARNING");
             unlink("FTP_SEMAMPHORE.smph");
             return false;
         }
+        
+        //check if local dir to store the whole remote directory structure exists. If not, then we create it
+        if(!file_exists($this->local_dir)){
+            mkdir($this->local_dir);
+        }
+
+        //check size of remote folde
+        $this->logger->postMessage("Calculating remote folder size...","INFO");
+        $this->dir_size = $this->getRemoteDirSize(MD_FTP_ROOT_DIR, explode("_",$this->semaphores_array[$this->semaphores_array_size])[0]);
+        $this->logger->postMessage("Size is $this->dir_size.","INFO");
+
+        foreach ($this->remote_contents as $file){
+            $file_info = pathinfo($file);
+            if(!isset($file_info["extension"]))
+                continue;
+            if($file_info["extension"] === "chk" && strpos($file_info["basename"], $this->semaphores_array[$this->semaphores_array_size]) !== false ){
+                //there's a semaphore with chk extension, so we can proceed
+                if(!ftp_get($this->connection, $this->local_dir."/".$file_info["filename"].".".$file_info["extension"], $file, FTP_ASCII))
+                    throw new FTPException("Connection process is down. Can't download files from remote host. Please retry.");
+            }
+        }
 
         //we isolate timestamps string, so we can get all files with a fixed timestamp
-        foreach( $this->semaphores_array as &$sem ){    
-            $tmp_array = explode("_", $sem);
-            foreach( $remote_contents as &$remCon ){
-                if( strpos($remCon, $tmp_array[0]) ){
-                    $file_info = pathinfo($remCon);
-                    if(!isset($file_info["extension"])){
-                        //we encountered a folder. This folder(s) will be processed later
-                        array_push($this->folders_name, $file_info["filename"]);
-                        continue;
-                    }
-                    if(!ftp_get($this->connection, $this->local_dir."/".$file_info["filename"].".".$file_info["extension"], $remCon, FTP_ASCII))
-                        throw new FTPException("Connection process is down. Can't download files from remote host. Please retry");
-                    $this->local_size += filesize($this->local_dir."/".$file_info["filename"].".".$file_info["extension"]);
-                    $percentage = round(($this->local_size * 100)/$this->dir_size, 1);
-                    $this->logger->postMessage("Download percentage: $percentage%", "INFO");
+        $tmp_array = explode("_", $this->semaphores_array[$this->semaphores_array_size]);
+        foreach( $this->remote_contents as $remCon ){
+            if( strpos($remCon, $tmp_array[0]) !== false ){
+                $file_info = pathinfo($remCon);
+                if(!isset($file_info["extension"])){
+                    //we encountered a folder. This folder(s) will be processed later
+                    array_push($this->folders_name, $file_info["filename"]);
+                    continue;
                 }
+                if(!ftp_get($this->connection, $this->local_dir."/".$file_info["filename"].".".$file_info["extension"], $remCon, FTP_ASCII))
+                    throw new FTPException("Connection process is down. Can't download files from remote host. Please retry");
+                $this->local_size += filesize($this->local_dir."/".$file_info["filename"].".".$file_info["extension"]);
+                $percentage = round(($this->local_size * 100)/$this->dir_size, 1);
+                $this->logger->postMessage("Download percentage: $percentage%", "INFO");
             }
         }
 
         //subfolder copy
         if( count($this->folders_name) > 0 ){
             foreach( $this->folders_name as $dir ){
-                mkdir($this->local_dir."/".$dir);
-                ftp_chdir($this->connection, MD_FTP_ROOT_DIR.$dir);
-                $dir_files = ftp_nlist($this->connection, MD_FTP_ROOT_DIR.$dir);
-                foreach($dir_files as $file){
-                    $file_info = pathinfo($file);
-                    if(!ftp_get($this->connection, $this->local_dir."/".$dir."/".$file_info["filename"].".".$file_info["extension"], $file, FTP_BINARY))
-                        throw new FTPException("Connection process is down. Can't download files from remote host. Please retry");
-                    $this->local_size += filesize($this->local_dir."/".$dir."/".$file_info["filename"].".".$file_info["extension"]);
-                    $percentage = round(($this->local_size * 100)/$this->dir_size,1);
-                    $this->logger->postMessage("Download percentage: $percentage%","INFO");
+                $tmp_array = explode("_", $this->semaphores_array[$this->semaphores_array_size]);
+                if( strpos($dir, $tmp_array[0]) !== false ){
+                    mkdir($this->local_dir."/".$dir);
+                    ftp_chdir($this->connection, MD_FTP_ROOT_DIR.$dir);
+                    $dir_files = ftp_nlist($this->connection, MD_FTP_ROOT_DIR.$dir);
+                    foreach($dir_files as $file){
+                        $file_info = pathinfo($file);
+                        if(!ftp_get($this->connection, $this->local_dir."/".$dir."/".$file_info["filename"].".".$file_info["extension"], $file, FTP_BINARY))
+                            throw new FTPException("Connection process is down. Can't download files from remote host. Please retry");
+                        $this->local_size += filesize($this->local_dir."/".$dir."/".$file_info["filename"].".".$file_info["extension"]);
+                        $percentage = round(($this->local_size * 100)/$this->dir_size,1);
+                        $this->logger->postMessage("Download percentage: $percentage%","INFO");
+                    }
                 }
             }
         }
@@ -156,7 +169,8 @@ class FTPConnection{
 	 * @return $semaphore_array that contains semaphore's names
 	 */
     public function getPSSemaphoresPath(){
-        return $this->semaphores_array;
+        return $this->semaphores_array[$this->semaphores_array_size];
+        //return $this->semaphores_array;
     }
 
     /**
@@ -166,7 +180,8 @@ class FTPConnection{
 	 * @return
 	 */
     public function revertCleanup(){
-        unlink("FTP_SEMAMPHORE.smph");
+        if(file_exists("FTP_SEMAMPHORE.smph"))
+            unlink("FTP_SEMAMPHORE.smph");
     }
 
     /**
@@ -179,18 +194,32 @@ class FTPConnection{
         $folder_to_remove = array();
         //delete semaphore, 'cause all the operations are ok.
         unlink("FTP_SEMAMPHORE.smph");
+        
         //delete downloaded files
         $this->_deleteDirectory($this->local_dir);
-        //delete ftp folder
-        $remote_contents = ftp_nlist($this->connection, MD_FTP_ROOT_DIR);
-        foreach($remote_contents as &$content){
-            $file_info = pathinfo($content);
-            if(!isset($file_info["extension"])){
-                //we encountered a folder. This folder(s) will be processed later
-                array_push($folder_to_remove, $content);
-                continue;
+
+        if(is_null($this->connection)){
+            //connection probably is "timeouted", so we extablish a new connection to perform cleanup operations
+            $this->logger->postMessage("FTP Connection has reached timeout. Trying to reconnect.", "INFO");
+            $this->connect();
+        }
+        
+        //reset($this->remote_contents);
+        
+        foreach($this->semaphores_array as $sem){
+            $sem_to_search = explode("_", $sem);
+            foreach($this->remote_contents as $remSource){
+                if(strpos($remSource, $sem_to_search[0]) !== false){
+                    $file_info = pathinfo($remSource);
+                    //we need to delete this file/folder
+                    if(!isset($file_info["extension"])){
+                        //we encountered a folder. This folder(s) will be processed later
+                        array_push($folder_to_remove, trim($remSource));
+                        continue;
+                    }
+                    ftp_delete($this->connection, trim($remSource));
+                }
             }
-            ftp_delete($this->connection, $content);
         }
 
         foreach($folder_to_remove as $folder){
@@ -217,18 +246,29 @@ class FTPConnection{
         }
     }
 
-    private function getRemoteDirSize($dir){ 
+    private function getRemoteDirSize($dir, $sem_name){ 
         $size = 0;
-        $remote_contents = ftp_nlist($this->connection, $dir);
-        foreach ($remote_contents as &$file){
-            $file_info = pathinfo($file);
-            if(!isset($file_info["extension"])){
-                $size += $this->getRemoteDirSize($file);
+        foreach ($this->remote_contents as &$file){
+            if( strpos($file, $sem_name) !== false ){
+                $file_info = pathinfo($file);
+                if(!isset($file_info["extension"])){
+                    $size += $this->getRemoteSubFolderSize($file);
+                }
+                $size += ftp_size($this->connection, $file);
             }
-            $size += ftp_size($this->connection, $file);
         }
         return $size; 
-    }  
+    }
+    
+    private function getRemoteSubFolderSize($dir){
+        $size = 0;
+        $subfolder_files = ftp_nlist($this->connection, $dir);
+        ftp_chdir($this->connection, $dir);
+        foreach($subfolder_files as $file){
+            $size += ftp_size($this->connection, $file);
+        }
+        return $size;
+    }
 
     private function _deleteDirectory($dir) {
         if (!file_exists($dir)) {

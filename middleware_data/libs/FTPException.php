@@ -1,5 +1,6 @@
 <?php
 require_once("Analog.php");
+require_once("HandleFilesFolder.php");
 
 interface IFTPException
 {
@@ -30,6 +31,8 @@ class FTPException extends Exception implements IFTPException{
         Analog::handler (Analog\Handler\File::init ($this->log_file));
         parent::__construct($message, $code);
         Analog::log ($this->__toString(), Analog::ERROR);
+        $handleFilesFolder = new HandleFilesFolder();
+        $handleFilesFolder->handle();
         if( file_exists("FTP_SEMAMPHORE.smph") )
             unlink("FTP_SEMAMPHORE.smph");
     }
