@@ -378,9 +378,9 @@ class PrestashopProduct{
         $product->reference = $product_attributes["Reference"];
         $product->id_tax_rules_group = 0;
 
-        $product->id_supplier = $this->setSupplierForProduct(trim($product_attributes["Supplier"]));
-        //$product->id_manufacturer = $this->setManufacturerForProduct(trim($product_attributes["Manufacture"]));
-		$product->id_manufacturer = 0;
+        //$product->id_supplier = $this->setSupplierForProduct(trim($product_attributes["Supplier"]));
+        $product->id_supplier = 0;
+        $product->id_manufacturer = $this->setManufacturerForProduct(trim($product_attributes["Manufacture"]));
 		
         $array_features = $product_attributes["Feature"];
         $product->width = (float)$array_features["Larghezza"];

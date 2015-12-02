@@ -32,7 +32,9 @@ class FTPConnection{
 	 * @params 
 	 * @return 
 	 */
-    public function __construct(){}
+    public function __construct(){
+        $this->logger = new Logger();
+    }
 
     /**
 	 * Handles connection to remote folder.
@@ -41,7 +43,6 @@ class FTPConnection{
 	 * @return 
 	 */
     public function connect(){
-        $this->logger = new Logger();
         if(is_null($this->connection)){
             $this->connection = ftp_connect(MD_FTP_SERVER, MD_FTP_PORT, 90);
             if(!$this->connection)
@@ -159,6 +160,11 @@ class FTPConnection{
                 }
             }
         }
+        if(!is_null($this->connection)){
+            if( !ftp_close($this->connection) )
+                throw new FTPException("Unable to close connection.", "ERROR");
+            $this->connection = null;
+        }
         return true;
     }
 
@@ -198,13 +204,9 @@ class FTPConnection{
         //delete downloaded files
         $this->_deleteDirectory($this->local_dir);
 
-        if(is_null($this->connection)){
-            //connection probably is "timeouted", so we extablish a new connection to perform cleanup operations
-            $this->logger->postMessage("FTP Connection has reached timeout. Trying to reconnect.", "INFO");
-            $this->connect();
-        }
+        $this->connect();
         
-        //reset($this->remote_contents);
+        //$this->remote_contents = ftp_nlist($this->connection, MD_FTP_ROOT_DIR);
         
         foreach($this->semaphores_array as $sem){
             $sem_to_search = explode("_", $sem);
@@ -217,7 +219,7 @@ class FTPConnection{
                         array_push($folder_to_remove, trim($remSource));
                         continue;
                     }
-                    ftp_delete($this->connection, trim($remSource));
+                    $bool = ftp_delete($this->connection, trim($remSource));
                 }
             }
         }
@@ -226,23 +228,16 @@ class FTPConnection{
             ftp_chdir($this->connection, $folder);
             $folder_contents = ftp_nlist($this->connection, $folder);
             foreach($folder_contents as $fold){
-                ftp_delete($this->connection, $fold);
+                $bool = ftp_delete($this->connection, $fold);
             }
             ftp_chdir($this->connection, MD_FTP_ROOT_DIR);
             ftp_rmdir($this->connection, $folder);
         }
-    }
-
-    /**
-	 * Handles class desctruction operations closing connection to remote folder.
-	 * @exception HandleOperationsException thrown when connection cannot be closed for some reason.
-	 * @params 
-	 * @return 
-	 */    
-    public function __destruct(){
+        
         if(!is_null($this->connection)){
             if( !ftp_close($this->connection) )
                 throw new FTPException("Unable to close connection.", "ERROR");
+            $this->connection = null;
         }
     }
 
