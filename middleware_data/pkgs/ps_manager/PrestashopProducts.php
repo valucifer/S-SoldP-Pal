@@ -379,8 +379,9 @@ class PrestashopProduct{
         $product->id_tax_rules_group = 0;
 
         $product->id_supplier = $this->setSupplierForProduct(trim($product_attributes["Supplier"]));
-        $product->id_manufacturer = $this->setManufacturerForProduct(trim($product_attributes["Manufacture"]));
-
+        //$product->id_manufacturer = $this->setManufacturerForProduct(trim($product_attributes["Manufacture"]));
+		$product->id_manufacturer = 0;
+		
         $array_features = $product_attributes["Feature"];
         $product->width = (float)$array_features["Larghezza"];
         $product->height = (float)$array_features["Altezza"];
@@ -481,20 +482,28 @@ class PrestashopProduct{
                 $code = "";
                 if($variable_tmp_values[$i] != ""){
                     $id_attribute_group = $this->createAttributeGroups($variable_tmp_attributes[$i], $language);
-
+					$id_attributes_for_not_repeat = $this->getAttributeColorAndSize($variable_tmp_values[$i], $language);
+                        
                     if(strtolower($variable_tmp_attributes[$i]) === "colore" || strtolower($variable_tmp_attributes[$i]) === "colori"){
                         $product_attribute_for_not_reply = $product->getAttributeCombinations($language);
-                        if(empty($product_attribute_for_not_reply)){
-                            $code = $this->getCodeColor(strtolower($variable_tmp_values[$i]));
-                            if($code != ""){
-                                $code = "#".$code;
-                                $attribute_for_product = new Attribute();
-                                $attribute_for_product->name = $this->setArrayElementForLinkRewrite($variable_tmp_values[$i], true, $language);
-                                $attribute_for_product->color = $code;
-                                $attribute_for_product->id_attribute_group = $id_attribute_group;
-                                $attribute_for_product->add();
-                                array_push($id_attributes_for_combinations, $attribute_for_product->id);
-                            }
+						
+						if(empty($product_attribute_for_not_reply)){
+							
+							if($id_attributes_for_not_repeat === '-1'){
+								$code = $this->getCodeColor(strtolower($variable_tmp_values[$i]));
+								if($code != ""){
+									$code = "#".$code;
+									$attribute_for_product = new Attribute();
+									$attribute_for_product->name = $this->setArrayElementForLinkRewrite($variable_tmp_values[$i], true, $language);
+									$attribute_for_product->color = $code;
+									$attribute_for_product->id_attribute_group = $id_attribute_group;
+									$attribute_for_product->add();
+									array_push($id_attributes_for_combinations, $attribute_for_product->id);
+								}
+							}else{
+								array_push($id_attributes_for_combinations, (int)$id_attributes_for_not_repeat);
+							}
+							
                         }else{
                             $flag = true;
                             foreach($product_attribute_for_not_reply as $more_attributes){
@@ -505,28 +514,38 @@ class PrestashopProduct{
                                 }
                             }
                             if($flag){
-                                $code = $this->getCodeColor(strtolower($variable_tmp_values[$i]));
-                                if($code != ""){
-                                    $code = "#".$code;
-                                    $attribute_for_product = new Attribute();
-                                    $attribute_for_product->name = $this->setArrayElementForLinkRewrite($variable_tmp_values[$i], true, $language);
-                                    $attribute_for_product->color = $code;
-                                    $attribute_for_product->id_attribute_group = $id_attribute_group;
-                                    $attribute_for_product->add();
-                                    array_push($id_attributes_for_combinations, $attribute_for_product->id);
-                                }
+								if($id_attributes_for_not_repeat === '-1'){
+									$code = $this->getCodeColor(strtolower($variable_tmp_values[$i]));
+									if($code != ""){
+										$code = "#".$code;
+										$attribute_for_product = new Attribute();
+										$attribute_for_product->name = $this->setArrayElementForLinkRewrite($variable_tmp_values[$i], true, $language);
+										$attribute_for_product->color = $code;
+										$attribute_for_product->id_attribute_group = $id_attribute_group;
+										$attribute_for_product->add();
+										array_push($id_attributes_for_combinations, $attribute_for_product->id);
+									}
+								}else{
+									array_push($id_attributes_for_combinations, $id_attributes_for_not_repeat);
+								}
                             }
+							
                         }
                     }
 
                     if(strtolower($variable_tmp_attributes[$i]) === "taglia" || strtolower($variable_tmp_attributes[$i]) === "taglie"){
                         $product_attribute_for_not_reply = $product->getAttributeCombinations($language);
-                        if(empty($product_attribute_for_not_reply)){
-                            $attribute_for_product = new Attribute();
-                            $attribute_for_product->name = $this->setArrayElementForLinkRewrite($variable_tmp_values[$i], true, $language);
-                            $attribute_for_product->id_attribute_group = $id_attribute_group;
-                            $attribute_for_product->add();
-                            array_push($id_attributes_for_combinations, $attribute_for_product->id);
+						
+						if(empty($product_attribute_for_not_reply)){
+							if($id_attributes_for_not_repeat === '-1'){
+								$attribute_for_product = new Attribute();
+								$attribute_for_product->name = $this->setArrayElementForLinkRewrite($variable_tmp_values[$i], true, $language);
+								$attribute_for_product->id_attribute_group = $id_attribute_group;
+								$attribute_for_product->add();
+								array_push($id_attributes_for_combinations, $attribute_for_product->id);
+							}else{
+								array_push($id_attributes_for_combinations, (int)$id_attributes_for_not_repeat);
+							}
                         }else{
                             $flag = true;
                             foreach($product_attribute_for_not_reply as $more_attributes){
@@ -549,11 +568,15 @@ class PrestashopProduct{
 
                             }
                             if($flag){
-                                $attribute_for_product = new Attribute();
-                                $attribute_for_product->name = $this->setArrayElementForLinkRewrite($variable_tmp_values[$i], true, $language);
-                                $attribute_for_product->id_attribute_group = $id_attribute_group;
-                                $attribute_for_product->add();
-                                array_push($id_attributes_for_combinations, $attribute_for_product->id);
+								if($id_attributes_for_not_repeat === '-1'){
+									$attribute_for_product = new Attribute();
+									$attribute_for_product->name = $this->setArrayElementForLinkRewrite($variable_tmp_values[$i], true, $language);
+									$attribute_for_product->id_attribute_group = $id_attribute_group;
+									$attribute_for_product->add();
+									array_push($id_attributes_for_combinations, $attribute_for_product->id);
+								}else{
+									array_push($id_attributes_for_combinations, (int)$id_attributes_for_not_repeat);
+								}
                             }
                         }
                     }
@@ -619,6 +642,19 @@ class PrestashopProduct{
             return "FFFFFF";
         }else return $colors[$name_color];
     }
+	
+	private function getAttributeColorAndSize($name_attribute, $language = 1){
+		$attribute = new Attribute();
+		$array_all_attributes = $attribute->getAttributes($language);
+		
+		foreach($array_all_attributes as $color_or_size){
+			if(strtolower($color_or_size["name"]) === strtolower(trim($name_attribute))){
+				return (int)$color_or_size["id_attribute"];
+			}
+		}
+		
+		return '-1';
+	}
 
     /**
 	* Creates a group of attributes in Prestashop.
@@ -941,20 +977,25 @@ class PrestashopProduct{
                 $code = "";
                 if($variable_tmp_values[$i] != ""){
                     $id_attribute_group = $this->createAttributeGroups($variable_tmp_attributes[$i], $language);
+					$id_attributes_for_not_repeat = $this->getAttributeColorAndSize($variable_tmp_values[$i], $language);
 
                     if(strtolower($variable_tmp_attributes[$i]) === "colore" || strtolower($variable_tmp_attributes[$i]) === "colori"){
                         $product_attribute_for_not_reply = $product->getAttributeCombinations($language);
                         if(empty($product_attribute_for_not_reply)){
-                            $code = $this->getCodeColor(strtolower($variable_tmp_values[$i]));
-                            if($code != ""){
-                                $code = "#".$code;
-                                $attribute_for_product = new Attribute();
-                                $attribute_for_product->name = $this->setArrayElementForLinkRewrite($variable_tmp_values[$i], true, $language);
-                                $attribute_for_product->color = $code;
-                                $attribute_for_product->id_attribute_group = $id_attribute_group;
-                                $attribute_for_product->add();
-                                array_push($id_attributes_for_combinations, $attribute_for_product->id);
-                            }
+							if($id_attributes_for_not_repeat === '-1'){
+								$code = $this->getCodeColor(strtolower($variable_tmp_values[$i]));
+								if($code != ""){
+									$code = "#".$code;
+									$attribute_for_product = new Attribute();
+									$attribute_for_product->name = $this->setArrayElementForLinkRewrite($variable_tmp_values[$i], true, $language);
+									$attribute_for_product->color = $code;
+									$attribute_for_product->id_attribute_group = $id_attribute_group;
+									$attribute_for_product->add();
+									array_push($id_attributes_for_combinations, $attribute_for_product->id);
+								}
+							}else{
+								array_push($id_attributes_for_combinations, (int)$id_attributes_for_not_repeat);
+							}
                         }else{
                             $flag = 1;
                             foreach($product_attribute_for_not_reply as $more_attributes){
@@ -966,16 +1007,20 @@ class PrestashopProduct{
                                 }
                             }
                             if($flag){
-                                $code = $this->getCodeColor(strtolower($variable_tmp_values[$i]));
-                                if($code != ""){
-                                    $code = "#".$code;
-                                    $attribute_for_product = new Attribute();
-                                    $attribute_for_product->name = $this->setArrayElementForLinkRewrite($variable_tmp_values[$i], true, $language);
-                                    $attribute_for_product->color = $code;
-                                    $attribute_for_product->id_attribute_group = $id_attribute_group;
-                                    $attribute_for_product->add();
-                                    array_push($id_attributes_for_combinations, $attribute_for_product->id);
-                                }
+								if($id_attributes_for_not_repeat === '-1'){
+									$code = $this->getCodeColor(strtolower($variable_tmp_values[$i]));
+									if($code != ""){
+										$code = "#".$code;
+										$attribute_for_product = new Attribute();
+										$attribute_for_product->name = $this->setArrayElementForLinkRewrite($variable_tmp_values[$i], true, $language);
+										$attribute_for_product->color = $code;
+										$attribute_for_product->id_attribute_group = $id_attribute_group;
+										$attribute_for_product->add();
+										array_push($id_attributes_for_combinations, $attribute_for_product->id);
+									}
+								}else{
+									array_push($id_attributes_for_combinations, (int)$id_attributes_for_not_repeat);
+								}
                             }
                         }
                     }
@@ -983,11 +1028,15 @@ class PrestashopProduct{
                     if(strtolower($variable_tmp_attributes[$i]) === "taglia" || strtolower($variable_tmp_attributes[$i]) === "taglie"){
                         $product_attribute_for_not_reply = $product->getAttributeCombinations($language);
                         if(empty($product_attribute_for_not_reply)){
-                            $attribute_for_product = new Attribute();
-                            $attribute_for_product->name = $this->setArrayElementForLinkRewrite($variable_tmp_values[$i], true, $language);
-                            $attribute_for_product->id_attribute_group = $id_attribute_group;
-                            $attribute_for_product->add();
-                            array_push($id_attributes_for_combinations, $attribute_for_product->id);
+							if($id_attributes_for_not_repeat === '-1'){
+								$attribute_for_product = new Attribute();
+								$attribute_for_product->name = $this->setArrayElementForLinkRewrite($variable_tmp_values[$i], true, $language);
+								$attribute_for_product->id_attribute_group = $id_attribute_group;
+								$attribute_for_product->add();
+								array_push($id_attributes_for_combinations, $attribute_for_product->id);
+							}else{
+								array_push($id_attributes_for_combinations, (int)$id_attributes_for_not_repeat);
+							}
                         }else{
                             $flag = 1;
                             foreach($product_attribute_for_not_reply as $more_attributes){
@@ -1012,11 +1061,15 @@ class PrestashopProduct{
 
                             }
                             if($flag){
-                                $attribute_for_product = new Attribute();
-                                $attribute_for_product->name = $this->setArrayElementForLinkRewrite($variable_tmp_values[$i], true, $language);
-                                $attribute_for_product->id_attribute_group = $id_attribute_group;
-                                $attribute_for_product->add();
-                                array_push($id_attributes_for_combinations, $attribute_for_product->id);
+								if($id_attributes_for_not_repeat === '-1'){
+									$attribute_for_product = new Attribute();
+									$attribute_for_product->name = $this->setArrayElementForLinkRewrite($variable_tmp_values[$i], true, $language);
+									$attribute_for_product->id_attribute_group = $id_attribute_group;
+									$attribute_for_product->add();
+									array_push($id_attributes_for_combinations, $attribute_for_product->id);
+								}else{
+									array_push($id_attributes_for_combinations, (int)$id_attributes_for_not_repeat);
+								}
                             }
                         }
                     }
