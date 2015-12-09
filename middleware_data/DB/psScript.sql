@@ -79,6 +79,14 @@ CREATE TABLE IF NOT EXISTS `miriadecommerce`.`ps_tmp_product` (
   `immagine` VARCHAR(700) NULL)
 ENGINE = InnoDB;
 
+-- -----------------------------------------------------
+-- Table `miriadecommerce`.`brand_mapping`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `miriadecommerce`.`brand_mapping` (
+  `sap_brand_name` VARCHAR(200) NOT NULL,
+  `ps_brand_name` VARCHAR(200) NOT NULL)
+ENGINE = InnoDB;
+
 USE `miriadecommerce` ;
 
 -- -----------------------------------------------------

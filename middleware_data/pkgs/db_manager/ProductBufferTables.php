@@ -1,6 +1,7 @@
 <?php
 require_once("settings.php");
 require_once ("connection.php");
+require_once ("BrandMapping.php");
 require_once (MD_LIBS_DIR."/HandleOperationsException.php");
 require_once (MD_LIBS_DIR."/Logger.php");
 
@@ -23,9 +24,19 @@ class ProductBufferTables{
         *@params  string $reference, string $attivo, string $categoria, string $prezzo, string $supplier, string $manufacture, string $qta, string $qta_min, string $lunghezza, string $altezza, string $larghezza, string $colore, string $quantita, string $taglia, string $nome, string $modello, string $linea, string $codice_colore, string $codice_taglia, string $url, string $immagine
         */
     public function insertProduct( $reference, $attivo, $categoria, $prezzo, $supplier, $manufacture, $qta, $qta_min, $lunghezza, $altezza, $larghezza, $colore, $quantita, $taglia, $nome, $modello, $linea, $codice_colore, $codice_taglia, $url, $immagine){
-         $connection = connectionServer();
+        $tmp = explode(",",$categoria);
+        $sub_category = $tmp[0];
+        $top_category = $tmp[1];
+        $brand_mapping = new BrandMapping();
+        $result_brand = $brand_mapping->getNameBrand($top_category);
+        if($result_brand != 0 && (gettype($result_brand)==='string') ){
+            $this->logger->postMessage("Brand change to $categoria.","DEBUG");
+            $categoria = $sub_category.",".$result_brand;
+            $this->logger->postMessage(" in $categoria for product $reference ","DEBUG");
+        }
             $sql ="INSERT INTO ps_buffer_product (reference, attivo, categoria, prezzo, supplier,                manufacture, qta, qta_min, lunghezza, altezza,larghezza,colore,quantita,taglia, nome, modello, linea, codice_colore, codice_taglia, url, immagine )VALUES('".$reference."','".$attivo."',            '".$categoria."','".$prezzo."','".$supplier."','".$manufacture."','".$qta."','".$qta_min."',
  '".$lunghezza."','".$altezza."','".$larghezza."','".$colore."','".$quantita."','".$taglia."','".$nome."','".$modello."','".$linea."','".$codice_colore."','".$codice_taglia."','".$url."','".$immagine."')";
+        $connection = connectionServer();
                 $res = mysql_query($sql,$connection);
             if($res){
                 $this->logger->postMessage("Product with reference $reference has been added successfully.");
