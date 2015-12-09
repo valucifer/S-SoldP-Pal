@@ -1,9 +1,10 @@
 
 <?php
-require_once ("ImageChecker.php");
-require_once ("ImageUpdate.php");
-require_once ("ViewManager.php");
-require_once ("Logger.php");
+require_once("settings.php");
+require_once (MD_IMAGECHECKER_DIR."/ImageChecker.php");
+require_once (MD_DBMANAGER_DIR."/ImageUpdate.php");
+require_once (MD_DBMANAGER_DIR."/ViewManager.php");
+require_once (MD_LIBS_DIR."/Logger.php");
 
 /**
     * PHP class that provides functions to update the informations of the tmp product table 

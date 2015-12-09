@@ -1,5 +1,6 @@
 <?php
-require_once ("HandleOperationsException.php");
+require_once("settings.php");
+require_once(MD_LIBS_DIR."/HandleOperationsException.php");
 /**
 * Mapping and Combinations related to file elements taken by input
 *

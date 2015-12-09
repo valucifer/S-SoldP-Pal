@@ -1,12 +1,13 @@
 <?php
+require_once("settings.php");
 
 class HandleFilesFolder{
     
     public function __construct(){}
     
     public function handle(){
-        if( file_exists("./files") ){
-            $this->_deleteDirectory("./files");
+        if( file_exists(MD_FILES_DIR) ){
+            $this->_deleteDirectory(MD_FILES_DIR);
         }
     }
     

@@ -1,7 +1,8 @@
 <?php
+require_once("settings.php");
 require_once ("connection.php");
-require_once ("HandleOperationsException.php");
-require_once ("Logger.php");
+require_once (MD_LIBS_DIR."/HandleOperationsException.php");
+require_once (MD_LIBS_DIR."/Logger.php");
 
     /**
     * PHP class update the buffer custom table use to verify the changes between

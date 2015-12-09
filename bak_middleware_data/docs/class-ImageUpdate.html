@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>Class ImageUpdate</title>
+
+	<link rel="stylesheet" href="resources/style.css?e99947befd7bf673c6b43ff75e9e0f170c88a60e">
+
+</head>
+
+<body>
+<div id="left">
+	<div id="menu">
+		<a href="index.html" title="Overview"><span>Overview</span></a>
+
+
+		<div id="groups">
+				<h3>Packages</h3>
+			<ul>
+				<li>
+					<a href="package-None.html">
+						None					</a>
+
+						</li>
+				<li>
+					<a href="package-UpdateProduct.html">
+						UpdateProduct					</a>
+
+						</li>
+			</ul>
+		</div>
+
+		<hr>
+
+
+		<div id="elements">
+			<h3>Classes</h3>
+			<ul>
+				<li class="active"><a href="class-ImageUpdate.html">ImageUpdate</a></li>
+				<li><a href="class-PrestashopUpdate.html">PrestashopUpdate</a></li>
+				<li><a href="class-ProductBufferTables.html">ProductBufferTables</a></li>
+				<li><a href="class-ProductUpdate.html">ProductUpdate</a></li>
+				<li><a href="class-UpdateTmpTables.html">UpdateTmpTables</a></li>
+			</ul>
+
+
+
+
+
+			<h3>Functions</h3>
+			<ul>
+				<li><a href="function-closeConnectionServer.html">closeConnectionServer</a></li>
+				<li><a href="function-connectionServer.html">connectionServer</a></li>
+			</ul>
+		</div>
+	</div>
+</div>
+
+<div id="splitter"></div>
+
+<div id="right">
+<div id="rightInner">
+	<form id="search">
+		<input type="hidden" name="cx" value="">
+		<input type="hidden" name="ie" value="UTF-8">
+		<input type="text" name="q" class="text" placeholder="Search">
+	</form>
+
+	<div id="navigation">
+		<ul>
+			<li>
+				<a href="index.html" title="Overview"><span>Overview</span></a>
+			</li>
+			<li>
+<span>Package</span>			</li>
+			<li class="active">
+<span>Class</span>			</li>
+		</ul>
+		<ul>
+		</ul>
+		<ul>
+		</ul>
+	</div>
+
+<div id="content" class="class">
+	<h1>Class ImageUpdate</h1>
+
+
+	<div class="description">
+	<p>PHP class update the tmp custom table use to verify the changes between
+the last import and the new import of product images</p>
+	</div>
+
+
+
+
+
+
+
+
+
+	<div class="info">
+		
+		
+		
+		<b>Package:</b> <a href="package-UpdateProduct.html">UpdateProduct</a><br>
+
+				<b>Author:</b>
+				Carlos Borges (carboma89@gmail.com)<br>
+			<b>Located at</b> <a href="source-class-ImageUpdate.html#8-138" title="Go to source code">db_manager/ImageUpdate.php</a>
+		<br>
+	</div>
+
+
+
+	<table class="summary methods" id="methods">
+	<caption>Methods summary</caption>
+	<tr data-order="__construct" id="___construct">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#___construct">#</a>
+		<code><a href="source-class-ImageUpdate.html#17-19" title="Go to source code">__construct</a>( )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="updateImageInformation" id="_updateImageInformation">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_updateImageInformation">#</a>
+		<code><a href="source-class-ImageUpdate.html#21-55" title="Go to source code">updateImageInformation</a>( <span> <var>$psIdProduc</var></span>, <span> <var>$psIdImage</var></span>, <span> <var>$colorAnalysis</var></span>, <span> <var>$md5Digest</var></span>, <span> <var>$imgPath</var></span> )</code>
+
+		<div class="description short">
+			<p>Function that updates images informations</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Function that updates images informations</p>
+
+
+
+
+
+				<h4>Params</h4>
+				<div class="list">
+						<p>int $psIdImage, int $psIdImage, string $coloranalysis, string $md5Digest,
+string $imgPath</p><br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="insertImageInformation" id="_insertImageInformation">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_insertImageInformation">#</a>
+		<code><a href="source-class-ImageUpdate.html#57-81" title="Go to source code">insertImageInformation</a>( <span> <var>$psIdProduc</var></span>, <span> <var>$psIdImage</var></span>, <span> <var>$colorAnalysis</var></span>, <span> <var>$md5Digest</var></span>, <span> <var>$imgPath</var></span> )</code>
+
+		<div class="description short">
+			<p>Inserts images informations to DB</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Inserts images informations to DB</p>
+
+
+
+
+
+				<h4>Params</h4>
+				<div class="list">
+						<p>int $psIdImage, int $psIdImage, string $coloranalysis, string $md5Digest,
+string $imgPath</p><br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="ifImageExist" id="_ifImageExist">
+
+		<td class="attributes"><code>
+			 public 
+
+			true
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_ifImageExist">#</a>
+		<code><a href="source-class-ImageUpdate.html#84-101" title="Go to source code">ifImageExist</a>( <span> <var>$psIdImage</var></span> )</code>
+
+		<div class="description short">
+			<p>Checks if there is images in to DB</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Checks if there is images in to DB</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					true<br>if exist the image in DB , false otherwise
+				</div>
+
+
+				<h4>Params</h4>
+				<div class="list">
+						string $psId<br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getImageInformation" id="_getImageInformation">
+
+		<td class="attributes"><code>
+			 public 
+
+			an
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getImageInformation">#</a>
+		<code><a href="source-class-ImageUpdate.html#103-117" title="Go to source code">getImageInformation</a>( <span> <var>$psIdImage</var></span> )</code>
+
+		<div class="description short">
+			<p>Returns images informations from db</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Returns images informations from db</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					an<br>associative array with coloranalysis anda md5Digest information
+				</div>
+
+
+				<h4>Params</h4>
+				<div class="list">
+						int $psIdImage<br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="_ifProductExist" id="__ifProductExist">
+
+		<td class="attributes"><code>
+			 public 
+
+			true
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#__ifProductExist">#</a>
+		<code><a href="source-class-ImageUpdate.html#120-136" title="Go to source code">_ifProductExist</a>( <span> <var>$psId</var></span> )</code>
+
+		<div class="description short">
+			<p>Checks if the product exists into the tmp table searching by product key</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Checks if the product exists into the tmp table searching by product key</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					true<br>if exist the product in DB , false otherwise
+				</div>
+
+
+				<h4>Params</h4>
+				<div class="list">
+						string $psId<br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+	<div id="footer">
+		 API documentation generated by <a href="http://apigen.org">ApiGen</a>
+	</div>
+</div>
+</div>
+<script src="resources/combined.js"></script>
+<script src="elementlist.js"></script>
+</body>
+</html>

@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>Class ImageChecker</title>
+
+	<link rel="stylesheet" href="resources/style.css?e99947befd7bf673c6b43ff75e9e0f170c88a60e">
+
+</head>
+
+<body>
+<div id="left">
+	<div id="menu">
+		<a href="index.html" title="Overview"><span>Overview</span></a>
+
+
+		<div id="groups">
+				<h3>Packages</h3>
+			<ul>
+				<li>
+					<a href="package-None.html">
+						None					</a>
+
+						</li>
+				<li>
+					<a href="package-UpdateProduct.html">
+						UpdateProduct					</a>
+
+						</li>
+			</ul>
+		</div>
+
+		<hr>
+
+
+		<div id="elements">
+			<h3>Classes</h3>
+			<ul>
+				<li><a href="class-ColorChecker.html">ColorChecker</a></li>
+				<li><a href="class-ColorComparison.html">ColorComparison</a></li>
+				<li><a href="class-FTPConnection.html">FTPConnection</a></li>
+				<li class="active"><a href="class-ImageChecker.html">ImageChecker</a></li>
+				<li><a href="class-Mapping.html">Mapping</a></li>
+				<li><a href="class-MappingArray.html">MappingArray</a></li>
+				<li><a href="class-PrestashopImageHandler.html">PrestashopImageHandler</a></li>
+				<li><a href="class-PrestashopProduct.html">PrestashopProduct</a></li>
+				<li><a href="class-ViewManager.html">ViewManager</a></li>
+			</ul>
+
+
+
+
+
+		</div>
+	</div>
+</div>
+
+<div id="splitter"></div>
+
+<div id="right">
+<div id="rightInner">
+	<form id="search">
+		<input type="hidden" name="cx" value="">
+		<input type="hidden" name="ie" value="UTF-8">
+		<input type="text" name="q" class="text" placeholder="Search">
+	</form>
+
+	<div id="navigation">
+		<ul>
+			<li>
+				<a href="index.html" title="Overview"><span>Overview</span></a>
+			</li>
+			<li>
+<span>Package</span>			</li>
+			<li class="active">
+<span>Class</span>			</li>
+		</ul>
+		<ul>
+		</ul>
+		<ul>
+		</ul>
+	</div>
+
+<div id="content" class="class">
+	<h1>Class ImageChecker</h1>
+
+
+	<div class="description">
+	<p>This class checks if two images are equals or not.</p>
+	</div>
+
+
+
+
+
+
+
+
+
+	<div class="info">
+		
+		
+		
+		
+
+				<b>Author:</b>
+				Nello Saulino <a href="&#109;&#97;&#105;&#x6c;&#x74;&#x6f;:&#110;&#101;&#108;&#x6c;&#x6f;&#x2e;&#115;&#97;&#117;&#108;&#x69;&#x6e;&#x6f;&#64;&#103;&#109;&#x61;&#x69;&#x6c;.&#99;&#111;&#109;">&#110;&#101;&#108;&#x6c;&#x6f;&#x2e;&#115;&#97;&#117;&#108;&#x69;&#x6e;&#x6f;&#64;&#103;&#109;&#x61;&#x69;&#x6c;.&#99;&#111;&#109;</a><br>
+			<b>Located at</b> <a href="source-class-ImageChecker.html#6-123" title="Go to source code">image_checker/ImageChecker.php</a>
+		<br>
+	</div>
+
+
+
+	<table class="summary methods" id="methods">
+	<caption>Methods summary</caption>
+	<tr data-order="__construct" id="___construct">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#___construct">#</a>
+		<code><a href="source-class-ImageChecker.html#17-25" title="Go to source code">__construct</a>( )</code>
+
+		<div class="description short">
+			<p>Initializes class and allocate needed variables.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Initializes class and allocate needed variables.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					
+				</div>
+
+
+				<h4>Params</h4>
+				<div class="list">
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="analyzeImagesColors" id="_analyzeImagesColors">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_analyzeImagesColors">#</a>
+		<code><a href="source-class-ImageChecker.html#27-38" title="Go to source code">analyzeImagesColors</a>( <span> <var>$imagePathToAnalyze</var></span>, <span> <var>$colorsNumber</var></span>, <span> <var>$delta</var></span> )</code>
+
+		<div class="description short">
+			<p>Analyzes an image from an existing path and returns a textual representation of colors</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Analyzes an image from an existing path and returns a textual representation of colors</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<br>$imageAnalysisResults a string representation of color analysis
+				</div>
+
+
+				<h4>Params</h4>
+				<div class="list">
+						$colorAnalysisImage1, $colorsNumber, $delta<br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="checkImageDiff" id="_checkImageDiff">
+
+		<td class="attributes"><code>
+			 public 
+
+			true
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_checkImageDiff">#</a>
+		<code><a href="source-class-ImageChecker.html#40-53" title="Go to source code">checkImageDiff</a>( <span> <var>$colorAnalysisImage1</var></span>, <span> <var>$pathImage2</var></span>, <span> <var>$colorsNumber</var></span>, <span> <var>$delta</var></span> )</code>
+
+		<div class="description short">
+			<p>Compares two images' color analysis. First parameter in this function is a text that represents a color analysis executed previously</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Compares two images' color analysis. First parameter in this function is a text that represents a color analysis executed previously</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					true<br>if images are equals, false otherwise
+				</div>
+
+
+				<h4>Params</h4>
+				<div class="list">
+						$colorAnalysisImage1, $pathImage2, $colorsNumber, $delta<br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="areTwoImageFilesDifferent" id="_areTwoImageFilesDifferent">
+
+		<td class="attributes"><code>
+			 public 
+
+			true
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_areTwoImageFilesDifferent">#</a>
+		<code><a href="source-class-ImageChecker.html#55-90" title="Go to source code">areTwoImageFilesDifferent</a>( <span> <var>$firstImagePath</var></span>, <span> <var>$secondImagePath</var></span>, <span> <var>$colorsNumber</var></span>, <span> <var>$delta</var></span> )</code>
+
+		<div class="description short">
+			<p>Compares two images through color analysis. This method checks first if md5 digest on images is the same; if digests are the same, then images are surely equals. If not, it proceeds analyzing color images.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Compares two images through color analysis. This method checks first if md5 digest on images is the same; if digests are the same, then images are surely equals. If not, it proceeds analyzing color images.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					true<br>if images are different, false otherwise
+				</div>
+
+
+				<h4>Exception</h4>
+				<div class="list">
+						HandleOperationsException thrown when parameters does not represent a valid path.<br>
+				</div>
+				<h4>Params</h4>
+				<div class="list">
+						$firstImagePath, $secondImagePath, $colorsNumber, $delta<br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="areImagesDifferent" id="_areImagesDifferent">
+
+		<td class="attributes"><code>
+			 public 
+
+			true
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_areImagesDifferent">#</a>
+		<code><a href="source-class-ImageChecker.html#92-117" title="Go to source code">areImagesDifferent</a>( <span> <var>$imagePath</var></span>, <span> <var>$colorsNumber</var></span>, <span> <var>$delta</var></span>, <span> <var>$md5_dig</var></span>, <span> <var>$colorAnalysis</var></span> )</code>
+
+		<div class="description short">
+			<p>Compares two images through color analysis. This method checks first if md5 digest on images is the same; if digests are the same, then images are surely equals. If not, it proceeds analyzing color images.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Compares two images through color analysis. This method checks first if md5 digest on images is the same; if digests are the same, then images are surely equals. If not, it proceeds analyzing color images.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					true<br>if images are different, false otherwise
+				</div>
+
+
+				<h4>Exception</h4>
+				<div class="list">
+						HandleOperationsException thrown when parameters does not represent a valid path.<br>
+				</div>
+				<h4>Params</h4>
+				<div class="list">
+						$firstImagePath, $secondImagePath, $colorsNumber, $delta<br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="__destruct" id="___destruct">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#___destruct">#</a>
+		<code><a href="source-class-ImageChecker.html#119-121" title="Go to source code">__destruct</a>( )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	</table>
+
+
+
+
+
+
+
+
+
+
+
+
+	<table class="summary properties" id="properties">
+	<caption>Properties summary</caption>
+	<tr data-order="start" id="$start">
+		<td class="attributes"><code>
+			public  
+			
+		</code></td>
+
+		<td class="name">
+				<a href="source-class-ImageChecker.html#15" title="Go to source code"><var>$start</var></a>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
+
+			</div>
+		</td>
+		<td class="value">
+			<div>
+				<a href="#$start" class="anchor">#</a>
+				<code><span class="php-keyword1">null</span></code>
+			</div>
+		</td>
+	</tr>
+	</table>
+
+
+
+
+
+
+</div>
+
+	<div id="footer">
+		 API documentation generated by <a href="http://apigen.org">ApiGen</a>
+	</div>
+</div>
+</div>
+<script src="resources/combined.js"></script>
+<script src="elementlist.js"></script>
+</body>
+</html>

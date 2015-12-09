@@ -1,9 +1,10 @@
 <?php
 
-require_once ("Mapping.php");
-require_once ("connection.php");
-require_once ("HandleOperationsException.php");
-require_once ("Logger.php");
+require_once ("settings.php");
+require_once (MD_PKGS_DIR."/Mapping.php");
+require_once (MD_DBMANAGER_DIR."/connection.php");
+require_once (MD_LIBS_DIR."/HandleOperationsException.php");
+require_once (MD_LIBS_DIR."/Logger.php");
 
 /**
 * This class handles views in database.

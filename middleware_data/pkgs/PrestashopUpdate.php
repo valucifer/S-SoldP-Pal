@@ -1,11 +1,13 @@
 <?php
-require_once ("Mapping.php");
-require_once ("UpdateTmpTables.php");
-require_once ("ProductUpdate.php");
-require_once ("PrestashopProducts.php");
-require_once ("ProductBufferTables.php");
-require_once ("ViewManager.php");
-require_once ("Logger.php");
+
+require_once("settings.php");
+require_once (MD_PKGS_DIR."/Mapping.php");
+require_once (MD_DBMANAGER_DIR."/UpdateTmpTables.php");
+require_once (MD_DBMANAGER_DIR."/ProductUpdate.php");
+require_once (MD_PSMANAGER_DIR."/PrestashopProducts.php");
+require_once (MD_DBMANAGER_DIR."/ProductBufferTables.php");
+require_once (MD_DBMANAGER_DIR."/ViewManager.php");
+require_once (MD_LIBS_DIR."/Logger.php");
 
 /**
 * Class that updates prestashop products informations from views and images

@@ -1,6 +1,8 @@
 <?php
-require_once("ColorChecker.php");
-require_once("HandleOperationsException.php");
+
+require_once("settings.php");
+require_once(MD_IMAGECHECKER_DIR."/ColorChecker.php");
+require_once(MD_LIBS_DIR."/HandleOperationsException.php");
 
 /**
  * This class checks if two images are equals or not.

@@ -1,4 +1,5 @@
 <?php
+require_once("settings.php");
 require_once("Analog.php");
 require_once("HandleFilesFolder.php");
 
@@ -22,10 +23,10 @@ class FTPException extends Exception implements IFTPException{
     private $log_file = null;
 
     public function __construct($message = null, $code = 0){
-        if(!file_exists("./log_files")){
-            mkdir('./log_files');
+        if(!file_exists(MD_LOG_FILE_DIR)){
+            mkdir(MD_LOG_FILE_DIR);
         }
-        $this->log_file = './log_files/Log.txt';
+        $this->log_file = MD_LOG_FILE_DIR.'/Log.txt';
         if (!$message) 
             throw new $this('Unknown '. get_class($this));
         Analog::handler (Analog\Handler\File::init ($this->log_file));
@@ -33,8 +34,8 @@ class FTPException extends Exception implements IFTPException{
         Analog::log ($this->__toString(), Analog::ERROR);
         $handleFilesFolder = new HandleFilesFolder();
         $handleFilesFolder->handle();
-        if( file_exists("FTP_SEMAMPHORE.smph") )
-            unlink("FTP_SEMAMPHORE.smph");
+        if( file_exists($_SERVER['document_root']."/FTP_SEMAMPHORE.smph") )
+            unlink($_SERVER['document_root']."/FTP_SEMAMPHORE.smph");
     }
 
     public function __toString(){

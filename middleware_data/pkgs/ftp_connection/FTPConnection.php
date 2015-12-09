@@ -1,9 +1,9 @@
 <?php
 
-require_once("HandleOperationsException.php");
-require_once("FTPException.php");
-require_once("Logger.php");
 require_once("settings.php");
+require_once(MD_LIBS_DIR."/HandleOperationsException.php");
+require_once(MD_LIBS_DIR."/FTPException.php");
+require_once(MD_LIBS_DIR."/Logger.php");
 /**
  * This class handles FTP connection to remote folder and create a local directory to ensure a better files processing.
  * Note that this class also handles a semaphore file uploaded on remote directory to create a sort of atomic informations processing.
@@ -14,8 +14,7 @@ require_once("settings.php");
 
 class FTPConnection{
 
-    private $local_dir = "./files";
-    private $semaphore_name = "FTP_SEMAMPHORE.smph";
+    private $local_dir = MD_LOG_FILE_DIR;
     private $connection = null;
     private $timestamps_name = array();
     private $semaphores_array = array();
@@ -64,12 +63,12 @@ class FTPConnection{
 	 */
     public function handleSemaphore(){
         //if semaphore is still present on local directory, we need to stop everything, 'cause probably another process is being performed
-        if(file_exists($this->semaphore_name)){
+        if(file_exists(MD_ROOT."/FTP_SEMAMPHORE.smph")){
             $this->logger->postMessage("Ops...another process seems to be in place. A semaphore file is present.", "WARNING");
             return "-1"; //returns -1 because this return does not need to clean local semaphore
         }
 
-        $sem_file_resource = fopen($this->semaphore_name,"w");
+        $sem_file_resource = fopen(MD_ROOT."/FTP_SEMAMPHORE.smph","w");
         fwrite($sem_file_resource, "1");
         fclose($sem_file_resource);
 
@@ -98,7 +97,7 @@ class FTPConnection{
             $this->semaphores_array_size = sizeof($this->semaphores_array)-1;
         }else{
             $this->logger->postMessage("Remote directory is empty. Update process aborted.","WARNING");
-            unlink("FTP_SEMAMPHORE.smph");
+            unlink(MD_ROOT."/FTP_SEMAMPHORE.smph");
             return false;
         }
         
@@ -186,8 +185,8 @@ class FTPConnection{
 	 * @return
 	 */
     public function revertCleanup(){
-        if(file_exists("FTP_SEMAMPHORE.smph"))
-            unlink("FTP_SEMAMPHORE.smph");
+        if(file_exists(MD_ROOT."/FTP_SEMAMPHORE.smph"))
+            unlink(MD_ROOT."/FTP_SEMAMPHORE.smph");
     }
 
     /**
@@ -199,7 +198,7 @@ class FTPConnection{
     public function cleanUp(){
         $folder_to_remove = array();
         //delete semaphore, 'cause all the operations are ok.
-        unlink("FTP_SEMAMPHORE.smph");
+        unlink(MD_ROOT."/FTP_SEMAMPHORE.smph");
         
         //delete downloaded files
         $this->_deleteDirectory($this->local_dir);

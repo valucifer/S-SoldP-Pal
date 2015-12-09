@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>Class PrestashopProduct</title>
+
+	<link rel="stylesheet" href="resources/style.css?e99947befd7bf673c6b43ff75e9e0f170c88a60e">
+
+</head>
+
+<body>
+<div id="left">
+	<div id="menu">
+		<a href="index.html" title="Overview"><span>Overview</span></a>
+
+
+		<div id="groups">
+				<h3>Packages</h3>
+			<ul>
+				<li>
+					<a href="package-None.html">
+						None					</a>
+
+						</li>
+				<li>
+					<a href="package-UpdateProduct.html">
+						UpdateProduct					</a>
+
+						</li>
+			</ul>
+		</div>
+
+		<hr>
+
+
+		<div id="elements">
+			<h3>Classes</h3>
+			<ul>
+				<li><a href="class-ColorChecker.html">ColorChecker</a></li>
+				<li><a href="class-ColorComparison.html">ColorComparison</a></li>
+				<li><a href="class-FTPConnection.html">FTPConnection</a></li>
+				<li><a href="class-ImageChecker.html">ImageChecker</a></li>
+				<li><a href="class-Mapping.html">Mapping</a></li>
+				<li><a href="class-MappingArray.html">MappingArray</a></li>
+				<li><a href="class-PrestashopImageHandler.html">PrestashopImageHandler</a></li>
+				<li class="active"><a href="class-PrestashopProduct.html">PrestashopProduct</a></li>
+				<li><a href="class-ViewManager.html">ViewManager</a></li>
+			</ul>
+
+
+
+
+
+		</div>
+	</div>
+</div>
+
+<div id="splitter"></div>
+
+<div id="right">
+<div id="rightInner">
+	<form id="search">
+		<input type="hidden" name="cx" value="">
+		<input type="hidden" name="ie" value="UTF-8">
+		<input type="text" name="q" class="text" placeholder="Search">
+	</form>
+
+	<div id="navigation">
+		<ul>
+			<li>
+				<a href="index.html" title="Overview"><span>Overview</span></a>
+			</li>
+			<li>
+<span>Package</span>			</li>
+			<li class="active">
+<span>Class</span>			</li>
+		</ul>
+		<ul>
+		</ul>
+		<ul>
+		</ul>
+	</div>
+
+<div id="content" class="class">
+	<h1>Class PrestashopProduct</h1>
+
+
+	<div class="description">
+	<p>This class handles products in Prestashop</p>
+	</div>
+
+
+
+
+
+
+
+
+
+	<div class="info">
+		
+		
+		
+		
+
+				<b>Author:</b>
+				Valentino Vivone <a href="&#x6d;&#x61;&#x69;&#x6c;&#116;&#111;&#58;&#118;&#46;&#x76;&#x69;&#x76;&#x6f;&#x6e;&#101;&#46;&#53;&#51;&#56;&#x39;&#x40;&#x67;&#x6d;&#x61;&#105;&#108;&#46;&#99;&#111;&#x6d;">&#118;&#46;&#x76;&#x69;&#x76;&#x6f;&#x6e;&#101;&#46;&#53;&#51;&#56;&#x39;&#x40;&#x67;&#x6d;&#x61;&#105;&#108;&#46;&#99;&#111;&#x6d;</a><br>
+				<b>Version:</b>
+				1.0<br>
+			<b>Located at</b> <a href="source-class-PrestashopProduct.html#193-1103" title="Go to source code">ps_manager/PrestashopProducts.php</a>
+		<br>
+	</div>
+
+
+
+	<table class="summary methods" id="methods">
+	<caption>Methods summary</caption>
+	<tr data-order="__construct" id="___construct">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#___construct">#</a>
+		<code><a href="source-class-PrestashopProduct.html#202" title="Go to source code">__construct</a>( )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="insertProductForPrestashop" id="_insertProductForPrestashop">
+
+		<td class="attributes"><code>
+			 public 
+
+			array
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_insertProductForPrestashop">#</a>
+		<code><a href="source-class-PrestashopProduct.html#345-442" title="Go to source code">insertProductForPrestashop</a>( <span>array <var>$product_attributes</var></span>, <span>string <var>$url_photo</var></span>, <span>array <var>$triple_cod_col_siz</var></span>, <span>array <var>$array_combinations</var></span>, <span>integer <var>$language</var> = <span class="php-num">1</span></span> )</code>
+
+		<div class="description short">
+			<p>Inserts a product in Prestashop.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Inserts a product in Prestashop.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$product_attributes</var></dt>
+					<dd></dd>
+					<dt><var>$url_photo</var></dt>
+					<dd>$url</dd>
+					<dt><var>$triple_cod_col_siz</var></dt>
+					<dd></dd>
+					<dt><var>$array_combinations</var></dt>
+					<dd></dd>
+					<dt><var>$language</var></dt>
+					<dd></dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					array
+				</div>
+
+
+				<h4>See</h4>
+				<div class="list">
+						$this->setSupplierForProduct<br>
+						$this->setArrayElementForLinkRewrite<br>
+						$this->setManufacturerForProduct<br>
+						$this->addFeaturesForProducts<br>
+						$this->setCategoriesForProduct<br>
+						$this->addCombinationsForPrestashop<br>
+						PrestashopImageHandler insertImageInPrestashop()<br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="updateProductForPrestashop" id="_updateProductForPrestashop">
+
+		<td class="attributes"><code>
+			 public 
+
+			array
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_updateProductForPrestashop">#</a>
+		<code><a href="source-class-PrestashopProduct.html#743-881" title="Go to source code">updateProductForPrestashop</a>( <span>array <var>$product_attributes</var></span>, <span>integer <var>$id_product</var></span>, <span>string <var>$url_photo</var></span>, <span>array <var>$triple_cod_col_siz</var></span>, <span>integer <var>$array_combinations</var></span>, <span>array <var>$language</var> = <span class="php-num">1</span></span> )</code>
+
+		<div class="description short">
+			<p>Updates a product on Prestashop.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Updates a product on Prestashop.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$product_attributes</var></dt>
+					<dd></dd>
+					<dt><var>$id_product</var></dt>
+					<dd></dd>
+					<dt><var>$url_photo</var></dt>
+					<dd></dd>
+					<dt><var>$triple_cod_col_siz</var></dt>
+					<dd></dd>
+					<dt><var>$array_combinations</var></dt>
+					<dd>$language</dd>
+					<dt><var>$language</var></dt>
+					<dd>$array_combinations</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					array
+				</div>
+
+
+				<h4>See</h4>
+				<div class="list">
+						$this->isOldNameProductEgualToNewNameProduct<br>
+						$this->isOldOrNewValueForProduct<br>
+						$this->controlCategoriesForActivateTheir<br>
+						$this->updateCombinantionsForPrestashop<br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+	<div id="footer">
+		 API documentation generated by <a href="http://apigen.org">ApiGen</a>
+	</div>
+</div>
+</div>
+<script src="resources/combined.js"></script>
+<script src="elementlist.js"></script>
+</body>
+</html>

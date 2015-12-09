@@ -1,8 +1,9 @@
 <?php
 
-require_once("colors.inc.php");
-require_once("Logger.php");
-require_once("HandleOperationsException.php");
+require_once("settings.php");
+require_once(MD_COLORLIB_DIR."/colors.inc.php");
+require_once(MD_LIBS_DIR."/Logger.php");
+require_once(MD_LIBS_DIR."/HandleOperationsException.php");
 
 /**
  * This class handles colors form an image and their presence ratio.

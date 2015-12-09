@@ -1,7 +1,10 @@
 <?php
-include "../../config/config.inc.php";//da controllare durante l'installazione finale (Carlos Borges)
-include "../../init.php";
-require_once ("Mapping.php");
+//include "../../config/config.inc.php";//da controllare durante l'installazione finale (Carlos Borges)
+//include "../../init.php";
+require_once("settings.php");
+include(dirname(__FILE__).'/../../../../config/config.inc.php');
+include(dirname(__FILE__).'/../../../../init.php');
+require_once (MD_PKGS_DIR."/Mapping.php");
 
 /**
 * This class handles images in Prestashop

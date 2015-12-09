@@ -1,5 +1,6 @@
 <?php
-require_once("HandleOperationsException.php");
+require_once("settings.php");
+require_once(MD_LIBS_DIR."/HandleOperationsException.php");
     /**
     * PHP class update the tmp custom table use to verify the change between
     * the last import and the new import of images of a product 
