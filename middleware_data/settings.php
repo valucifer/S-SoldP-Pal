@@ -23,8 +23,8 @@ define("MD_IMAGECHECKER_DIR", realpath(MD_PKGS_DIR . '/image_checker'));
 define("MD_FTPCONNECTION_DIR", realpath(MD_PKGS_DIR . '/ftp_connection'));
 define("MD_LIBS_DIR", realpath(dirname(__FILE__) . '/libs'));
 define("MD_COLORLIB_DIR", realpath(MD_LIBS_DIR . '/color_lib'));
-define("MD_FILES_DIR", realpath(dirname(__FILE__) . '/files'));
 
 define("MD_ROOT", realpath(dirname(__FILE__)));
+
 
 ?>

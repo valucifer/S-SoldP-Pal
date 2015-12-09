@@ -34,8 +34,8 @@ class FTPException extends Exception implements IFTPException{
         Analog::log ($this->__toString(), Analog::ERROR);
         $handleFilesFolder = new HandleFilesFolder();
         $handleFilesFolder->handle();
-        if( file_exists($_SERVER['document_root']."/FTP_SEMAMPHORE.smph") )
-            unlink($_SERVER['document_root']."/FTP_SEMAMPHORE.smph");
+        if( file_exists(MD_ROOT."/FTP_SEMAMPHORE.smph") )
+            unlink(MD_ROOT."/FTP_SEMAMPHORE.smph");
     }
 
     public function __toString(){

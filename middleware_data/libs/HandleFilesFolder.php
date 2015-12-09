@@ -6,8 +6,8 @@ class HandleFilesFolder{
     public function __construct(){}
     
     public function handle(){
-        if( file_exists(MD_FILES_DIR) ){
-            $this->_deleteDirectory(MD_FILES_DIR);
+        if( file_exists(MD_ROOT."/files") ){
+            $this->_deleteDirectory(MD_ROOT."/files");
         }
     }
     

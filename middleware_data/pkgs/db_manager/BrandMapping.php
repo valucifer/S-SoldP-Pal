@@ -38,4 +38,5 @@ class BrandMapping{
             return 0;
         }
     }
+}
 ?>

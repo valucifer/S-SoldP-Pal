@@ -29,12 +29,12 @@ class ProductBufferTables{
         $top_category = $tmp[1];
         $brand_mapping = new BrandMapping();
         $result_brand = $brand_mapping->getNameBrand($top_category);
-        if($result_brand != 0 && (gettype($result_brand)==='string') ){
+        if((gettype($result_brand) === 'string') ){
             $this->logger->postMessage("Brand change to $categoria.","DEBUG");
             $categoria = $sub_category.",".$result_brand;
             $this->logger->postMessage(" in $categoria for product $reference ","DEBUG");
         }
-            $sql ="INSERT INTO ps_buffer_product (reference, attivo, categoria, prezzo, supplier,                manufacture, qta, qta_min, lunghezza, altezza,larghezza,colore,quantita,taglia, nome, modello, linea, codice_colore, codice_taglia, url, immagine )VALUES('".$reference."','".$attivo."',            '".$categoria."','".$prezzo."','".$supplier."','".$manufacture."','".$qta."','".$qta_min."',
+            $sql ="INSERT INTO ps_buffer_product (reference, attivo, categoria, prezzo, supplier, manufacture, qta, qta_min, lunghezza, altezza,larghezza,colore,quantita,taglia, nome, modello, linea, codice_colore, codice_taglia, url, immagine )VALUES('".$reference."','".$attivo."',            '".$categoria."','".$prezzo."','".$supplier."','".$manufacture."','".$qta."','".$qta_min."',
  '".$lunghezza."','".$altezza."','".$larghezza."','".$colore."','".$quantita."','".$taglia."','".$nome."','".$modello."','".$linea."','".$codice_colore."','".$codice_taglia."','".$url."','".$immagine."')";
         $connection = connectionServer();
                 $res = mysql_query($sql,$connection);
