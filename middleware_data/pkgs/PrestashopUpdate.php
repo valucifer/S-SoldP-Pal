@@ -32,8 +32,7 @@ class PrestashopUpdate{
     public function startUpdate($mapping_path){
         $this->mapping = new Mapping($mapping_path);
         $tmp = explode ('_',$mapping_path);
-        $this->url_photo = $tmp[0].'_FOTO/';
-        $this->mapping = new Mapping($mapping_path);
+        $this->url_photo = MD_ROOT."/files/".$tmp[0].'_FOTO/';
         $this->keys= $this->mapping->keys();
         $this->triple= $this->mapping->triple();
         $this->array_mapping = $this->mapping->getItemMaster();
@@ -79,7 +78,7 @@ class PrestashopUpdate{
                     $array_combination = $tmp_combination [$triple];
                     $tmp_code = $array_combination ['Codici'];
                     $tmp_explode_code = explode(',',$tmp_code);
-                    if($product_update->colorSizeExists($key, $result,$tmp_explode_code[0], $tmp_explode_code[1])){
+                    if($product_update->colorSizeExists($key, $result,$tmp_explode_code[0], $tmp_explode_code[1]) == 1){
                         $array_product = $insert_product->updateProductForPrestashop($product[0], (int) $result, $this->url_photo,$product[1], $product[2]);
                         $tmp_manager->insertTmpProducts($result,$key);
                         if( !empty($array_product[2]) ){

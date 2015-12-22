@@ -14,7 +14,7 @@ require_once(MD_LIBS_DIR."/Logger.php");
 
 class FTPConnection{
 
-    private $local_dir = MD_ROOT."/files";
+    private $local_dir = "";
     private $connection = null;
     private $timestamps_name = array();
     private $semaphores_array = array();
@@ -32,6 +32,7 @@ class FTPConnection{
 	 * @return 
 	 */
     public function __construct(){
+        $this->local_dir = MD_ROOT."/files";
         $this->logger = new Logger();
     }
 

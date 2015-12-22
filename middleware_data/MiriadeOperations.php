@@ -21,7 +21,6 @@ class MiriadeOperations{
         $this->logger = new Logger();
         $this->err_log = new ErrorLogger();
         $this->ftp_connection = new FTPConnection();
-        //$_SERVER['DOCUMENT_ROOT'] = dirname(__FILE__);
     }
 
     public function start(){
@@ -47,7 +46,7 @@ class MiriadeOperations{
 
             $this->update_prestashop = new PrestashopUpdate();
 
-            $this->update_prestashop->startUpdate(MD_LOG_FILE_DIR."/".$sems);
+            $this->update_prestashop->startUpdate($sems);
             $this->update_prestashop->firstStep();
             $this->logger->postMessage("Update $sems completed.","DEBUG");
 
@@ -56,7 +55,7 @@ class MiriadeOperations{
             throw new Exception("Error exception. Please, see ErrorLog.txt in log_files directory.");
         }
 
-        $this->ftp_connection->cleanUp();
+        //$this->ftp_connection->cleanUp();
         $this->logger->postMessage("Update process completed.","INFO");
 
     }

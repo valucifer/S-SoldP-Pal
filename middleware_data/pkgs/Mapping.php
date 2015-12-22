@@ -34,7 +34,7 @@ class Mapping{
 		*
 		*/
     public function __construct($path){
-        $tmp_array = $this->createArray($path);
+        $tmp_array = $this->createArray(MD_ROOT."/files/".$path);
 
         if(sizeof($tmp_array) === 1){
             throw new HandleOperationsException("Il file semaforo è vuoto");
