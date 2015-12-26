@@ -1,0 +1,156 @@
+::1 - 2015-12-26 15:36:54 - 6 - Connected as pjgroup@ftp14.ilbello.com
+::1 - 2015-12-26 15:36:57 - 6 - Calculating remote folder size...
+::1 - 2015-12-26 15:36:59 - 6 - Size is 2228524.
+::1 - 2015-12-26 15:37:00 - 6 - Download percentage: 0%
+::1 - 2015-12-26 15:37:01 - 6 - Download percentage: 0%
+::1 - 2015-12-26 15:37:01 - 6 - Download percentage: 0.1%
+::1 - 2015-12-26 15:37:01 - 6 - Download percentage: 0.1%
+::1 - 2015-12-26 15:37:02 - 6 - Download percentage: 0.1%
+::1 - 2015-12-26 15:37:02 - 6 - Download percentage: 0.2%
+::1 - 2015-12-26 15:37:03 - 6 - Download percentage: 0.5%
+::1 - 2015-12-26 15:37:05 - 6 - Download percentage: 8.7%
+::1 - 2015-12-26 15:37:05 - 6 - Download percentage: 13.7%
+::1 - 2015-12-26 15:37:06 - 6 - Download percentage: 21.1%
+::1 - 2015-12-26 15:37:07 - 6 - Download percentage: 29.6%
+::1 - 2015-12-26 15:37:08 - 6 - Download percentage: 47.6%
+::1 - 2015-12-26 15:37:09 - 6 - Download percentage: 53.1%
+::1 - 2015-12-26 15:37:10 - 6 - Download percentage: 59.1%
+::1 - 2015-12-26 15:37:11 - 6 - Download percentage: 62.5%
+::1 - 2015-12-26 15:37:11 - 6 - Download percentage: 70.1%
+::1 - 2015-12-26 15:37:13 - 6 - Download percentage: 79%
+::1 - 2015-12-26 15:37:15 - 6 - Download percentage: 82%
+::1 - 2015-12-26 15:37:16 - 6 - Download percentage: 100%
+::1 - 2015-12-26 15:37:16 - 7 - Product with reference KPBS03S05 has been added successfully.
+::1 - 2015-12-26 15:37:16 - 7 - Product with reference KPBS03S05 has been added successfully.
+::1 - 2015-12-26 15:37:16 - 7 - Product with reference KPBS03S08 has been added successfully.
+::1 - 2015-12-26 15:37:16 - 7 - Product with reference KPBS03S08 has been added successfully.
+::1 - 2015-12-26 15:37:16 - 7 - Product with reference KPBS04M01 has been added successfully.
+::1 - 2015-12-26 15:37:16 - 7 - Product with reference RBBS30S04 has been added successfully.
+::1 - 2015-12-26 15:37:16 - 7 - Product with reference RBBS30S04 has been added successfully.
+::1 - 2015-12-26 15:37:16 - 7 - Product with reference RBBS30S04 has been added successfully.
+::1 - 2015-12-26 15:37:16 - 7 - Product with reference YASC98M01X has been added successfully.
+::1 - 2015-12-26 15:37:16 - 7 - Product with reference YASC98M01X has been added successfully.
+::1 - 2015-12-26 15:37:16 - 7 - Product with reference YASC98M01X has been added successfully.
+::1 - 2015-12-26 15:37:16 - 7 - Product with reference YASC98M01X has been added successfully.
+::1 - 2015-12-26 15:37:16 - 7 - Product with reference YASC98M01X has been added successfully.
+::1 - 2015-12-26 15:37:16 - 7 - Product with reference YASC98M01X has been added successfully.
+::1 - 2015-12-26 15:37:16 - 7 - Product with reference YASC98M01X has been added successfully.
+::1 - 2015-12-26 15:37:16 - 7 - Product with reference YASC98M01X has been added successfully.
+::1 - 2015-12-26 15:37:16 - 7 - Product with reference YASC98M01X has been added successfully.
+::1 - 2015-12-26 15:37:16 - 7 - Product with reference YASC98M01X has been added successfully.
+::1 - 2015-12-26 15:37:16 - 7 - Product with reference YASC98M01X has been added successfully.
+::1 - 2015-12-26 15:37:16 - 7 - Product with reference YASC98M01X has been added successfully.
+::1 - 2015-12-26 15:37:16 - 7 - Product with reference YASC98M01X has been added successfully.
+::1 - 2015-12-26 15:37:16 - 7 - Product with reference YASC98M01X has been added successfully.
+::1 - 2015-12-26 15:37:16 - 7 - Product with reference YASC98M01X has been added successfully.
+::1 - 2015-12-26 15:37:16 - 7 - Product with reference YASC98M01X has been added successfully.
+::1 - 2015-12-26 15:37:16 - 7 - Product with reference YASC98M01X has been added successfully.
+::1 - 2015-12-26 15:37:16 - 7 - Product with reference YASC98M01X has been added successfully.
+::1 - 2015-12-26 15:37:16 - 7 - Product with reference YASC98M01X has been added successfully.
+::1 - 2015-12-26 15:37:40 - 7 - Update finished! Cleaning up...
+::1 - 2015-12-26 15:37:40 - 7 - Update A20151008161213_SEM.chk completed.
+::1 - 2015-12-26 15:37:40 - 6 - Update process completed.
+::1 - 2015-12-26 15:39:15 - 6 - Connected as pjgroup@ftp14.ilbello.com
+::1 - 2015-12-26 15:39:15 - 6 - Calculating remote folder size...
+::1 - 2015-12-26 15:39:20 - 6 - Size is 2228524.
+::1 - 2015-12-26 15:39:22 - 6 - Download percentage: 0%
+::1 - 2015-12-26 15:39:23 - 6 - Download percentage: 0%
+::1 - 2015-12-26 15:39:23 - 6 - Download percentage: 0.1%
+::1 - 2015-12-26 15:39:24 - 6 - Download percentage: 0.1%
+::1 - 2015-12-26 15:39:24 - 6 - Download percentage: 0.1%
+::1 - 2015-12-26 15:39:25 - 6 - Download percentage: 0.2%
+::1 - 2015-12-26 15:39:25 - 6 - Download percentage: 0.5%
+::1 - 2015-12-26 15:39:26 - 6 - Download percentage: 8.7%
+::1 - 2015-12-26 15:39:27 - 6 - Download percentage: 13.7%
+::1 - 2015-12-26 15:39:29 - 6 - Download percentage: 21.1%
+::1 - 2015-12-26 15:39:31 - 6 - Download percentage: 29.6%
+::1 - 2015-12-26 15:39:32 - 6 - Download percentage: 47.6%
+::1 - 2015-12-26 15:39:33 - 6 - Download percentage: 53.1%
+::1 - 2015-12-26 15:39:34 - 6 - Download percentage: 59.1%
+::1 - 2015-12-26 15:39:34 - 6 - Download percentage: 62.5%
+::1 - 2015-12-26 15:39:35 - 6 - Download percentage: 70.1%
+::1 - 2015-12-26 15:39:35 - 6 - Download percentage: 79%
+::1 - 2015-12-26 15:39:36 - 6 - Download percentage: 82%
+::1 - 2015-12-26 15:39:37 - 6 - Download percentage: 100%
+::1 - 2015-12-26 15:39:37 - 7 - Product with reference KPBS03S05 has been added successfully.
+::1 - 2015-12-26 15:39:37 - 7 - Product with reference KPBS03S05 has been added successfully.
+::1 - 2015-12-26 15:39:37 - 7 - Product with reference KPBS03S08 has been added successfully.
+::1 - 2015-12-26 15:39:37 - 7 - Product with reference KPBS03S08 has been added successfully.
+::1 - 2015-12-26 15:39:37 - 7 - Product with reference KPBS04M01 has been added successfully.
+::1 - 2015-12-26 15:39:37 - 7 - Product with reference RBBS30S04 has been added successfully.
+::1 - 2015-12-26 15:39:37 - 7 - Product with reference RBBS30S04 has been added successfully.
+::1 - 2015-12-26 15:39:37 - 7 - Product with reference RBBS30S04 has been added successfully.
+::1 - 2015-12-26 15:39:37 - 7 - Product with reference YASC98M01X has been added successfully.
+::1 - 2015-12-26 15:39:37 - 7 - Product with reference YASC98M01X has been added successfully.
+::1 - 2015-12-26 15:39:37 - 7 - Product with reference YASC98M01X has been added successfully.
+::1 - 2015-12-26 15:39:37 - 7 - Product with reference YASC98M01X has been added successfully.
+::1 - 2015-12-26 15:39:37 - 7 - Product with reference YASC98M01X has been added successfully.
+::1 - 2015-12-26 15:39:37 - 7 - Product with reference YASC98M01X has been added successfully.
+::1 - 2015-12-26 15:39:37 - 7 - Product with reference YASC98M01X has been added successfully.
+::1 - 2015-12-26 15:39:37 - 7 - Product with reference YASC98M01X has been added successfully.
+::1 - 2015-12-26 15:39:37 - 7 - Product with reference YASC98M01X has been added successfully.
+::1 - 2015-12-26 15:39:37 - 7 - Product with reference YASC98M01X has been added successfully.
+::1 - 2015-12-26 15:39:37 - 7 - Product with reference YASC98M01X has been added successfully.
+::1 - 2015-12-26 15:39:37 - 7 - Product with reference YASC98M01X has been added successfully.
+::1 - 2015-12-26 15:39:37 - 7 - Product with reference YASC98M01X has been added successfully.
+::1 - 2015-12-26 15:39:37 - 7 - Product with reference YASC98M01X has been added successfully.
+::1 - 2015-12-26 15:39:37 - 7 - Product with reference YASC98M01X has been added successfully.
+::1 - 2015-12-26 15:39:37 - 7 - Product with reference YASC98M01X has been added successfully.
+::1 - 2015-12-26 15:39:37 - 7 - Product with reference YASC98M01X has been added successfully.
+::1 - 2015-12-26 15:39:37 - 7 - Product with reference YASC98M01X has been added successfully.
+::1 - 2015-12-26 15:39:37 - 7 - Product with reference YASC98M01X has been added successfully.
+::1 - 2015-12-26 15:39:37 - 7 - Update finished! Cleaning up...
+::1 - 2015-12-26 15:39:37 - 7 - Update A20151008161213_SEM.chk completed.
+::1 - 2015-12-26 15:39:37 - 6 - Update process completed.
+::1 - 2015-12-26 16:16:12 - 6 - Connected as pjgroup@ftp14.ilbello.com
+::1 - 2015-12-26 16:16:13 - 6 - Calculating remote folder size...
+::1 - 2015-12-26 16:16:19 - 6 - Size is 2417712.
+::1 - 2015-12-26 16:16:19 - 6 - Download percentage: 0%
+::1 - 2015-12-26 16:16:20 - 6 - Download percentage: 0%
+::1 - 2015-12-26 16:16:20 - 6 - Download percentage: 0.1%
+::1 - 2015-12-26 16:16:20 - 6 - Download percentage: 0.1%
+::1 - 2015-12-26 16:16:21 - 6 - Download percentage: 0.1%
+::1 - 2015-12-26 16:16:21 - 6 - Download percentage: 0.2%
+::1 - 2015-12-26 16:16:25 - 6 - Download percentage: 0.4%
+::1 - 2015-12-26 16:16:27 - 6 - Download percentage: 8%
+::1 - 2015-12-26 16:16:28 - 6 - Download percentage: 12.6%
+::1 - 2015-12-26 16:16:29 - 6 - Download percentage: 19.5%
+::1 - 2015-12-26 16:16:31 - 6 - Download percentage: 27.3%
+::1 - 2015-12-26 16:16:32 - 6 - Download percentage: 43.8%
+::1 - 2015-12-26 16:16:33 - 6 - Download percentage: 48.9%
+::1 - 2015-12-26 16:16:35 - 6 - Download percentage: 54.4%
+::1 - 2015-12-26 16:16:36 - 6 - Download percentage: 57.6%
+::1 - 2015-12-26 16:16:38 - 6 - Download percentage: 64.6%
+::1 - 2015-12-26 16:16:39 - 6 - Download percentage: 72.8%
+::1 - 2015-12-26 16:16:41 - 6 - Download percentage: 80.7%
+::1 - 2015-12-26 16:16:42 - 6 - Download percentage: 83.4%
+::1 - 2015-12-26 16:16:44 - 6 - Download percentage: 100%
+::1 - 2015-12-26 16:16:44 - 7 - Product with reference KPBS03S05 has been added successfully.
+::1 - 2015-12-26 16:16:44 - 7 - Product with reference KPBS03S05 has been added successfully.
+::1 - 2015-12-26 16:16:44 - 7 - Product with reference KPBS03S08 has been added successfully.
+::1 - 2015-12-26 16:16:44 - 7 - Product with reference KPBS03S08 has been added successfully.
+::1 - 2015-12-26 16:16:44 - 7 - Product with reference KPBS04M01 has been added successfully.
+::1 - 2015-12-26 16:16:44 - 7 - Product with reference RBBS30S04 has been added successfully.
+::1 - 2015-12-26 16:16:44 - 7 - Product with reference RBBS30S04 has been added successfully.
+::1 - 2015-12-26 16:16:44 - 7 - Product with reference RBBS30S04 has been added successfully.
+::1 - 2015-12-26 16:16:44 - 7 - Product with reference YASC98M01X has been added successfully.
+::1 - 2015-12-26 16:16:44 - 7 - Product with reference YASC98M01X has been added successfully.
+::1 - 2015-12-26 16:16:44 - 7 - Product with reference YASC98M01X has been added successfully.
+::1 - 2015-12-26 16:16:44 - 7 - Product with reference YASC98M01X has been added successfully.
+::1 - 2015-12-26 16:16:44 - 7 - Product with reference YASC98M01X has been added successfully.
+::1 - 2015-12-26 16:16:44 - 7 - Product with reference YASC98M01X has been added successfully.
+::1 - 2015-12-26 16:16:44 - 7 - Product with reference YASC98M01X has been added successfully.
+::1 - 2015-12-26 16:16:44 - 7 - Product with reference YASC98M01X has been added successfully.
+::1 - 2015-12-26 16:16:44 - 7 - Product with reference YASC98M01X has been added successfully.
+::1 - 2015-12-26 16:16:44 - 7 - Product with reference YASC98M01X has been added successfully.
+::1 - 2015-12-26 16:16:44 - 7 - Product with reference YASC98M01X has been added successfully.
+::1 - 2015-12-26 16:16:44 - 7 - Product with reference YASC98M01X has been added successfully.
+::1 - 2015-12-26 16:16:44 - 7 - Product with reference YASC98M01X has been added successfully.
+::1 - 2015-12-26 16:16:44 - 7 - Product with reference YASC98M01X has been added successfully.
+::1 - 2015-12-26 16:16:44 - 7 - Product with reference YASC98M01X has been added successfully.
+::1 - 2015-12-26 16:16:44 - 7 - Product with reference YASC98M01X has been added successfully.
+::1 - 2015-12-26 16:16:44 - 7 - Product with reference YASC98M01X has been added successfully.
+::1 - 2015-12-26 16:16:44 - 7 - Product with reference YASC98M01X has been added successfully.
+::1 - 2015-12-26 16:17:05 - 7 - Update finished! Cleaning up...
+::1 - 2015-12-26 16:17:05 - 7 - Update A20151008161213_SEM.chk completed.
+::1 - 2015-12-26 16:17:05 - 6 - Update process completed.

@@ -1,6 +1,7 @@
 <?php
 require_once("settings.php");
 require_once(MD_LIBS_DIR."/HandleOperationsException.php");
+require_once(MD_LIBS_DIR."/ProductWithoutImageList.php");
 /**
 * Mapping and Combinations related to file elements taken by input
 *
@@ -21,6 +22,8 @@ class Mapping{
     private $_TB_ART_DET_DISP;
     private $_TB_DESCR_LIN;
     private $keys;
+    
+    private $productWithoutImageHandler = null;
 
     /**
 		* Initializes inner logic structures.
@@ -34,6 +37,7 @@ class Mapping{
 		*
 		*/
     public function __construct($path){
+        $this->productWithoutImageHandler = new ProductWithoutImageList();
         $tmp_array = $this->createArray(MD_ROOT."/files/".$path);
 
         if(sizeof($tmp_array) === 1){
@@ -364,7 +368,7 @@ class Mapping{
     private function getPriceAndSalable(){			
         $return = array();
         $size_key = sizeof($this->keys);
-        $size_array_TBARTDET =  sizeof($this->_TB_ART_DET);
+        $size_array_TBARTDET = sizeof($this->_TB_ART_DET);
 
         $count = 0;
         for($i = 0; $i < $size_key; $i++){
@@ -701,7 +705,16 @@ class Mapping{
                 $stringTmp = $stringTmp.$singleFoto.",";
             }
             $element["URL"] = $stringTmp;
-
+            
+            if(empty($element["URL"]))
+                if($element["Attivo"]){
+                    $element["Attivo"] = 0;
+                    $this->productWithoutImageHandler->addProductToList($element["Reference"], 0);
+                    echo "Ho trovato un prodotto senza immagine che è attivo. Lo disattivo.<br>";
+                }else{
+                    $this->productWithoutImageHandler->addProductToList($element["Reference"], 1);
+                    echo "Ho trovato un prodotto senza immagine che non è attivo.<br>";
+                }
             $return[$keys] = $element;
         }
 
@@ -736,6 +749,10 @@ class Mapping{
         }
 
         return $return;
+    }
+    
+    public function __destruct(){
+        $this->productWithoutImageHandler->writeDownTheList();
     }
 	
 }
